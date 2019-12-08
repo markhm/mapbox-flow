@@ -5,8 +5,8 @@
 
     <groupId>com.github.markhm</groupId>
     <artifactId>mapbox-flow</artifactId>
-    <version>0.1-SNAPSHOT</version>
-    <name>Mapbox</name>
+    <version>0.0.2-SNAPSHOT</version>
+    <name>Mapbox Flow</name>
     <description>Integration of Mapbox for Vaadin Flow. Not associated with Mapbox.com</description>
 
     <properties>
