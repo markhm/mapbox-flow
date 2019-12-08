@@ -1,28 +1,23 @@
 var map;
+var radius = 20;
 
-function renderMapbox(center)
+function renderMapbox(center, initialZoom)
 {
-    console.log("Centering around: "+center);
-
-    map = new mapboxgl.Map({
+    map = new mapboxgl.Map(
+    {
         container: 'map', // container id" +
         style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location" +
         center: center, // starting position [lng, lat]" +
-        zoom: 6 // starting zoom" +
+        zoom: initialZoom // starting zoom" +
     });
 }
 
 function zoomTo(level)
 {
     map.zoomTo(level,
-        {"duration": 1500}
+        { "duration": 1500 }
     );
 }
-
-// 18.1733, 49.508]
-// [-74.50, 40]
-
-var radius = 20;
 
 function pointOnCircle(angle)
 {
@@ -34,6 +29,10 @@ function pointOnCircle(angle)
         ]
     };
 }
+
+// --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
+// --*  Example: https://docs.mapbox.com/mapbox-gl-js/example/animate-point-along-line/  *--
+// --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
 
 function startAnimation()
 {
@@ -67,6 +66,10 @@ function startAnimation()
     // Start the animation.
     animateMarker(0);
 }
+
+// --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
+// --*  https://docs.mapbox.com/mapbox-gl-js/example/geojson-markers/                    *--
+// --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
 
 function addLayer()
 {
@@ -115,15 +118,17 @@ function addLayer()
     });
 }
 
-// -----
-
-var route;
+// --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
+// --*  Example: https://docs.mapbox.com/mapbox-gl-js/example/animate-point-along-route/ *--
+// --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
 
 // A single point that animates along the route.
 // Coordinates are initially set to origin.
+
+var route;
 var point;
 
-var lineDistance;
+var lineDistance; // = turf.lineDistance(route.features[0], 'kilometers');
 
 var arc = [];
 
@@ -135,18 +140,18 @@ var steps = 500;
 // Used to increment the value of the point measurement against the route.
 var counter = 0;
 
-function setOriginDestination(oorsprong, bestemming)
+function setOriginDestination(origin, destination)
 {
     // A simple line from oorsprong to bestemming.
     route = {
-        "type": "FeatureCollection",
-        "features": [{
-            "type": "Feature",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    oorsprong,
-                    bestemming
+        type: "FeatureCollection",
+        features: [{
+            type: "Feature",
+            geometry: {
+                type: "LineString",
+                coordinates: [
+                    origin,
+                    destination
                 ]
             }
         }]
@@ -161,63 +166,29 @@ function setOriginDestination(oorsprong, bestemming)
             "properties": {},
             "geometry": {
                 "type": "Point",
-                "coordinates": oorsprong
+                "coordinates": origin
             }
         }]
     };
 
     lineDistance = turf.lineDistance(route.features[0], 'kilometers');
+
+    // Draw an arc between the `origin` & `destination` of the two points
+    for (var i = 0; i < lineDistance; i += lineDistance / steps)
+    {
+        var segment = turf.along(route.features[0], i, "kilometers");
+        arc.push(segment.geometry.coordinates);
+    }
 
     // Update the route with calculated arc coordinates
     route.features[0].geometry.coordinates = arc;
 }
 
-var origin, destination;
-
-function fromOriginToDestination(originInput, destinationInput)
+function fromOriginToDestination(origin, destination)
 {
-    origin = originInput;
-    destination = destinationInput;
-
-    // MHM: Correct
-    // console.log(originInput);
-    // console.log(destinationInput);
-
-    // setOriginDestination(originInput, destinationInput);
-
-    // A simple line from oorsprong to bestemming.
-    route = {
-        "type": "FeatureCollection",
-        "features": [{
-            "type": "Feature",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    originInput,
-                    destinationInput
-                ]
-            }
-        }]
-    };
-
-// A single point that animates along the route.
-// Coordinates are initially set to oorsprong.
-    point = {
-        "type": "FeatureCollection",
-        "features": [{
-            "type": "Feature",
-            "properties": {},
-            "geometry": {
-                "type": "Point",
-                "coordinates": originInput
-            }
-        }]
-    };
-
-    lineDistance = turf.lineDistance(route.features[0], 'kilometers');
-
-    // Update the route with calculated arc coordinates
-    route.features[0].geometry.coordinates = arc;
+    // prepare route and point objects
+    // and the arc for the flight
+    setOriginDestination(origin, destination);
 
     map.addSource('route',
         {
@@ -256,6 +227,9 @@ function fromOriginToDestination(originInput, destinationInput)
 
     function animate()
     {
+        console.log(point);
+        console.log(route);
+
         // Update point geometry to a new position based on counter denoting
         // the index to access the arc.
         point.features[0].geometry.coordinates = route.features[0].geometry.coordinates[counter];
@@ -263,11 +237,6 @@ function fromOriginToDestination(originInput, destinationInput)
         // Calculate the bearing to ensure the icon is rotated to match the route arc
         // The bearing is calculate between the current point and the next point, except
         // at the end of the arc use the previous point and the current point
-
-        // console.log(route);
-        // console.log(route.features[0]);
-        // console.log(route.features[0].geometry);
-        // console.log(route.features[0].geometry.coordinates);
 
         point.features[0].properties.bearing = turf.bearing(
             turf.point(route.features[0].geometry.coordinates[counter >= steps ? counter - 1 : counter]),
