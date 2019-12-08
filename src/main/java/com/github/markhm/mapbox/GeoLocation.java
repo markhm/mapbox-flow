@@ -26,6 +26,9 @@ public class GeoLocation
     // Map
     public static GeoLocation Center = new GeoLocation("World", 0, 0);
 
+    public static GeoLocation InitialView = new GeoLocation("Initial view", 17.1733, 49.508);
+    public static GeoLocation InitialView_Turku_NY = new GeoLocation("Initial view", -26, 50);
+
     // Europe
     public static GeoLocation Turku = new GeoLocation("Turku",22.266667, 60.45);
 
