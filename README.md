@@ -1,9 +1,7 @@
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin-flow/Lobby#?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # Mapbox Integration for Vaadin Flow (10+)
-Mapbox integration for Vaadin Flow.
-
-This project is not affiliated with Mapbox or Vaadin. 
+Mapbox integration for Vaadin Flow. NB: This project is not affiliated with Mapbox or Vaadin. 
 
 ### Characteristics
 - Based on Vaadin 14.1.1
@@ -25,3 +23,6 @@ Feedback and contributions are appreciated.
 - Project structure based on [Appreciated](https://github.com/appreciated/)'s [ApexCharts Flow](https://github.com/appreciated/apexcharts-flow) component. 
    
 Dec 2019, @markhm.
+
+### Screenshot
+![Screenshot](mapbox-flow-screenshot.png)
