@@ -288,6 +288,11 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
                         <version>3.0.1</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>mapbox.properties</exclude>
+                            </excludes>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -306,6 +311,7 @@
                             <!-- Generated file that shouldn't be included in add-ons -->
                             <excludes>
                                 <exclude>META-INF/VAADIN/config/flow-build-info.json</exclude>
+                                <exclude>mapbox.properties</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
