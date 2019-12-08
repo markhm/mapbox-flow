@@ -21,8 +21,14 @@ public class MapboxMap extends Div
 
     boolean alreadyRendered = false;
 
-    public MapboxMap()
+    private GeoLocation initialView = null;
+    private int initialZoom;
+
+    public MapboxMap(GeoLocation initialView, int initialZoom)
     {
+        this.initialView = initialView;
+        this.initialZoom = initialZoom;
+
         setId("map");
         getStyle().set("align-self", "center");
         getStyle().set("border", "1px solid black");
@@ -50,7 +56,7 @@ public class MapboxMap extends Div
         String accessToken = loadAccessToken();
         page.executeJs("mapboxgl.accessToken = '" + accessToken + "';");
 
-        page.executeJs("renderMapbox(" + GeoLocation.Turku.getCoordinates()+");");
+        page.executeJs("renderMapbox(" + initialView.getCoordinates()+ "," + initialZoom + ");");
     }
 
     public void flyTo(GeoLocation geoLocation)
@@ -75,64 +81,7 @@ public class MapboxMap extends Div
 
     public void drawOriginDestinationFlight(GeoLocation origin, GeoLocation destination)
     {
-//        Route route = new Route(origin, destination);
-//        Point point = new Point(origin);
-
         page.executeJs("fromOriginToDestination(" + origin.getCoordinates() + ", " + destination.getCoordinates() + ");");
-    }
-
-    public static void main(String[] args)
-    {
-        Route route = new Route(GeoLocation.Madrid, GeoLocation.Moscow);
-        Point point = new Point(GeoLocation.Madrid);
-
-        log.info((route.toString(2)));
-        log.info("");
-        log.info((point.toString(2)));
-    }
-
-    private static class Route extends JSONObject
-    {
-        public Route(GeoLocation origin, GeoLocation destination)
-        {
-            this.put("type", "FeatureCollection");
-
-            JSONArray coordinates = new JSONArray();
-            coordinates.put(0, origin.getCoordinates());
-            coordinates.put(1, destination.getCoordinates());
-
-            JSONObject geometry = new JSONObject();
-            geometry.put("type", "LineString");
-            geometry.put("coordinates", coordinates);
-
-            JSONObject featureObject = new JSONObject();
-            featureObject.put("geometry", geometry);
-            featureObject.put("type", "Feature");
-
-            JSONArray features = new JSONArray();
-            this.put("features", featureObject);
-
-        }
-    }
-
-    private static class Point extends JSONObject
-    {
-        public Point(GeoLocation origin)
-        {
-            this.put("type", "FeatureCollection");
-
-            JSONObject geometry = new JSONObject();
-            geometry.put("type", "Point");
-            geometry.put("coordinates", origin.getCoordinates());
-
-            JSONObject featureObject = new JSONObject();
-            featureObject.put("geometry", geometry);
-            featureObject.put("type", "Feature");
-
-            JSONArray features = new JSONArray();
-            this.put("features", featureObject);
-        }
-
     }
 
     private String loadAccessToken()
@@ -151,15 +100,15 @@ public class MapboxMap extends Div
             token = prop.getProperty("mapboxgl.accessToken");
 
             // get the property value and print it out
-            System.out.println("Successfully loaded access token from mapbox.properties file.");
+            // System.out.println("Successfully loaded access token from mapbox.properties file.");
 
         } catch (IOException ex)
         {
             System.err.println("Something went wrong reading properties file: "+ex.getMessage());
+            System.err.println("Did you create an account at Mapbox.com and save your API key in src/main/resources/mapbox.properties...?");
             ex.printStackTrace(System.err);
         }
 
         return token;
     }
-
 }
