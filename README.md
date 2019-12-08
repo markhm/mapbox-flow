@@ -1,7 +1,9 @@
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/vaadin-flow/Lobby#?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 # Mapbox Integration for Vaadin Flow (10+)
-Mapbox integration for Vaadin Flow. NB: This project is not affiliated with Mapbox or Vaadin. 
+Mapbox integration for Vaadin Flow. NB: This project is not affiliated with Mapbox or Vaadin.
+
+This project is in early stage and contains some examples of how to work with the Mapbox GL JS API.  
 
 ### Characteristics
 - Based on Vaadin 14.1.1
@@ -13,7 +15,7 @@ Mapbox integration for Vaadin Flow. NB: This project is not affiliated with Mapb
 - Open a browser to http://localhost:8080/
 
 ### In case or problems
-In case of problems with Vaadin, a full clean solves most problems:
+In case of problems with Vaadin, a full clean solves most issues:
 - `mvn clean`
 - `rm package-lock.json`
 - `rm -Rf node_modules`
