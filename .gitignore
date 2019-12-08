@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+/.idea/
+/target/
+/package-lock.json
+/node_modules
+webpack.generated.js
+
+dependency_tree.txt
