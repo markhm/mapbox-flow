@@ -29,7 +29,7 @@ public class DemoView extends VerticalLayout
 
         addTopButtons();
 
-        mapboxMap = new MapboxMap();
+        mapboxMap = new MapboxMap(GeoLocation.InitialView_Turku_NY, 2);
         add(mapboxMap);
 
         addBottomButtons();
@@ -62,16 +62,16 @@ public class DemoView extends VerticalLayout
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setAlignItems(Alignment.CENTER);
 
-        Button startAnimation = new Button("Start animation", e -> mapboxMap.startAnimation());
-        Button addLayer = new Button("Add layer", e -> mapboxMap.executeJS("addLayer();"));
+        Button startAnimation = new Button("Circle animation", e -> mapboxMap.startAnimation());
+        Button addLayer = new Button("GeoJSON markers", e -> mapboxMap.executeJS("addLayer();"));
 
-        Button drawMadridMoscow = new Button("From Madrid to Moscow", e ->
+        Button turkuNewYork = new Button("From Turku to NewYork", e ->
         {
-            mapboxMap.drawOriginDestinationFlight(GeoLocation.Madrid, GeoLocation.Moscow);
+            mapboxMap.drawOriginDestinationFlight(GeoLocation.Turku, GeoLocation.NewYork);
         });
-        drawMadridMoscow.setId("replay");
+        turkuNewYork.setId("replay");
 
-        horizontalLayout.add(new Label("Work in progress:"), startAnimation, addLayer, drawMadridMoscow);
+        horizontalLayout.add(new Label("Animations:"), turkuNewYork, addLayer, startAnimation);
 
         add(horizontalLayout);
     }
