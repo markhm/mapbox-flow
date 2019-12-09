@@ -2,15 +2,20 @@ package com.github.markhm.mapbox;
 
 public class GeoLocation
 {
-    private String name;
+    private String name = "";
     private double longitude;
     private double latitude;
 
-    public GeoLocation(String name, double longitude, double latitude)
+    public GeoLocation(double longitude, double latitude)
     {
-        this.name = name;
         this.longitude = longitude;
         this.latitude = latitude;
+    }
+
+    public GeoLocation(String name, double longitude, double latitude)
+    {
+        this(longitude, latitude);
+        this.name = name;
     }
 
     public String getName()
@@ -22,6 +27,17 @@ public class GeoLocation
     {
         return "[" + longitude + "," + latitude + "]";
     }
+
+    public double[] getCoordArray()
+    {
+        double[] result = new double[2];
+
+        result[0] = longitude;
+        result[1] = latitude;
+
+        return result;
+    }
+
 
     // Map
     public static GeoLocation Center = new GeoLocation("World", 0, 0);
