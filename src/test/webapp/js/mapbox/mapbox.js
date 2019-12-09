@@ -71,7 +71,7 @@ function startAnimation()
 // --*  https://docs.mapbox.com/mapbox-gl-js/example/geojson-markers/                    *--
 // --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
 
-function addLayer()
+function addExampleLayer()
 {
     map.addLayer({
         "id": "points",
@@ -117,6 +117,34 @@ function addLayer()
         }
     });
 }
+
+function addLayer(layer)
+{
+    console.log(JSON.stringify(layer));
+
+    // console.log(layer);
+    map.addLayer(layer);
+}
+
+// Note that the id cannot be reused.
+function removeLayer(id)
+{
+    // var stateDataLayer = map.getLayer(id);
+    if (map.getLayer(id)) map.removeLayer(id);
+}
+
+function hideLayer(id)
+{
+    map.setFilter(id, ['==', 'type', 'Feature']);
+}
+
+function unhideLayer(id)
+{
+    map.setFilter(id, null);
+
+    // map.setFilter(id, ['==', 'type', null]);
+}
+
 
 // --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
 // --*  Example: https://docs.mapbox.com/mapbox-gl-js/example/animate-point-along-route/ *--

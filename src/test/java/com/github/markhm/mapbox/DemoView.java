@@ -59,21 +59,46 @@ public class DemoView extends VerticalLayout
 
     private void addBottomButtons()
     {
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
-        horizontalLayout.setAlignItems(Alignment.CENTER);
+        HorizontalLayout layerLayout = new HorizontalLayout();
+        layerLayout.setAlignItems(Alignment.CENTER);
+
+        HorizontalLayout animationsLayout = new HorizontalLayout();
+        animationsLayout.setAlignItems(Alignment.CENTER);
 
         Button startAnimation = new Button("Circle animation", e -> mapboxMap.startAnimation());
-        Button addLayer = new Button("GeoJSON markers", e -> mapboxMap.executeJS("addLayer();"));
-
+        Button addLayer = new Button("Add layer", e -> mapboxMap.executeJS("addLayer(" + getLayer().toString().replace("\"", "\'") + ");"));
+        Button removeLayer = new Button("Remove layer", e -> mapboxMap.executeJS("removeLayer('" + getLayer().getId()+ "');"));
+        // Button hideLayer = new Button("Hide layer", e -> mapboxMap.executeJS("hideLayer('" + getLayer().getId()+ "');"));
+        Button unhideLayer = new Button("Unhide layer", e -> mapboxMap.executeJS("unhideLayer('" + getLayer().getId()+ "');"));
         Button turkuNewYork = new Button("From Turku to NewYork", e ->
         {
             mapboxMap.drawOriginDestinationFlight(GeoLocation.Turku, GeoLocation.NewYork);
         });
         turkuNewYork.setId("replay");
 
-        horizontalLayout.add(new Label("Animations:"), turkuNewYork, addLayer, startAnimation);
+        layerLayout.add(addLayer, removeLayer, unhideLayer);
+        animationsLayout.add(new Label("Animations:"), turkuNewYork, startAnimation);
 
-        add(horizontalLayout);
+        add(layerLayout);
+        add(animationsLayout);
     }
 
+    public static Layer getLayer()
+    {
+        Layer layer = new Layer("points", "symbol");
+
+        Layer.Properties mapboxDCProperties = new Layer.Properties("Mapbox DC", "monument");
+        GeoLocation mapboxDCLocation = new GeoLocation(-77.03238901390978, 38.913188059745586);
+        Layer.Feature mapboxDCFeature = new Layer.Feature("Feature", mapboxDCProperties, mapboxDCLocation);
+        layer.addFeature(mapboxDCFeature);
+
+        Layer.Properties mapboxSFProperties = new Layer.Properties("Mapbox SF", "harbor");
+        GeoLocation mapboxSFLocation = new GeoLocation(-122.414, 37.776);
+        Layer.Feature mapboxSFFeature = new Layer.Feature("Feature", mapboxSFProperties, mapboxSFLocation);
+        layer.addFeature(mapboxSFFeature);
+
+        // System.out.println(layer.toString(2));
+
+        return layer;
+    }
 }
