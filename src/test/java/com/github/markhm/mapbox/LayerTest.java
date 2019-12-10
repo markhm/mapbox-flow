@@ -9,7 +9,7 @@ public class LayerTest
     @Test
     public void testLayerMaker()
     {
-        Layer layer = DemoView.getLayer();
+        Layer layer = DemoView.getExampleLayer();
 
         String jsonString = "{" +
                 "        \"id\": \"points\"," +

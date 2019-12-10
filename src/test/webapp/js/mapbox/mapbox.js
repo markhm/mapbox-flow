@@ -71,65 +71,14 @@ function startAnimation()
 // --*  https://docs.mapbox.com/mapbox-gl-js/example/geojson-markers/                    *--
 // --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
 
-function addExampleLayer()
-{
-    map.addLayer({
-        "id": "points",
-        "type": "symbol",
-        "source": {
-            "type": "geojson",
-            "data": {
-                "type": "FeatureCollection",
-                "features": [{
-// feature for Mapbox DC
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [-77.03238901390978, 38.913188059745586]
-                    },
-                    "properties": {
-                        "title": "Mapbox DC",
-                        "icon": "monument"
-                    }
-                }, {
-// feature for Mapbox SF
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [-122.414, 37.776]
-                    },
-                    "properties": {
-                        "title": "Mapbox SF",
-                        "icon": "harbor"
-                    }
-                }]
-            }
-        },
-        "layout": {
-// get the icon name from the source's "icon" property
-// concatenate the name to get an icon from the style's sprite sheet
-            "icon-image": ["concat", ["get", "icon"], "-15"],
-// get the title name from the source's "title" property
-            "text-field": ["get", "title"],
-            "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
-            "text-offset": [0, 0.6],
-            "text-anchor": "top"
-        }
-    });
-}
-
 function addLayer(layer)
 {
-    console.log(JSON.stringify(layer));
-
-    // console.log(layer);
     map.addLayer(layer);
 }
 
-// Note that the id cannot be reused.
 function removeLayer(id)
 {
-    // var stateDataLayer = map.getLayer(id);
+    // Note that the id cannot be reused, so removeLayer does not seem useful
     if (map.getLayer(id)) map.removeLayer(id);
 }
 
@@ -141,10 +90,7 @@ function hideLayer(id)
 function unhideLayer(id)
 {
     map.setFilter(id, null);
-
-    // map.setFilter(id, ['==', 'type', null]);
 }
-
 
 // --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
 // --*  Example: https://docs.mapbox.com/mapbox-gl-js/example/animate-point-along-route/ *--
@@ -170,7 +116,7 @@ var counter = 0;
 
 function setOriginDestination(origin, destination)
 {
-    // A simple line from oorsprong to bestemming.
+    // A simple line from origin to destination
     route = {
         type: "FeatureCollection",
         features: [{
@@ -186,7 +132,7 @@ function setOriginDestination(origin, destination)
     };
 
 // A single point that animates along the route.
-// Coordinates are initially set to oorsprong.
+// Coordinates initially set to origin.
     point = {
         "type": "FeatureCollection",
         "features": [{

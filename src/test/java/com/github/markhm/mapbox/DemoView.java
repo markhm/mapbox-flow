@@ -66,25 +66,26 @@ public class DemoView extends VerticalLayout
         animationsLayout.setAlignItems(Alignment.CENTER);
 
         Button startAnimation = new Button("Circle animation", e -> mapboxMap.startAnimation());
-        Button addLayer = new Button("Add layer", e -> mapboxMap.executeJS("addLayer(" + getLayer().toString().replace("\"", "\'") + ");"));
-        Button removeLayer = new Button("Remove layer", e -> mapboxMap.executeJS("removeLayer('" + getLayer().getId()+ "');"));
-        // Button hideLayer = new Button("Hide layer", e -> mapboxMap.executeJS("hideLayer('" + getLayer().getId()+ "');"));
-        Button unhideLayer = new Button("Unhide layer", e -> mapboxMap.executeJS("unhideLayer('" + getLayer().getId()+ "');"));
+        Button addLayer = new Button("Add layer", e -> mapboxMap.executeJS("addLayer(" + getExampleLayer() + ");"));
+        // Button removeLayer = new Button("Remove layer", e -> mapboxMap.executeJS("removeLayer('" + getLayer().getId()+ "');"));
+        Button hideLayer = new Button("Hide layer", e -> mapboxMap.executeJS("hideLayer('" + getExampleLayer().getId()+ "');"));
+        Button unhideLayer = new Button("Unhide layer", e -> mapboxMap.executeJS("unhideLayer('" + getExampleLayer().getId()+ "');"));
         Button turkuNewYork = new Button("From Turku to NewYork", e ->
         {
             mapboxMap.drawOriginDestinationFlight(GeoLocation.Turku, GeoLocation.NewYork);
         });
         turkuNewYork.setId("replay");
 
-        layerLayout.add(addLayer, removeLayer, unhideLayer);
+        layerLayout.add(addLayer, hideLayer, unhideLayer);
         animationsLayout.add(new Label("Animations:"), turkuNewYork, startAnimation);
 
         add(layerLayout);
         add(animationsLayout);
     }
 
-    public static Layer getLayer()
+    public static Layer getExampleLayer()
     {
+        // getLayer().toString() or getLayer().toString().replace("\"", "\'") is not needed
         Layer layer = new Layer("points", "symbol");
 
         Layer.Properties mapboxDCProperties = new Layer.Properties("Mapbox DC", "monument");
