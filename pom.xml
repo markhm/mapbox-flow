@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <vaadin.version>14.1.1</vaadin.version>
+        <vaadin.version>14.1.5</vaadin.version>
         <jetty.version>9.4.15.v20190215</jetty.version>
         <logback.version>1.2.3</logback.version>
 
@@ -187,11 +187,16 @@
 
     </dependencies>
 
+<!--    <generatedSourcesDirectory>src/main/generated</generatedSourcesDirectory>-->
+
     <build>
         <defaultGoal>jetty:run</defaultGoal>
         <resources>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/src/main/generated</directory>
             </resource>
         </resources>
         <plugins>
