@@ -1,0 +1,184 @@
+{
+  "metadata" : {
+    "name" : "mapbox-flow",
+    "description" : "Mapbox wrapper for Vaadin Flow (10+)",
+    "logoLink" : "",
+    "links" : [ ]
+  },
+  "summary" : [ ],
+  "srcRoot" : "..",
+  "extensions" : [ "js", "md", "json", "ts", "yml", "html", "xml", "txt", "h", "java", "css", "svg", "cc", "properties", "sh" ],
+  "ignore" : [ {
+    "pathPattern" : ".*/target/.*",
+    "contentPattern" : "",
+    "include" : true,
+    "note" : "Compiled files"
+  }, {
+    "pathPattern" : ".*/node_modules/.*",
+    "contentPattern" : "",
+    "include" : true,
+    "note" : "Node modules"
+  }, {
+    "pathPattern" : ".*/.*[.]min[.]js",
+    "contentPattern" : "",
+    "include" : true,
+    "note" : "Minimized JS library"
+  }, {
+    "pathPattern" : ".*/[.][a-zA-Z0-9_]+.*",
+    "contentPattern" : "",
+    "include" : true,
+    "note" : "Hidden files and folders"
+  } ,
+  {
+    "pathPattern" : ".*/src/main/resources/data/.*",
+    "contentPattern" : "",
+    "include" : true,
+    "note" : "Hidden resources data directory, which contains json data"
+  }  ,
+  {
+    "pathPattern" : ".*/package.json",
+    "contentPattern" : "",
+    "include" : true,
+    "note" : "Ignoring package.json, which is part of the Vaadin definition."
+  } ,
+  {
+    "pathPattern" : ".*/package-lock.json",
+    "contentPattern" : "",
+    "include" : true,
+    "note" : "Ignoring package-lock.json, which are part of the Vaadin definition."
+  } ,
+  {
+    "pathPattern" : ".*/webpack.generated.js",
+    "contentPattern" : "",
+    "include" : true,
+    "note" : "Ignoring webpack.generated.js, which are part of the Vaadin definition."
+  } ,
+  {
+    "pathPattern" : ".*/webpack.config.js",
+    "contentPattern" : "",
+    "include" : true,
+    "note" : "Ignoring webpack.config.js, which are part of the Vaadin definition."
+  } ],
+  "main" : {
+    "name" : "main",
+    "sourceFileFilters" : [ {
+      "pathPattern" : ".*",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : ""
+    } ]
+  },
+  "test" : {
+    "name" : "test",
+    "sourceFileFilters" : [ {
+      "pathPattern" : ".*/test/.*",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "Test files"
+    }, {
+      "pathPattern" : ".*/karma[.]conf[.]js",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "Test files"
+    }, {
+      "pathPattern" : ".*[.]spec[.]js",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "Test files"
+    }, {
+      "pathPattern" : ".*/tests/.*",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "Test files"
+    } ]
+  },
+  "generated" : {
+    "name" : "generated",
+    "sourceFileFilters" : [ {
+      "pathPattern" : ".*/generated/.*",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "Generated files"
+    } ]
+  },
+  "buildAndDeployment" : {
+    "name" : "build and deployment",
+    "sourceFileFilters" : [ {
+      "pathPattern" : ".*([.]|/)webpack([.]|/).*",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "Webpack configuration files"
+    }, {
+      "pathPattern" : ".*/package[.]json",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "npm configuration"
+    }, {
+      "pathPattern" : ".*/assembly[.]xml",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "Maven assembly plugin configuration"
+    }, {
+      "pathPattern" : ".*[.]sh",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "Scripts"
+    }, {
+      "pathPattern" : ".*/package[-]lock[.]json",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "npm configuration"
+    }, {
+      "pathPattern" : ".*/pom[.]xml",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "Maven configuration"
+    } ]
+  },
+  "other" : {
+    "name" : "other",
+    "sourceFileFilters" : [ {
+      "pathPattern" : ".*[.]md",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "Markdown files"
+    }, {
+      "pathPattern" : ".*[.]txt",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "Text files"
+    }, {
+      "pathPattern" : ".*[.]svg",
+      "contentPattern" : "",
+      "include" : true,
+      "note" : "SVG files"
+    } ]
+  },
+  "goalsAndControls" : [ ],
+  "compareResultsWith" : [ ],
+  "logicalDecompositions" : [ {
+    "name" : "primary",
+    "scope" : "main",
+    "filters" : [ ],
+    "componentsFolderDepth" : 1,
+    "components" : [ ],
+    "metaComponents" : [ ],
+    "includeRemainingFiles" : true,
+    "dependenciesFinder" : {
+      "useBuiltInDependencyFinders" : true,
+      "rules" : [ ],
+      "metaRules" : [ ]
+    },
+    "renderingOptions" : {
+      "orientation" : "TB"
+    }
+  } ],
+  "crossCuttingConcerns" : [ ],
+  "analysis" : {
+    "skipDuplication" : false,
+    "skipDependencies" : false,
+    "cacheSourceFiles" : true,
+    "saveDailyHistory" : false,
+    "analyzerOverrides" : [ ]
+  }
+}
