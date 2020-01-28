@@ -13,8 +13,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 //@Tag("map")
-@JsModule("mapbox.js")
-@CssImport("mapbox.css")
+@JsModule("./mapbox.js")
+@CssImport("./mapbox.css")
 // @JavaScript("https://raw.githubusercontent.com/markhm/mapbox-flow/master/src/main/resources/META-INF/resources/frontend/mapbox.js")
 // @CssImport("https://raw.githubusercontent.com/markhm/mapbox-flow/master/src/main/resources/META-INF/resources/frontend/mapbox.css")
 public class MapboxMap extends Div
@@ -69,8 +69,8 @@ public class MapboxMap extends Div
         String accessToken = AccessToken.getToken();
         // page.addJavaScript(jsFileLocation);
 
-//        page.addStyleSheet("https://raw.githubusercontent.com/markhm/mapbox-flow/master/src/main/resources/META-INF/resources/frontend/mapbox.css");
-//        page.addJavaScript("https://raw.githubusercontent.com/markhm/mapbox-flow/master/src/main/resources/META-INF/resources/frontend/mapbox.js");
+        page.addStyleSheet("https://raw.githubusercontent.com/markhm/mapbox-flow/master/src/main/resources/META-INF/resources/frontend/mapbox.css");
+        page.addJavaScript("https://raw.githubusercontent.com/markhm/mapbox-flow/master/src/main/resources/META-INF/resources/frontend/mapbox.js");
 
         page.executeJs("mapboxgl.accessToken = '" + accessToken + "';");
         page.executeJs("renderMapbox(" + initialView.getLongLat()+ "," + initialZoom + ");");
