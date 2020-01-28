@@ -6,7 +6,7 @@ Mapbox integration for Vaadin Flow. NB: This project is not affiliated with Mapb
 This project is in early stage and contains some examples of how to work with the Mapbox GL JS API.  
 
 ### Characteristics
-- Based on Vaadin 14.1.1
+- Based on Vaadin <del>14.1.1</del> - 14.0.15, due to larger memory footprint for 14.1
 
 ### To get started
 - Create an account at [Mapbox](https://account.mapbox.com/auth/signup/) and save your API token in a file called `mapbox.properties` that contains the following line (replace by your own token):
