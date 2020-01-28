@@ -4,7 +4,6 @@ import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 
 import java.io.*;
-import java.util.Properties;
 
 public class TestData
 {
@@ -13,7 +12,7 @@ public class TestData
         JSONObject result = null;
         ClassLoader latestClassLoader = MapboxMap.class.getClassLoader();
 
-        try (InputStream defaultInputStream = latestClassLoader.getResourceAsStream("data/danske_kommuner.geo.json"))
+        try (InputStream defaultInputStream = latestClassLoader.getResourceAsStream("data/dk/danske_kommuner.geo.json"))
         {
 
             String fileContents = IOUtils.toString(defaultInputStream, "UTF-8");
