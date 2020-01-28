@@ -10,3 +10,4 @@ webpack.generated.js
 dependency_tree.txt
 
 _sokrates/reports
+src/main/resources/mapbox_default.properties
