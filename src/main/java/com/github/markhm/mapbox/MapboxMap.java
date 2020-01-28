@@ -1,18 +1,20 @@
 package com.github.markhm.mapbox;
 
-import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dependency.JavaScript;
+import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.Page;
+import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.shared.ui.LoadMode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
+@Tag("map")
+@JavaScript("./mapbox.js")
+@CssImport("./mapbox.css")
 public class MapboxMap extends Div
 {
     private static Log log = LogFactory.getLog(MapboxMap.class);
@@ -47,21 +49,37 @@ public class MapboxMap extends Div
 
     private void render()
     {
+//        String jsFileLocation = AccessToken.getJSFileLocation();
+//        String cssLocation = AccessToken.getCSSFileLocation();
+
         page.addStyleSheet("https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.css");
+
+
+        // TODO Here it is
+        // https://github.com/vaadin/flow/issues/6582
+        // https://vaadin.com/forum/thread/14045163/how-to-pack-server-side-java-script-in-executable-jar-file
+        // https://vaadin.com/docs/v14/flow/importing-dependencies/tutorial-ways-of-importing.html
+        // https://vaadin.com/forum/thread/18059914
+
         page.addJavaScript("https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.js");
         page.addJavaScript("https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js");
 
-        page.addJavaScript("/js/mapbox/mapbox.js");
+        String accessToken = AccessToken.getToken();
+        // page.addJavaScript(jsFileLocation);
 
-        String accessToken = loadAccessToken();
+        // page.addStyleSheet("./mapbox.css");
+        // page.addJavaScript("./mapbox.js");
+
         page.executeJs("mapboxgl.accessToken = '" + accessToken + "';");
+        page.executeJs("renderMapbox(" + initialView.getLongLat()+ "," + initialZoom + ");");
 
-        page.executeJs("renderMapbox(" + initialView.getCoordinates()+ "," + initialZoom + ");");
+        // add full screen control
+        page.executeJs("map.addControl(new mapboxgl.FullscreenControl());");
     }
 
     public void flyTo(GeoLocation geoLocation)
     {
-        page.executeJs("map.flyTo({center: " + geoLocation.getCoordinates() + ", zoom: 9});");
+        page.executeJs("map.flyTo({center: " + geoLocation.getLongLat() + ", zoom: 9});");
     }
 
     public void zoomTo(int zoomLevel)
@@ -81,34 +99,7 @@ public class MapboxMap extends Div
 
     public void drawOriginDestinationFlight(GeoLocation origin, GeoLocation destination)
     {
-        page.executeJs("fromOriginToDestination(" + origin.getCoordinates() + ", " + destination.getCoordinates() + ");");
+        page.executeJs("fromOriginToDestination(" + origin.getLongLat() + ", " + destination.getLongLat() + ");");
     }
 
-    private String loadAccessToken()
-    {
-        String token = "";
-
-        // https://www.mkyong.com/java/java-properties-file-examples/
-        try (InputStream input = MapboxMap.class.getClassLoader().getResourceAsStream("mapbox.properties"))
-        {
-
-            Properties prop = new Properties();
-
-            // load a properties file
-            prop.load(input);
-
-            token = prop.getProperty("mapboxgl.accessToken");
-
-            // get the property value and print it out
-            // System.out.println("Successfully loaded access token from mapbox.properties file.");
-
-        } catch (IOException ex)
-        {
-            System.err.println("Something went wrong reading properties file: "+ex.getMessage());
-            System.err.println("Did you create an account at Mapbox.com and save your API key in src/main/resources/mapbox.properties...?");
-            ex.printStackTrace(System.err);
-        }
-
-        return token;
-    }
 }
