@@ -14,8 +14,8 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
 @Route("")
-//@JsModule("com/github/markhm/mapbox/mapbox.js")
-//@CssImport("com/github/markhm/mapbox/mapbox.css")
+@JsModule("mapbox.js")
+@CssImport("mapbox.css")
 public class DemoView extends VerticalLayout
 {
     private static Log log = LogFactory.getLog(DemoView.class);
