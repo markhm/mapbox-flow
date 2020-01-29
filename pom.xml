@@ -281,8 +281,11 @@
                     </supportedPackagings>
                     <webApp>
                         <resourceBases>
-                            <resourceBase>${project.basedir}/src/main/webapp/</resourceBase>
-                            <resourceBase>${project.basedir}/src/test/webapp/</resourceBase>
+                            <resourceBase>${project.basedir}/src/main/resources/META-INF/resources</resourceBase>
+                            <resourceBase>${project.basedir}/src/test/resources/</resourceBase>
+
+<!--                            <resourceBase>${project.basedir}/src/main/webapp/</resourceBase>-->
+<!--&lt;!&ndash;                            <resourceBase>${project.basedir}/src/main/resources/</resourceBase>&ndash;&gt;-->
                         </resourceBases>
                     </webApp>
                 </configuration>
