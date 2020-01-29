@@ -13,10 +13,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 //@Tag("map")
-@JsModule("./mapbox.js")
-@CssImport("./mapbox.css")
-// @JavaScript("https://raw.githubusercontent.com/markhm/mapbox-flow/master/src/main/resources/META-INF/resources/frontend/mapbox.js")
-// @CssImport("https://raw.githubusercontent.com/markhm/mapbox-flow/master/src/main/resources/META-INF/resources/frontend/mapbox.css")
+//@JavaScript("./mapbox.js")
+//@CssImport("./mapbox.css")
 public class MapboxMap extends Div
 {
     private static Log log = LogFactory.getLog(MapboxMap.class);
@@ -55,22 +53,13 @@ public class MapboxMap extends Div
 //        String cssLocation = AccessToken.getCSSFileLocation();
 
         page.addStyleSheet("https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.css");
-
-
-        // TODO Here it is
-        // https://github.com/vaadin/flow/issues/6582
-        // https://vaadin.com/forum/thread/14045163/how-to-pack-server-side-java-script-in-executable-jar-file
-        // https://vaadin.com/docs/v14/flow/importing-dependencies/tutorial-ways-of-importing.html
-        // https://vaadin.com/forum/thread/18059914
-
         page.addJavaScript("https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.js");
         page.addJavaScript("https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js");
 
         String accessToken = AccessToken.getToken();
-        // page.addJavaScript(jsFileLocation);
 
-        page.addStyleSheet("https://raw.githubusercontent.com/markhm/mapbox-flow/master/src/main/resources/META-INF/resources/frontend/mapbox.css");
-        page.addJavaScript("https://raw.githubusercontent.com/markhm/mapbox-flow/master/src/main/resources/META-INF/resources/frontend/mapbox.js");
+        page.addStyleSheet("./mapbox.css");
+        page.addJavaScript("./mapbox.js");
 
         page.executeJs("mapboxgl.accessToken = '" + accessToken + "';");
         page.executeJs("renderMapbox(" + initialView.getLongLat()+ "," + initialZoom + ");");
@@ -103,5 +92,11 @@ public class MapboxMap extends Div
     {
         page.executeJs("fromOriginToDestination(" + origin.getLongLat() + ", " + destination.getLongLat() + ");");
     }
+
+    // Documents regarding importing
+    // https://github.com/vaadin/flow/issues/6582
+    // https://vaadin.com/forum/thread/14045163/how-to-pack-server-side-java-script-in-executable-jar-file
+    // https://vaadin.com/docs/v14/flow/importing-dependencies/tutorial-ways-of-importing.html
+    // https://vaadin.com/forum/thread/18059914
 
 }
