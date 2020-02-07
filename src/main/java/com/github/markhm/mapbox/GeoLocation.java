@@ -57,7 +57,7 @@ public class GeoLocation
         return "[" + longitude + "," + latitude+ "]";
     }
 
-    @Deprecated // This should never be necessary
+    // @Deprecated // This should never be necessary
     public String getLatLong()
     {
         return "[" + latitude + "," + longitude+ "]";
@@ -67,8 +67,8 @@ public class GeoLocation
     {
         double[] result = new double[2];
 
-        result[0] = latitude;
-        result[1] = longitude;
+        result[0] = longitude;
+        result[1] = latitude;
 
         return result;
     }
@@ -93,8 +93,14 @@ public class GeoLocation
     public static GeoLocation Turku = new GeoLocation("Turku",60.45, 22.266667);
 
     public static GeoLocation Paris = new GeoLocation("Paris", 48.8566, 2.3522);
+
     public static GeoLocation Amsterdam = new GeoLocation("Amsterdam", 52.3702, 4.8952);
+    public static GeoLocation Utrecht = new GeoLocation("Utrecht", 52.09083, 5.12222);
+
     public static GeoLocation Copenhagen = new GeoLocation("Copenhagen", 55.6761, 12.5683);
+    public static GeoLocation Roskilde = new GeoLocation("Roskilde", 55.64152, 12.08035);
+
+
     public static GeoLocation Madrid = new GeoLocation("Madrid", 40.416775, -3.703790);
     public static GeoLocation Moscow = new GeoLocation("Moscow", 55.755825, 37.617298 );
 

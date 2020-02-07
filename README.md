@@ -12,7 +12,7 @@ This project is in early stage and contains some examples of how to work with th
 - Create an account at [Mapbox](https://account.mapbox.com/auth/signup/) and save your API token in a file called `mapbox.properties` that contains the following line (replace by your own token):
     `mapboxgl.accessToken=pk.ayJ1IjoibCFya2htIiRiYSI7ImNrM4ZoazZwcDBtajQzbW2xZHp2c3A4N3BifQ.Y1yevUv4K5gMIqlh2X1v5w`
 - To build/run: `mvn jetty:run`
-- Open a browser to http://localhost:8080/
+- Open a browser to http://localhost/
 
 ### In case or problems
 In case of problems with Vaadin, a full clean solves most issues:

@@ -29,8 +29,8 @@ public class DirectionsRequest extends AbstractRESTClient
 //        GeoLocation from = GeoLocation.Paris;
 //        GeoLocation to = GeoLocation.Copenhagen;
 
-        GeoLocation from = GeoLocation.Paris;
-        GeoLocation to = GeoLocation.Copenhagen;
+        GeoLocation from = GeoLocation.Utrecht;
+        GeoLocation to = GeoLocation.Roskilde;
 
         String origin =  from.getLongitude() + "," + from.getLatitude();
         String destination = to.getLongitude() + "," + to.getLatitude();

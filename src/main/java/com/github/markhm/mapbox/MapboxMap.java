@@ -1,10 +1,16 @@
 package com.github.markhm.mapbox;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.github.markhm.mapbox.directions.Geometry;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.Page;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 
 //@Tag("map")
 //@JavaScript("./mapbox.js")
@@ -66,6 +72,50 @@ public class MapboxMap extends Div
 
         // add full screen control
         page.executeJs("map.addControl(new mapboxgl.FullscreenControl());");
+    }
+
+    public void addAnimatedItem(AnimatedItem animatedItem)
+    {
+        Layer carLayer = new Layer(animatedItem.getLayerId(), "symbol");
+
+        GeoLocation initialPosition = animatedItem.getLocation();
+        log.info("Adding " + animatedItem.getDescription() + " to initial position " + initialPosition + " on map.");
+
+        Layer.Properties carProperties = new Layer.Properties("", animatedItem.getSprite().toString());
+        Layer.Feature carFeature = new Layer.Feature("Feature", carProperties, initialPosition);
+        carLayer.addFeature(carFeature);
+
+        executeJS("addLayer(" + carLayer + ");");
+
+//        UI ui = getUI().get();
+//        ui.access(() ->
+//        {
+//
+//        });
+    }
+
+    public void addLine(Geometry geometry, Color color)
+    {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectWriter writer = objectMapper.writerFor(Geometry.class);
+
+        String stringValue = null;
+
+        try
+        {
+            stringValue = writer.writeValueAsString(geometry);
+        }
+        catch (JsonProcessingException jpe)
+        {
+            log.error(jpe);
+        }
+
+        executeJS("addLine(" + stringValue + ", " + color.toStringForJS() + ");");
+    }
+
+    public void removeAnimatedItem(AnimatedItem animatedItem)
+    {
+        executeJS("removeLayer(" + animatedItem.getLayerId() + ");");
     }
 
     public void zoomTo(GeoLocation geoLocation, int zoomLevel)

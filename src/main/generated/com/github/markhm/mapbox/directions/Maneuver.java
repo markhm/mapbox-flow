@@ -12,6 +12,7 @@ public class Maneuver
     private List<Double> location;
     private String instruction;
     private DrivingSide modifier;
+    private Long exit;
 
     @JsonProperty("bearing_after")
     public long getBearingAfter()
@@ -84,4 +85,9 @@ public class Maneuver
     {
         this.modifier = value;
     }
+
+    @JsonProperty("exit")
+    public Long getExit() { return exit; }
+    @JsonProperty("exit")
+    public void setExit(Long value) { this.exit = value; }
 }

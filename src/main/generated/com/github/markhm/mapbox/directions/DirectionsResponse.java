@@ -14,7 +14,10 @@ public class DirectionsResponse
 {
     private static Log log = LogFactory.getLog(DirectionsResponse.class);
 
-    private static String filePath = "data/amsterdam_to_copenhagen.json";
+    private static String AMS_TO_CPH = "data/amsterdam_to_copenhagen.json";
+    private static String UTR_TO_ROS = "data/utrecht_to_roskilde.json";
+
+    private static String ACTIVE_PATH = UTR_TO_ROS;
 
     private List<Route> routes;
     private List<Waypoint> waypoints;
@@ -29,7 +32,7 @@ public class DirectionsResponse
         {
             if (instance == null)
             {
-                instance = Converter.fromJsonString(Util.readLineByLine(filePath));
+                instance = Converter.fromJsonString(Util.readLineByLine(ACTIVE_PATH));
             }
         }catch (IOException ioe)
         {
@@ -42,7 +45,7 @@ public class DirectionsResponse
 
     public static void main(String[] args) throws Exception
     {
-        DirectionsResponse directionsResponse = Converter.fromJsonString(Util.readLineByLine(filePath));
+        DirectionsResponse directionsResponse = getInstance();
 
         List<Route> routes = directionsResponse.getRoutes();
 
@@ -76,22 +79,27 @@ public class DirectionsResponse
 
                     List<List<Double>> coordinates = step.getGeometry().getCoordinates();
 
+                    long stepDuration = step.getDuration();
+                    double coordinateDuration = ((double) stepDuration / coordinates.size());
+
                     for (int k = 0; k < coordinates.size(); k++)
                     {
                         List<Double> coordinate = coordinates.get(k);
 
-                        log.info(counter + " L"+i + "-S" + j + "-C" + k + " - [" + coordinate.get(0) + "," + coordinate.get(1) + "]");
+                        log.info(counter + " L"+i + "-S" + j + "-C" + k + " - " + (coordinateDuration * (k+1)) + "-" + accumulatedDuration + " @ [" + coordinate.get(1) + "," + coordinate.get(0) + "]");
+
+                        // accumulatedDuration += coordinateDuration;
 
                         counter++;
                     }
-                    long duration = step.getDuration();
-                    accumulatedDuration += duration;
-                    // log.info(duration+" seconds until " + intersection.getLocation());
 
+                    accumulatedDuration += stepDuration;
+                    // log.info(stepDuration+" seconds until " + intersection.getLocation());
                 }
             }
 
             log.info("Accumulated duration = "+accumulatedDuration);
+            log.info("Leg, Segment, Coordinates");
         }
     }
 

@@ -6,7 +6,7 @@
     <groupId>com.github.markhm</groupId>
     <artifactId>mapbox-flow</artifactId>
     <version>0.0.2-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <!-- <packaging>war</packaging> -->
 
     <name>Mapbox Flow</name>
     <description>Integration of Mapbox for Vaadin Flow. Not associated with Mapbox.com</description>
@@ -181,11 +181,12 @@
 <!--            <scope>test</scope>-->
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.skyscreamer/jsonassert -->
         <dependency>
             <groupId>org.skyscreamer</groupId>
             <artifactId>jsonassert</artifactId>
             <version>1.5.0</version>
-            <scope>test</scope>
+<!--            <scope>test</scope>-->
         </dependency>
 
     </dependencies>

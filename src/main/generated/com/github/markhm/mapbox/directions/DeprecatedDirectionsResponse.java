@@ -21,7 +21,10 @@ public class DeprecatedDirectionsResponse extends JSONObject
 {
     private static Log log = LogFactory.getLog(DeprecatedDirectionsResponse.class);
 
-    private static String classpathResource = "data/amsterdam_to_copenhagen.json";
+    private static String AMS_TO_CPH = "data/amsterdam_to_copenhagen.json";
+    private static String UTR_TO_ROS = "data/utrecht_to_roskilde.json";
+
+    private static String ACTIVE_PATH = UTR_TO_ROS;
 
     public static DeprecatedDirectionsResponse singleton = null;
 
@@ -58,7 +61,7 @@ public class DeprecatedDirectionsResponse extends JSONObject
     {
         if (singleton == null)
         {
-            String result = readLineByLine(classpathResource);
+            String result = readLineByLine(ACTIVE_PATH);
             singleton = new DeprecatedDirectionsResponse(result);
         }
         return singleton;

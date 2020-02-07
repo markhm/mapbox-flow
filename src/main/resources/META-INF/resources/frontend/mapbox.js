@@ -50,7 +50,7 @@ function addPolygon(featureCollection)
 }
 
 
-function addLine(geometry)
+function addLine(geometry, color)
 {
     var layer = {
         'id': 'routeLine',
@@ -68,7 +68,7 @@ function addLine(geometry)
             'line-cap': 'round'
         },
         'paint': {
-            'line-color': '#d54648',
+            'line-color': color,
             'line-width': 3
         }
     };
