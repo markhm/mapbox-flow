@@ -6,11 +6,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Stream;
 
 // https://app.quicktype.io/
 
@@ -18,12 +14,31 @@ public class DirectionsResponse
 {
     private static Log log = LogFactory.getLog(DirectionsResponse.class);
 
-    private static String filePath = "/Users/mark/git/markhm/mapbox-flow/src/main/resources/data/amsterdam_to_copenhagen.json";
+    private static String filePath = "data/amsterdam_to_copenhagen.json";
 
     private List<Route> routes;
     private List<Waypoint> waypoints;
     private String code;
     private String uuid;
+
+    private static DirectionsResponse instance = null;
+
+    public static DirectionsResponse getInstance()
+    {
+        try
+        {
+            if (instance == null)
+            {
+                instance = Converter.fromJsonString(Util.readLineByLine(filePath));
+            }
+        }catch (IOException ioe)
+        {
+            log.error(ioe);
+        }
+
+        return instance;
+
+    }
 
     public static void main(String[] args) throws Exception
     {
@@ -45,23 +60,29 @@ public class DirectionsResponse
             log.info( durationHours+ " hours, " + roundedMinutes + " minutes and "+remainingSeconds+" seconds.");
             log.info("");
 
+            int counter = 0;
             long accumulatedDuration = 0;
             List<Leg> legs = route.getLegs();
-            for (Leg leg : legs)
+            for (int i = 0 ; i < legs.size(); i++)
             {
+                log.info("Entering leg "+i);
+                Leg leg = legs.get(i);
+
                 List<Step> steps = leg.getSteps();
-                for (int i = 0; i < steps.size(); i++)
+                for (int j = 0; j < steps.size(); j++)
                 {
-                    Step step = steps.get(i);
-                    // log.info(step.getDestinations());
-//                    List<Intersection> intersections = step.getIntersections();
-//                    for (Intersection intersection : intersections)
-//                    {
-//                    }
+                    log.info("Entering step "+j);
+                    Step step = steps.get(j);
+
                     List<List<Double>> coordinates = step.getGeometry().getCoordinates();
-                    for (List<Double> coordinate : coordinates)
+
+                    for (int k = 0; k < coordinates.size(); k++)
                     {
-                        log.info(i + " - [" + coordinate.get(0) + "," + coordinate.get(1) + "]");
+                        List<Double> coordinate = coordinates.get(k);
+
+                        log.info(counter + " L"+i + "-S" + j + "-C" + k + " - [" + coordinate.get(0) + "," + coordinate.get(1) + "]");
+
+                        counter++;
                     }
                     long duration = step.getDuration();
                     accumulatedDuration += duration;
