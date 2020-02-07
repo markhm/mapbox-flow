@@ -5,10 +5,16 @@ import org.json.JSONObject;
 
 public class GeoLocation
 {
-    private String name = "";
+    private String name = null;
+
     private double latitude;
     private double longitude;
 
+    /** GeoLocations are created [latitude, longtitude]
+     *
+     * @param latitude
+     * @param longitude
+     */
     public GeoLocation(double latitude, double longitude)
     {
         this.latitude = latitude;
@@ -31,9 +37,15 @@ public class GeoLocation
 
     public String toString()
     {
-        return name + " - " + getLongLat();
+        if (name != null)
+        {
+            return name + " - " + getLongLat();
+        }
+        else
+        {
+            return getLongLat();
+        }
     }
-
 
     public String getName()
     {
@@ -43,6 +55,12 @@ public class GeoLocation
     public String getLongLat()
     {
         return "[" + longitude + "," + latitude+ "]";
+    }
+
+    @Deprecated // This should never be necessary
+    public String getLatLong()
+    {
+        return "[" + latitude + "," + longitude+ "]";
     }
 
     public double[] getCoordArray()
@@ -68,9 +86,8 @@ public class GeoLocation
     // Map
     public static GeoLocation Center = new GeoLocation("World", 0, 0);
 
-    public static GeoLocation InitialView = new GeoLocation("Initial view", 17.1733, 49.508);
-    public static GeoLocation InitialView_Turku_NY = new GeoLocation("Initial view",50, -26);
-    public static GeoLocation InitialView_AMS_CPH = new GeoLocation("Initial view",54, 8.74);
+    public static GeoLocation InitialView_Turku_NY = new GeoLocation("Initial view Turku, NY",50, -26);
+    public static GeoLocation InitialView_AMS_CPH = new GeoLocation("Initial view AMS, CPH",54, 8.74);
 
     // Europe
     public static GeoLocation Turku = new GeoLocation("Turku",60.45, 22.266667);
@@ -81,11 +98,7 @@ public class GeoLocation
     public static GeoLocation Madrid = new GeoLocation("Madrid", 40.416775, -3.703790);
     public static GeoLocation Moscow = new GeoLocation("Moscow", 55.755825, 37.617298 );
 
-    public static GeoLocation Circelhuset = new GeoLocation("Circelhuset", 55.902685, 12.475549 );
-    public static GeoLocation Graafschap_Doetinchem = new GeoLocation("Hotel De Graafschap, Doetinchem", 51.964903, 6.2883468);
-
     public static GeoLocation Oisterwijk = new GeoLocation("Oisterwijk", 51.5809686, 5.197761);
-    public static GeoLocation Stokske = new GeoLocation("Stokske", 51.5534789,5.1893911);
     public static GeoLocation Kijkduin = new GeoLocation("Kijkduin", 52.068889, 4.222388);
 
     // US
