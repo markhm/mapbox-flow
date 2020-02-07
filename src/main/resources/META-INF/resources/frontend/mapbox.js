@@ -135,15 +135,15 @@ function pointOnCircle(angle)
 function startAnimation()
 {
 // Add a source and layer displaying a point which will be animated in a circle.
-    map.addSource('point', {
+    map.addSource('animation', {
         "type": "geojson",
         "data": pointOnCircle(0)
     });
 
     map.addLayer(
         {
-            "id": "point",
-            "source": "point",
+            "id": "animation",
+            "source": "animation",
             "type": "circle",
             "paint": {
                 "circle-radius": 10,
@@ -155,7 +155,7 @@ function startAnimation()
     {
         // Update the data to a new position based on the animation timestamp. The
         // divisor in the expression `timestamp / 1000` controls the animation speed.
-        map.getSource('point').setData(pointOnCircle(timestamp / 1000));
+        map.getSource('animation').setData(pointOnCircle(timestamp / 1000));
 
         // Request the next frame of the animation.
         requestAnimationFrame(animateMarker);
@@ -171,6 +171,7 @@ function startAnimation()
 
 function addLayer(layer)
 {
+    console.log("Adding layer "+layer);
     map.addLayer(layer);
 }
 
@@ -299,8 +300,8 @@ function fromOriginToDestination(origin, destination)
 
     function animate()
     {
-        console.log(point);
-        console.log(route);
+        // console.log(point);
+        // console.log(route);
 
         // Update point geometry to a new position based on counter denoting
         // the index to access the arc.
