@@ -6,6 +6,8 @@
     <groupId>com.github.markhm</groupId>
     <artifactId>mapbox-flow</artifactId>
     <version>0.0.2-SNAPSHOT</version>
+    <packaging>war</packaging>
+
     <name>Mapbox Flow</name>
     <description>Integration of Mapbox for Vaadin Flow. Not associated with Mapbox.com</description>
 
@@ -15,6 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+	<failOnMissingWebXml>false</failOnMissingWebXml>
         <vaadin.version>14.0.15</vaadin.version>
         <jetty.version>9.4.15.v20190215</jetty.version>
         <logback.version>1.2.3</logback.version>
@@ -114,7 +117,7 @@
             <artifactId>slf4j-simple</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -167,7 +170,7 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
+<!--            <scope>test</scope>-->
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.junit.vintage/junit-vintage-engine -->
@@ -175,7 +178,7 @@
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
             <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
+<!--            <scope>test</scope>-->
         </dependency>
 
         <dependency>
@@ -190,16 +193,58 @@
 <!--    <generatedSourcesDirectory>src/main/generated</generatedSourcesDirectory>-->
 
     <build>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <defaultGoal>jetty:run</defaultGoal>
+
         <resources>
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/src/test/resources</directory>
             </resource>
             <resource>
                 <directory>${project.basedir}/src/main/generated</directory>
             </resource>
         </resources>
         <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/generated</source>
+                                <source>src/test/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <version>3.8.1</version>-->
+<!--                <configuration>-->
+<!--                    <verbose>true</verbose>-->
+<!--                    <fork>true</fork>-->
+<!--                    <compilerVersion>1.3</compilerVersion>-->
+<!--                    <includes>-->
+<!--                        <include>src/main/java/**/*.java</include>-->
+<!--                        <include>src/main/generated/**/*.java</include>-->
+<!--                    </includes>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.1.0</version>
@@ -212,7 +257,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/frontend/</outputDirectory>
+                            <outputDirectory>${basedir}/target/${artifactId}-${version}/frontend</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/webapp</directory>
@@ -220,6 +265,10 @@
                                 </resource>
                                 <resource>
                                     <directory>src/test/webapp</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>src/main/resources/META-INF/resources/frontend</directory>
                                     <filtering>false</filtering>
                                 </resource>
                                 <resource>
@@ -234,6 +283,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -242,13 +292,18 @@
                     <archive>
                         <index>true</index>
                         <manifest>
-                            <addClasspath>false</addClasspath>
+                            <addClasspath>true</addClasspath>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
                             <Vaadin-Package-Version>1</Vaadin-Package-Version>
                         </manifestEntries>
                     </archive>
+<!--                    <includes>-->
+<!--                        <include>src/main/java/**/*.java</include>-->
+<!--                        <include>src/main/generated/**/*.java</include>-->
+<!--                        <include>target/classes/**/*.class</include>-->
+<!--                    </includes>-->
                     <!-- Generated file that shouldn't be included in add-ons -->
                     <excludes>
                         <exclude>META-INF/VAADIN/config/flow-build-info.json</exclude>
@@ -283,9 +338,6 @@
                         <resourceBases>
                             <resourceBase>${project.basedir}/src/main/resources/META-INF/resources</resourceBase>
                             <resourceBase>${project.basedir}/src/test/resources/</resourceBase>
-
-<!--                            <resourceBase>${project.basedir}/src/main/webapp/</resourceBase>-->
-<!--&lt;!&ndash;                            <resourceBase>${project.basedir}/src/main/resources/</resourceBase>&ndash;&gt;-->
                         </resourceBases>
                     </webApp>
                 </configuration>
@@ -351,7 +403,9 @@
                 </plugins>
             </build>
         </profile>
+
         <!-- Run (demo) in production mode-->
+
         <profile>
             <id>production</id>
             <properties>
