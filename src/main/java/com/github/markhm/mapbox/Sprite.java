@@ -4,52 +4,72 @@ package com.github.markhm.mapbox;
  */
 public class Sprite
 {
-    public static final String Airport = "airport";
-    public static final String Harbor = "harbor";
-    public static final String Helicopter = "heliport";
+    private String id = null;
 
-    public static final String Airplane = "airport";
-    public static final String Bicycle = "bicycle";
-    public static final String Boat = "ferry";
-    public static final String Bus = "bus";
-    public static final String Car = "car";
-    public static final String Rocket = "rocket";
-    public static final String Train = "rail";
+    private Sprite(String id)
+    {
+        this.id = id;
+    }
 
-    public static final String Doctor = "doctor";
-    public static final String Police = "police";
-    public static final String Fire_Station = "fire-station";
-    public static final String Hospital = "hospital";
+    public String toString()
+    {
+        return id;
+    }
 
-    public static final String Danger = "danger";
-    public static final String Globe = "globe";
-    public static final String Information = "information";
-    public static final String Marker = "marker";
-    public static final String Marker_Open = "marker-stroked";
+    // Available in the default map
+    public static final Sprite Airport = new Sprite("airport");
+    public static final Sprite Car = new Sprite("car");
 
-    public static final String Flag = "embassy";
-    public static final String Cross = "cross";
-    public static final String Heart = "heart";
-    public static final String Star = "star";
-    public static final String Star_Open = "star-stroked";
-    public static final String Circle = "circle";
-    public static final String Circle_Open = "circle-stroked";
-    public static final String Triangle = "triangle";
-    public static final String Triangle_Open = "circle-stroked";
+    public static final Sprite Bank = new Sprite("bank");
+    public static final Sprite Helicopter = new Sprite("heliport");
 
-    public static final String Home = "home";
+    // Unevaluated
+    public static final Sprite Harbor = new Sprite("harbor");
 
-    public static final String Monument = "monument";
-    public static final String Bank = "bank";
-    public static final String Building = "building";
-    public static final String Castle = "castle";
-    public static final String Commercial = "commercial";
-    public static final String Convenience = "convenience";
-    public static final String Factory = "industry";
-    public static final String Farm = "farm";
-    public static final String Tulip = "garden";
-    public static final String Shop = "shop";
-    public static final String Town_hall = "town-hall";
-    public static final String Warehouse = "warehouse";
-    public static final String Windmill = "windmil";
+    public static final Sprite Airplane = new Sprite("airport");
+    public static final Sprite Bicycle = new Sprite("bicycle");
+    public static final Sprite Boat = new Sprite("ferry");
+    public static final Sprite Bus = new Sprite("bus");
+
+    public static final Sprite Rocket = new Sprite("rocket");
+    public static final Sprite Train = new Sprite("rail");
+
+    public static final Sprite Doctor = new Sprite("doctor");
+    public static final Sprite Police = new Sprite("police");
+    public static final Sprite Fire_Station = new Sprite("fire-station");
+    public static final Sprite Hospital = new Sprite("hospital");
+
+    public static final Sprite Globe = new Sprite("globe");
+    public static final Sprite Information = new Sprite("information");
+    public static final Sprite Marker = new Sprite("marker");
+    public static final Sprite Marker_Open = new Sprite("marker-stroked");
+
+    public static final Sprite Flag = new Sprite("embassy");
+    public static final Sprite Cross = new Sprite("cross");
+    public static final Sprite Heart = new Sprite("heart");
+    public static final Sprite Star = new Sprite("star");
+    public static final Sprite Star_Open = new Sprite("star-stroked");
+    public static final Sprite Circle = new Sprite("circle");
+    public static final Sprite Circle_Open = new Sprite("circle-stroked");
+    public static final Sprite Triangle = new Sprite("triangle");
+    public static final Sprite Triangle_Open = new Sprite("circle-stroked");
+
+    public static final Sprite Home = new Sprite("home");
+
+    public static final Sprite Monument = new Sprite("monument");
+
+    public static final Sprite Building = new Sprite("building");
+    public static final Sprite Castle = new Sprite("castle");
+    public static final Sprite Commercial = new Sprite("commercial");
+    public static final Sprite Convenience = new Sprite("convenience");
+    public static final Sprite Factory = new Sprite("industry");
+    public static final Sprite Farm = new Sprite("farm");
+    public static final Sprite Tulip = new Sprite("garden");
+    public static final Sprite Shop = new Sprite("shop");
+    public static final Sprite Town_hall = new Sprite("town-hall");
+    public static final Sprite Warehouse = new Sprite("warehouse");
+    public static final Sprite Windmill = new Sprite("windmil");
+
+    // Unavailable in the default map
+    public static final Sprite Danger = new Sprite("danger");
 }
