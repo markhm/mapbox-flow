@@ -4,7 +4,7 @@
 //
 // Import this package:
 //
-//     import com.github.markhm.mapbox.directions.Converter;
+//     import com.github.markhm.mapbox.com.github.markhm.mapbox.directions.Converter;
 //
 // Then you can deserialize a JSON string with
 //
@@ -39,7 +39,7 @@ public class Converter
     private static void instantiateMapper()
     {
         ObjectMapper mapper = new ObjectMapper();
-        reader = mapper.reader(DirectionsResponse.class);
+        reader = mapper.readerFor(DirectionsResponse.class);
         writer = mapper.writerFor(DirectionsResponse.class);
     }
 
