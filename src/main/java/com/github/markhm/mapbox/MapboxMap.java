@@ -1,14 +1,8 @@
 package com.github.markhm.mapbox;
 
 import com.vaadin.flow.component.*;
-import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.dependency.JavaScript;
-import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.Page;
-import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import com.vaadin.flow.shared.ui.LoadMode;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -28,6 +22,7 @@ public class MapboxMap extends Div
 
     public MapboxMap(GeoLocation initialView, int initialZoom)
     {
+        // log.info("Entering Mapbox(..) constructor");
         this.initialView = initialView;
         this.initialZoom = initialZoom;
 
@@ -49,6 +44,9 @@ public class MapboxMap extends Div
 
     private void render()
     {
+        // mapbox://styles/markhm/ck63rxdzn0zgq1iomoub9gk91
+
+        // log.info("About to render()");
 //        String jsFileLocation = AccessToken.getJSFileLocation();
 //        String cssLocation = AccessToken.getCSSFileLocation();
 
@@ -56,21 +54,29 @@ public class MapboxMap extends Div
         page.addJavaScript("https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.js");
         page.addJavaScript("https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js");
 
-        String accessToken = AccessToken.getToken();
-
         page.addStyleSheet("./mapbox.css");
         page.addJavaScript("./mapbox.js");
 
+        String accessToken = AccessToken.getToken();
+
         page.executeJs("mapboxgl.accessToken = '" + accessToken + "';");
+
+        // render mapbox
         page.executeJs("renderMapbox(" + initialView.getLongLat()+ "," + initialZoom + ");");
 
         // add full screen control
         page.executeJs("map.addControl(new mapboxgl.FullscreenControl());");
     }
 
-    public void flyTo(GeoLocation geoLocation)
+    public void zoomTo(GeoLocation geoLocation, int zoomLevel)
     {
-        page.executeJs("map.flyTo({center: " + geoLocation.getLongLat() + ", zoom: 9});");
+        page.executeJs("map.flyTo({center: " + geoLocation.getLongLat() + ", zoom: " + zoomLevel + "});");
+    }
+
+    public void zoomTo(GeoLocation geoLocation)
+    {
+        page.executeJs("map.flyTo({center: " + geoLocation.getLongLat() + "});");
+        // zoomTo(geoLocation, 9);
     }
 
     public void zoomTo(int zoomLevel)
