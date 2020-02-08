@@ -6,7 +6,7 @@
     <groupId>com.github.markhm</groupId>
     <artifactId>mapbox-flow</artifactId>
     <version>0.0.2-SNAPSHOT</version>
-    <!-- <packaging>war</packaging> -->
+    <packaging>jar</packaging>
 
     <name>Mapbox Flow</name>
     <description>Integration of Mapbox for Vaadin Flow. Not associated with Mapbox.com</description>
@@ -288,6 +288,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make-a-jar</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <version>3.1.0</version>
                 <configuration>
                     <archive>
