@@ -2,20 +2,34 @@
 
 package com.github.markhm.mapbox.layer;
 
-import java.util.*;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Layout {
+public class Layout
+{
     private String lineJoin;
     private String lineCap;
 
     @JsonProperty("line-join")
-    public String getLineJoin() { return lineJoin; }
+    public String getLineJoin()
+    {
+        return lineJoin;
+    }
+
     @JsonProperty("line-join")
-    public void setLineJoin(String value) { this.lineJoin = value; }
+    public void setLineJoin(String value)
+    {
+        this.lineJoin = value;
+    }
 
     @JsonProperty("line-cap")
-    public String getLineCap() { return lineCap; }
+    public String getLineCap()
+    {
+        return lineCap;
+    }
+
     @JsonProperty("line-cap")
-    public void setLineCap(String value) { this.lineCap = value; }
+    public void setLineCap(String value)
+    {
+        this.lineCap = value;
+    }
 }

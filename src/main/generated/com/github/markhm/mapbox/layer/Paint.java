@@ -2,20 +2,35 @@
 
 package com.github.markhm.mapbox.layer;
 
-import java.util.*;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.markhm.mapbox.Color;
 
-public class Paint {
-    private String lineColor;
-    private String lineWidth;
+public class Paint
+{
+    private Color lineColor;
+    private int lineWidth;
 
     @JsonProperty("line-color")
-    public String getLineColor() { return lineColor; }
+    public Color getLineColor()
+    {
+        return lineColor;
+    }
+
     @JsonProperty("line-color")
-    public void setLineColor(String value) { this.lineColor = value; }
+    public void setLineColor(Color value)
+    {
+        this.lineColor = value;
+    }
 
     @JsonProperty("line-width")
-    public String getLineWidth() { return lineWidth; }
+    public int getLineWidth()
+    {
+        return lineWidth;
+    }
+
     @JsonProperty("line-width")
-    public void setLineWidth(String value) { this.lineWidth = value; }
+    public void setLineWidth(int value)
+    {
+        this.lineWidth = value;
+    }
 }

@@ -1,10 +1,8 @@
 package com.github.markhm.mapbox;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.github.markhm.mapbox.directions.Geometry;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.Page;
@@ -56,8 +54,8 @@ public class MapboxMap extends Div
 //        String jsFileLocation = AccessToken.getJSFileLocation();
 //        String cssLocation = AccessToken.getCSSFileLocation();
 
-        page.addStyleSheet("https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.css");
-        page.addJavaScript("https://api.tiles.mapbox.com/mapbox-gl-js/v1.6.0/mapbox-gl.js");
+        page.addStyleSheet("https://api.tiles.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css");
+        page.addJavaScript("https://api.tiles.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js");
         page.addJavaScript("https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js");
 
         page.addStyleSheet("./mapbox.css");

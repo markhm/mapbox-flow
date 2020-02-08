@@ -2,10 +2,10 @@
 
 package com.github.markhm.mapbox.layer;
 
-import java.util.*;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Layer {
+public class Layer
+{
     private String id;
     private String type;
     private Source source;
@@ -13,27 +13,62 @@ public class Layer {
     private Paint paint;
 
     @JsonProperty("id")
-    public String getID() { return id; }
+    public String getID()
+    {
+        return id;
+    }
+
     @JsonProperty("id")
-    public void setID(String value) { this.id = value; }
+    public void setID(String value)
+    {
+        this.id = value;
+    }
 
     @JsonProperty("type")
-    public String getType() { return type; }
+    public String getType()
+    {
+        return type;
+    }
+
     @JsonProperty("type")
-    public void setType(String value) { this.type = value; }
+    public void setType(String value)
+    {
+        this.type = value;
+    }
 
     @JsonProperty("source")
-    public Source getSource() { return source; }
+    public Source getSource()
+    {
+        return source;
+    }
+
     @JsonProperty("source")
-    public void setSource(Source value) { this.source = value; }
+    public void setSource(Source value)
+    {
+        this.source = value;
+    }
 
     @JsonProperty("layout")
-    public Layout getLayout() { return layout; }
+    public Layout getLayout()
+    {
+        return layout;
+    }
+
     @JsonProperty("layout")
-    public void setLayout(Layout value) { this.layout = value; }
+    public void setLayout(Layout value)
+    {
+        this.layout = value;
+    }
 
     @JsonProperty("paint")
-    public Paint getPaint() { return paint; }
+    public Paint getPaint()
+    {
+        return paint;
+    }
+
     @JsonProperty("paint")
-    public void setPaint(Paint value) { this.paint = value; }
+    public void setPaint(Paint value)
+    {
+        this.paint = value;
+    }
 }

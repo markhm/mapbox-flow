@@ -2,10 +2,9 @@
 
 package com.github.markhm.mapbox.layer;
 
-import java.util.*;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
-@JsonAutoDetect(fieldVisibility=JsonAutoDetect.Visibility.NONE)
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.NONE)
 public class Properties
 {
 }

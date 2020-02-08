@@ -1,6 +1,7 @@
 package com.github.markhm.mapbox.directions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.markhm.mapbox.Geometry;
 
 import java.util.List;
 

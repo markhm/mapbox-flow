@@ -1,10 +1,9 @@
-package com.github.markhm.mapbox.direction;
+package com.github.markhm.mapbox.directions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.github.markhm.mapbox.directions.DirectionsResponse;
-import com.github.markhm.mapbox.directions.Geometry;
+import com.github.markhm.mapbox.Geometry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
