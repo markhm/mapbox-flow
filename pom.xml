@@ -290,7 +290,7 @@
                 </executions>
             </plugin>
 
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>
@@ -314,17 +314,17 @@
                             <Vaadin-Package-Version>1</Vaadin-Package-Version>
                         </manifestEntries>
                     </archive>
-<!--                    <includes>-->
-<!--                        <include>src/main/java/**/*.java</include>-->
-<!--                        <include>src/main/generated/**/*.java</include>-->
-<!--                        <include>target/classes/**/*.class</include>-->
-<!--                    </includes>-->
-                    <!-- Generated file that shouldn't be included in add-ons -->
+<!- -                    <includes>- ->
+<!- -                        <include>src/main/java/**/*.java</include>- ->
+<!- -                        <include>src/main/generated/**/*.java</include>- ->
+<!- -                        <include>target/classes/**/*.class</include>- ->
+<!- -                    </includes>- ->
+                    <!- - Generated file that shouldn't be included in add-ons - ->
                     <excludes>
                         <exclude>META-INF/VAADIN/config/flow-build-info.json</exclude>
                     </excludes>
                 </configuration>
-            </plugin>
+            </plugin> -->
             <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
