@@ -16,6 +16,7 @@ public class DirectionsResponse
 
     private static String AMS_TO_CPH = "data/amsterdam_to_copenhagen.json";
     private static String UTR_TO_ROS = "data/utrecht_to_roskilde.json";
+    private static String VEENENDAAL_TO_NIVAA = "data/veenendaal_to_nivaa.json";
 
     private static String ACTIVE_PATH = UTR_TO_ROS;
 

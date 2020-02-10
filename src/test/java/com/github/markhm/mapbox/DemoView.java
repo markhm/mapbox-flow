@@ -2,6 +2,7 @@ package com.github.markhm.mapbox;
 
 import com.github.markhm.mapbox.directions.Converter;
 import com.github.markhm.mapbox.directions.DeprecatedDirectionsResponse;
+import com.github.markhm.mapbox.directions.DirectionsResponse;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
@@ -79,29 +80,33 @@ public class DemoView extends VerticalLayout
         animationsButtons.setAlignItems(Alignment.CENTER);
 
         Button startAnimation = new Button("Circle animation", e -> mapboxMap.startAnimation());
-        Button addLayer = new Button("Add layer", e -> mapboxMap.executeJS("addLayer(" + getExampleLayer() + ");"));
+        Button addLayer = new Button("Add layer", e -> mapboxMap.executeJs("addLayer(" + getExampleLayer() + ");"));
         // Button removeLayer = new Button("Remove layer", e -> mapboxMap.executeJS("removeLayer('" + getLayer().getId()+ "');"));
-        Button hideLayer = new Button("Hide layer", e -> mapboxMap.executeJS("hideLayer('" + getExampleLayer().getId()+ "');"));
-        Button unhideLayer = new Button("Unhide layer", e -> mapboxMap.executeJS("unhideLayer('" + getExampleLayer().getId()+ "');"));
+        Button hideLayer = new Button("Hide layer", e -> mapboxMap.executeJs("hideLayer('" + getExampleLayer().getId()+ "');"));
+        Button unhideLayer = new Button("Unhide layer", e -> mapboxMap.executeJs("unhideLayer('" + getExampleLayer().getId()+ "');"));
 
         JSONObject jsonObject = TestData.loadFile();
 
-        Button addPolygon = new Button("Add DK Polygon", e -> mapboxMap.executeJS("addPolygon("+jsonObject+");"));
+        Button addPolygon = new Button("Add DK Polygon", e -> mapboxMap.executeJs("addPolygon("+jsonObject+");"));
         Button turkuNewYork = new Button("From Turku to New York", e ->
         {
             mapboxMap.drawOriginDestinationFlight(GeoLocation.Turku, GeoLocation.NewYork_JFK);
         });
         turkuNewYork.setId("replay");
 
-        Button fromParisToCopenhagen = new Button("Amsterdam -> Copenhagen",
-                e -> mapboxMap.executeJS("addLine(" + DeprecatedDirectionsResponse.getInstance().getGeometry() + ");"));
+//        Button fromParisToCopenhagen = new Button("Utrecht -> Roskilde",
+//                e -> mapboxMap.executeJs("addLine(" + DeprecatedDirectionsResponse.getInstance().getGeometry() + ");"));
+
+        Button linesButton = new Button("Utrecht -> Roskilde",
+                e -> mapboxMap.addLine(DirectionsResponse.getInstance().getRoutes().get(0).getGeometry(), Color.NAVY_BLUE));
+
 
         layerButtons.add(addLayer, hideLayer, unhideLayer, addPolygon);
-        animationsButtons.add(new Label("Animations:"), turkuNewYork, startAnimation, fromParisToCopenhagen);
+        animationsButtons.add(new Label("Animations:"), turkuNewYork, startAnimation, linesButton);
 
         HorizontalLayout controlButtons = new HorizontalLayout();
-        Button activatePointerCoordinates = new Button("Add pointer coordinates", e -> mapboxMap.executeJS("activatePointerLocation();"));
-        Button deactivatePointerCoordinates = new Button("Deactivate all listeners", e -> mapboxMap.executeJS("deactivateAllListeners();"));
+        Button activatePointerCoordinates = new Button("Add pointer coordinates", e -> mapboxMap.executeJs("activatePointerLocation();"));
+        Button deactivatePointerCoordinates = new Button("Deactivate all listeners", e -> mapboxMap.executeJs("deactivateAllListeners();"));
 
         controlButtons.add(activatePointerCoordinates, deactivatePointerCoordinates);
 
@@ -116,17 +121,17 @@ public class DemoView extends VerticalLayout
         Layer layer = new Layer("points", "symbol");
 
         Layer.Properties mapboxDCProperties = new Layer.Properties("National Bank", Sprite.Bank.toString());
-        GeoLocation mapboxDCLocation = new GeoLocation(-77.03238901390978, 38.913188059745586);
+        GeoLocation mapboxDCLocation = new GeoLocation(38.913188059745586, -77.03238901390978);
         Layer.Feature mapboxDCFeature = new Layer.Feature("Feature", mapboxDCProperties, mapboxDCLocation);
         layer.addFeature(mapboxDCFeature);
 
         Layer.Properties mapboxDangerProperties = new Layer.Properties("National danger", Sprite.Danger.toString());
-        GeoLocation mapboxDangerLocation = new GeoLocation(30, -20);
+        GeoLocation mapboxDangerLocation = new GeoLocation(-20, 30);
         Layer.Feature mapboxDangerFeature = new Layer.Feature("Feature", mapboxDangerProperties, mapboxDangerLocation);
         layer.addFeature(mapboxDangerFeature);
 
         Layer.Properties mapboxSFProperties = new Layer.Properties("Helicopter Haven", Sprite.Helicopter.toString());
-        GeoLocation mapboxSFLocation = new GeoLocation(-122.414, 37.776);
+        GeoLocation mapboxSFLocation = new GeoLocation(37.776, -122.414);
         Layer.Feature mapboxSFFeature = new Layer.Feature("Feature", mapboxSFProperties, mapboxSFLocation);
         layer.addFeature(mapboxSFFeature);
 

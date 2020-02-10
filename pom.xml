@@ -8,6 +8,11 @@
     <version>0.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
+    <!-- https://www.roytuts.com/create-both-war-and-jar-files-using-maven/ -->
+    <!-- https://maven.apache.org/plugins/maven-war-plugin/examples/war-manifest-guide.html -->
+    <!-- https://devcenter.heroku.com/articles/java-webapp-runner -->
+    <!-- https://devcenter.heroku.com/articles/deploying-executable-jar-files#deployment-with-git -->
+
     <name>Mapbox Flow</name>
     <description>Integration of Mapbox for Vaadin Flow. Not associated with Mapbox.com</description>
 
@@ -258,7 +263,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/${artifactId}-${version}/frontend</outputDirectory>
+                            <outputDirectory>${basedir}/target/${artifactId}-${project.version}/frontend</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/webapp</directory>

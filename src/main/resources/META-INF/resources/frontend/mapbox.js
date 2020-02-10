@@ -1,7 +1,7 @@
 var map;
 var radius = 20;
 
-function renderMapbox(center, initialZoom)
+function renderDefaultMap(center, initialZoom)
 {
     map = new mapboxgl.Map(
     {
@@ -10,6 +10,33 @@ function renderMapbox(center, initialZoom)
         center: center, // starting position [lng, lat]" +
         zoom: initialZoom // starting zoom" +
     });
+}
+
+function renderCustomMap(mapStyle, center, initialZoom)
+{
+    console.log("mapStyle = " + mapStyle);
+
+    map = new mapboxgl.Map(
+        {
+            container: 'map', // container id" +
+            style: mapStyle, // stylesheet location" +
+            center: center, // starting position [lng, lat]" +
+            zoom: initialZoom // starting zoom" +
+        });
+}
+
+function renderOptionsMap(mapOptions)
+{
+    console.log("Map options passed is: " + mapOptions);
+
+    // var mapOptionsString = "'" + JSON.stringify(mapOptions) + "'";
+    // console.log("mapOptionsString = " + mapOptionsString);
+
+    var optionsObject = JSON.parse(mapOptions);
+
+    // console.log("optionsObject created is: " + optionsObject);
+
+    map = new mapboxgl.Map(optionsObject);
 }
 
 function activatePointerLocation()
@@ -48,7 +75,6 @@ function addPolygon(featureCollection)
 
     map.addLayer(polyLayer);
 }
-
 
 function addLine(geometry, color)
 {

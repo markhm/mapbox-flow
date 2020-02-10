@@ -11,16 +11,16 @@ import com.github.markhm.mapbox.ColorSerializer;
 
 import java.io.IOException;
 
-public class Converter
+public class SourceConverter
 {
     // Serialize/deserialize helpers
 
-    public static Layer fromJsonString(String json) throws IOException
+    public static Source fromJsonString(String json) throws IOException
     {
         return getObjectReader().readValue(json);
     }
 
-    public static String toJsonString(Layer obj) throws JsonProcessingException
+    public static String toJsonString(Source obj) throws JsonProcessingException
     {
         return getObjectWriter().writeValueAsString(obj);
     }
@@ -32,14 +32,14 @@ public class Converter
     {
         ObjectMapper mapper = new ObjectMapper();
 
-        // Added custom deserializer
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(Color.class, new ColorDeserializer());
-        module.addSerializer(Color.class, new ColorSerializer());
-        mapper.registerModule(module);
+//        // Added custom deserializer
+//        SimpleModule module = new SimpleModule();
+//        module.addDeserializer(Color.class, new ColorDeserializer());
+//        module.addSerializer(Color.class, new ColorSerializer());
+//        mapper.registerModule(module);
 
-        reader = mapper.readerFor(Layer.class);
-        writer = mapper.writerFor(Layer.class);
+        reader = mapper.readerFor(Source.class);
+        writer = mapper.writerFor(Source.class);
     }
 
     private static ObjectReader getObjectReader()
@@ -54,4 +54,3 @@ public class Converter
         return writer;
     }
 }
-

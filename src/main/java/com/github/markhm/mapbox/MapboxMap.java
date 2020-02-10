@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.Page;
+import com.vaadin.flow.internal.JsonSerializer;
+import elemental.json.JsonValue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -23,13 +25,12 @@ public class MapboxMap extends Div
 
     private GeoLocation initialView = null;
     private int initialZoom;
+    boolean dkMap = false;
 
-    public MapboxMap(GeoLocation initialView, int initialZoom)
+    private MapboxOptions options = null;
+
+    private MapboxMap()
     {
-        // log.info("Entering Mapbox(..) constructor");
-        this.initialView = initialView;
-        this.initialZoom = initialZoom;
-
         setId("map");
         getStyle().set("align-self", "center");
         getStyle().set("border", "1px solid black");
@@ -38,15 +39,37 @@ public class MapboxMap extends Div
         setHeight("700px");
 
         page = UI.getCurrent().getPage();
+    }
+
+    public MapboxMap(MapboxOptions options)
+    {
+        this();
+
+        this.options = options;
+    }
+
+    public MapboxMap(GeoLocation initialView, int initialZoom)
+    {
+        this(initialView, initialZoom, false);
+    }
+
+
+    public MapboxMap(GeoLocation initialView, int initialZoom, boolean dkMap)
+    {
+        this();
+        // log.info("Entering Mapbox(..) constructor");
+        this.initialView = initialView;
+        this.initialZoom = initialZoom;
+        this.dkMap = dkMap;
 
         if (!alreadyRendered)
         {
-            render();
+            render(dkMap);
             alreadyRendered = true;
         }
     }
 
-    private void render()
+    private void render(boolean dkMap)
     {
         // mapbox://styles/markhm/ck63rxdzn0zgq1iomoub9gk91
 
@@ -63,14 +86,42 @@ public class MapboxMap extends Div
 
         String accessToken = AccessToken.getToken();
 
-        page.executeJs("mapboxgl.accessToken = '" + accessToken + "';");
+        executeJs("mapboxgl.accessToken = '" + accessToken + "';");
 
         // render mapbox
-        page.executeJs("renderMapbox(" + initialView.getLongLat()+ "," + initialZoom + ");");
+//        options = new MapboxOptions();
+//        options.setInitialZoom(initialZoom);
+//        options.setInitialView(initialView);
+
+        // log.info("Mapbox options: " + options);
+
+        // JsonValue jsonString = JsonSerializer.toJson(options);
+
+        // executeJs("renderCustomMap(" + options.toString().replace("\"", "'") + ");");
+        // executeJs("renderCustomMap(" + options.toString() + ");");
+
+        String styleString = getMapStyle(dkMap);
+
+        // log.info("styleString = "+styleString);
+
+        executeJs("renderCustomMap('" + styleString + "', " + initialView.getLongLat() + "," + initialZoom + ");");
 
         // add full screen control
-        page.executeJs("map.addControl(new mapboxgl.FullscreenControl());");
+        executeJs("map.addControl(new mapboxgl.FullscreenControl());");
     }
+
+    private String getMapStyle(boolean dkMap)
+    {
+        if (dkMap)
+        {
+            return "mapbox://styles/markhm/ck4b4hiy41bmh1ck5ns089mhh";
+        }
+        else
+        {
+            return "mapbox://styles/mapbox/streets-v11";
+        }
+    }
+
 
     public void addAnimatedItem(AnimatedItem animatedItem)
     {
@@ -83,7 +134,9 @@ public class MapboxMap extends Div
         Layer.Feature carFeature = new Layer.Feature("Feature", carProperties, initialPosition);
         carLayer.addFeature(carFeature);
 
-        executeJS("addLayer(" + carLayer + ");");
+        log.info("CARLAYER: "+carLayer); // see below
+
+        executeJs("addLayer(" + carLayer + ");");
 
 //        UI ui = getUI().get();
 //        ui.access(() ->
@@ -92,38 +145,92 @@ public class MapboxMap extends Div
 //        });
     }
 
+//    {
+//        "layout":
+//        {
+//            "text-field":["get","title"],
+//            "text-offset":[0,0.7],
+//            "text-anchor":"top",
+//                "icon-image":["concat",["get","icon"],"-15"],
+//            "text-font":["Open Sans  Semibold"]
+//        },
+//        "id":"cars",
+//            "source":
+//        {
+//            "data":
+//            {
+//                "features":
+//                        [{"geometry":
+//                {
+//                    "coordinates":[5.55361,52.026443],
+//                    "type":"Point"
+//                },
+//                "type":"Feature",
+//                        "properties": {"icon":"car","title":""}}
+//                        ],
+//                "type":"FeatureCollection"
+//            },
+//            "type":"geojson"
+//        },
+//        "type":"symbol"
+//    }
+
     public void addLine(Geometry geometry, Color color)
     {
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter writer = objectMapper.writerFor(Geometry.class);
 
-        String stringValue = null;
+        String geometryAsString = null;
 
         try
         {
-            stringValue = writer.writeValueAsString(geometry);
+            geometryAsString = writer.writeValueAsString(geometry);
         }
         catch (JsonProcessingException jpe)
         {
             log.error(jpe);
         }
 
-        executeJS("addLine(" + stringValue + ", " + color.toStringForJS() + ");");
+        executeJs("addLine(" + geometryAsString + ", " + color.toStringForJS() + ");");
     }
+
+//        {
+//            "id":"routeLine",
+//                "type":"line",
+//                "source":
+//            {
+//                "type":"geojson",
+//                    "data":
+//                {
+//                    "type":"Feature",
+//                        "properties":{},
+//                    "geometry":
+//                    {
+//                        "coordinates":[
+//                    [55.755825,37.617298],
+//                    [55.6761,12.5683]
+//                    ],
+//                        "type":"LineString"
+//                    }
+//                }
+//            },
+//            "layout":{"line-join":"round","line-cap":"round"},
+//            "paint":{"line-color":{"line-color":"#377E21"},"line-width":3}
+//        }
 
     public void removeAnimatedItem(AnimatedItem animatedItem)
     {
-        executeJS("removeLayer(" + animatedItem.getLayerId() + ");");
+        executeJs("removeLayer(" + animatedItem.getLayerId() + ");");
     }
 
     public void zoomTo(GeoLocation geoLocation, int zoomLevel)
     {
-        page.executeJs("map.flyTo({center: " + geoLocation.getLongLat() + ", zoom: " + zoomLevel + "});");
+        executeJs("map.flyTo({center: " + geoLocation.getLongLat() + ", zoom: " + zoomLevel + "});");
     }
 
     public void zoomTo(GeoLocation geoLocation)
     {
-        page.executeJs("map.flyTo({center: " + geoLocation.getLongLat() + "});");
+        executeJs("map.flyTo({center: " + geoLocation.getLongLat() + "});");
         // zoomTo(geoLocation, 9);
     }
 
@@ -134,17 +241,17 @@ public class MapboxMap extends Div
 
     public void startAnimation()
     {
-        page.executeJs("startAnimation();");
+        executeJs("startAnimation();");
     }
 
-    public void executeJS(String javaScript)
+    public void executeJs(String javaScript)
     {
         page.executeJs(javaScript);
     }
 
     public void drawOriginDestinationFlight(GeoLocation origin, GeoLocation destination)
     {
-        page.executeJs("fromOriginToDestination(" + origin.getLongLat() + ", " + destination.getLongLat() + ");");
+        executeJs("fromOriginToDestination(" + origin.getLongLat() + ", " + destination.getLongLat() + ");");
     }
 
     // Documents regarding importing

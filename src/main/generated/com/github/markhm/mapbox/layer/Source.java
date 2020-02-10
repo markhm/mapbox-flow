@@ -9,6 +9,7 @@ public class Source
 {
     private String type;
     private Data data;
+    private String url;
 
     @JsonProperty("type")
     public String getType()
@@ -32,5 +33,17 @@ public class Source
     public void setData(Data value)
     {
         this.data = value;
+    }
+
+    @JsonProperty("url")
+    public void setUrl(String url)
+    {
+        this.url = url;
+    }
+
+    @JsonProperty("url")
+    public String getUrl()
+    {
+        return this.url;
     }
 }

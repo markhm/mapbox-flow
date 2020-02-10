@@ -1,5 +1,7 @@
 package com.github.markhm.mapbox;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Color
 {
     public static final Color RED = new Color("#EA3323");
@@ -11,6 +13,7 @@ public class Color
 
     public static final Color RED_LINE = new Color("#d54648");
 
+    @JsonProperty("color")
     private String hexValue = null;
 
     public Color(String hexValue)
@@ -27,5 +30,13 @@ public class Color
     {
         return "'" + toString() + "'";
     }
+
+    public Color fromStringforJS(String stringvalue)
+    {
+        Color color = new Color(stringvalue.substring(1, stringvalue.length() - 1));
+
+        return color;
+    }
+
 
 }

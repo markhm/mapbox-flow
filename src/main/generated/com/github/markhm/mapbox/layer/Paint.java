@@ -8,6 +8,7 @@ import com.github.markhm.mapbox.Color;
 public class Paint
 {
     private Color lineColor;
+
     private int lineWidth;
 
     @JsonProperty("line-color")
