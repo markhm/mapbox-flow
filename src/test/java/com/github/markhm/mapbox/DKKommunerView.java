@@ -94,14 +94,14 @@ public class DKKommunerView extends VerticalLayout
                 "'source': 'danske-kommuner'," +
                 "'source-layer': 'Danske_Kommuner'," +
                 "'layout': {" +
-                    "'line-join': 'round'," +
-                    "'line-cap': 'round'" +
+                "'line-join': 'round'," +
+                "'line-cap': 'round'" +
                 "}," +
                 "'paint': " +
                 "{" +
-                    "'line-color': '#ff69b4'," +
+                "'line-color': '#ff69b4'," +
 //                    "'fill-color': '#ff8ad0'," +
-                    "'line-width': 1" +
+                "'line-width': 1" +
                 "}" +
                 "});";
 
@@ -134,25 +134,25 @@ public class DKKommunerView extends VerticalLayout
                 "'source': "+getSourceString()+"," +
                 "'source-layer': 'Danske_Kommuner'," +
                 "'paint': {" +
-                    "'fill-color': " +
-                    "[" +
-                        "'match'," +
-                        "['get', 'name']," +
-                        "[" +
-                            "'Skive'," +
-                            "'Haderslev'," +
-                            "'Esbjerg'," +
-                            "'Lejre'," +
-                            "'Køge'," +
-                            "'Nyborg'," +
-                            "'Brønderslev'," +
-                            "'Rødovre'," +
-                            "'Aarhus'," +
-                            "'Odder'" +
-                        "]," +
-                    "'hsla(271, 38%, 61%, 0.5)'," +
-                    "'hsla(0, 0%, 0%, 0)'" +
-                    "]" +
+                "'fill-color': " +
+                "[" +
+                "'match'," +
+                "['get', 'name']," +
+                "[" +
+                "'Skive'," +
+                "'Haderslev'," +
+                "'Esbjerg'," +
+                "'Lejre'," +
+                "'Køge'," +
+                "'Nyborg'," +
+                "'Brønderslev'," +
+                "'Rødovre'," +
+                "'Aarhus'," +
+                "'Odder'" +
+                "]," +
+                "'hsla(271, 38%, 61%, 0.5)'," +
+                "'hsla(0, 0%, 0%, 0)'" +
+                "]" +
                 "}" +
                 "}, );";
 

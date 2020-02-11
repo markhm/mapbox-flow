@@ -3,6 +3,11 @@ var radius = 20;
 
 function renderDefaultMap(center, initialZoom)
 {
+    console.log("center: "+center);
+    console.log("initialZoom: "+initialZoom);
+
+    // var centerObject = JSON.parse(center);
+
     map = new mapboxgl.Map(
     {
         container: 'map', // container id" +
@@ -17,12 +22,12 @@ function renderCustomMap(mapStyle, center, initialZoom)
     console.log("mapStyle = " + mapStyle);
 
     map = new mapboxgl.Map(
-        {
-            container: 'map', // container id" +
-            style: mapStyle, // stylesheet location" +
-            center: center, // starting position [lng, lat]" +
-            zoom: initialZoom // starting zoom" +
-        });
+    {
+        container: 'map', // container id" +
+        style: mapStyle, // stylesheet location" +
+        center: center, // starting position [lng, lat]" +
+        zoom: initialZoom // starting zoom" +
+    });
 }
 
 function renderOptionsMap(mapOptions)
@@ -32,11 +37,11 @@ function renderOptionsMap(mapOptions)
     // var mapOptionsString = "'" + JSON.stringify(mapOptions) + "'";
     // console.log("mapOptionsString = " + mapOptionsString);
 
-    var optionsObject = JSON.parse(mapOptions);
+    // var optionsObject = JSON.parse(mapOptions);
 
     // console.log("optionsObject created is: " + optionsObject);
 
-    map = new mapboxgl.Map(optionsObject);
+    map = new mapboxgl.Map(mapOptions);
 }
 
 function activatePointerLocation()

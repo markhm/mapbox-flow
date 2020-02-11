@@ -55,11 +55,11 @@ public class DemoView extends VerticalLayout
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setAlignItems(Alignment.CENTER);
 
-        Button zoomTurku = new Button("Turku", e -> mapboxMap.zoomTo(GeoLocation.Turku));
-        Button zoomCopenhagen = new Button("Copenhagen", e -> mapboxMap.zoomTo(GeoLocation.Copenhagen));
-        Button zoomAmsterdam = new Button("Amsterdam", e -> mapboxMap.zoomTo(GeoLocation.Amsterdam));
-        Button zoomParis = new Button("Paris", e -> mapboxMap.zoomTo(GeoLocation.Paris));
-        Button zoomNewYork = new Button("New York JFK", e -> mapboxMap.zoomTo(GeoLocation.NewYork_JFK));
+        Button zoomTurku = new Button("Turku", e -> mapboxMap.zoomTo(GeoLocation.Turku, 10));
+        Button zoomCopenhagen = new Button("Copenhagen", e -> mapboxMap.zoomTo(GeoLocation.Copenhagen, 16));
+        Button zoomAmsterdam = new Button("Amsterdam", e -> mapboxMap.flyTo(GeoLocation.Amsterdam));
+        Button zoomParis = new Button("Paris", e -> mapboxMap.zoomTo(GeoLocation.Paris,8));
+        Button zoomNewYork = new Button("New York JFK", e -> mapboxMap.flyTo(GeoLocation.NewYork_JFK));
 
         Button zoomWorld = new Button("World", e ->
         {
@@ -99,7 +99,6 @@ public class DemoView extends VerticalLayout
 
         Button linesButton = new Button("Utrecht -> Roskilde",
                 e -> mapboxMap.addLine(DirectionsResponse.getInstance().getRoutes().get(0).getGeometry(), Color.NAVY_BLUE));
-
 
         layerButtons.add(addLayer, hideLayer, unhideLayer, addPolygon);
         animationsButtons.add(new Label("Animations:"), turkuNewYork, startAnimation, linesButton);

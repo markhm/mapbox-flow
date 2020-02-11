@@ -43,10 +43,10 @@ public class MapboxOptions extends JSONObject
         put(OptionType.zoom.toString(), initialZoom);
     }
 
-//    public String toString()
-//    {
-//        return "{" + super.toString() + "}";
-//    }
+    public String toString()
+    {
+        return super.toString();
+    }
 
     public enum OptionType
     {

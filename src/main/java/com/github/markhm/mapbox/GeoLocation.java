@@ -1,5 +1,8 @@
 package com.github.markhm.mapbox;
 
+import elemental.json.JsonObject;
+import elemental.json.JsonValue;
+import elemental.json.impl.JsonUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -73,7 +76,20 @@ public class GeoLocation
         return "[" + longitude + "," + latitude+ "]";
     }
 
-    // @Deprecated // This should never be necessary
+    public JsonValue toJsonValue()
+    {
+        return null;
+//        JsonUtil
+//        JsonObject jsonObject = new JsonObject();
+//        new JsonValue()
+    }
+
+
+    public String toJSON()
+    {
+        return "{ lng: " + longitude + ", lat: " + latitude + "}";
+    }
+
     public String getLatLong()
     {
         return "[" + latitude + "," + longitude+ "]";
