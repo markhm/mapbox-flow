@@ -126,7 +126,11 @@ public class MapboxMap extends Div
 
         log.info("CARLAYER: "+carLayer); // see below
 
-        executeJs("addLayer($0);", carLayer.toString());
+        // This should work, but does not
+        // executeJs("addLayer($0);", carLayer.toString());
+
+        // This should not work, but does. Note that .toString() is nót called on the Layer class (which extends JSONObject)
+        executeJs("addLayer(" + carLayer + ")");
     }
 
     public void addLine(Geometry geometry, Color color)
@@ -180,6 +184,7 @@ public class MapboxMap extends Div
 
     public void zoomTo(int zoomLevel)
     {
+        // This works as expected (wow..!)
         page.executeJs("zoomTo($0);", zoomLevel);
     }
 

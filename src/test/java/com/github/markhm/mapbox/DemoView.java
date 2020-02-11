@@ -61,12 +61,10 @@ public class DemoView extends VerticalLayout
         Button zoomParis = new Button("Paris", e -> mapboxMap.zoomTo(GeoLocation.Paris,8));
         Button zoomNewYork = new Button("New York JFK", e -> mapboxMap.flyTo(GeoLocation.NewYork_JFK));
 
-        Button zoomWorld = new Button("World", e ->
-        {
-            mapboxMap.zoomTo(GeoLocation.Center, 1);
-        });
+        Button zoomWorld = new Button("World", e -> mapboxMap.zoomTo(GeoLocation.Center, 1));
+        Button zoomToLevel16 = new Button("Zoom in", e -> mapboxMap.zoomTo( 16));
 
-        horizontalLayout.add(new Label("Zoom to:"), zoomTurku, zoomCopenhagen, zoomAmsterdam, zoomParis, zoomNewYork, zoomWorld);
+        horizontalLayout.add(new Label("Zoom to:"), zoomTurku, zoomCopenhagen, zoomAmsterdam, zoomParis, zoomNewYork, zoomWorld, zoomToLevel16);
 
         add(horizontalLayout);
     }
