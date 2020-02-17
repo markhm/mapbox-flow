@@ -26,9 +26,14 @@ public class Color
         return hexValue;
     }
 
+    public String getHexValue()
+    {
+        return hexValue;
+    }
+
     public String toStringForJS()
     {
-        return "'" + toString() + "'";
+        return "'" + getHexValue() + "'";
     }
 
     public Color fromStringforJS(String stringvalue)

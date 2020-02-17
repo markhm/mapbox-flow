@@ -16,7 +16,7 @@ public class MapboxOptionsTest
     public void testMapboxOptions()
     {
         MapboxOptions options = new MapboxOptions();
-        options.setInitialView(GeoLocation.InitialView_Denmark);
+        options.setCenter(GeoLocation.InitialView_Denmark);
         options.setInitialZoom(6);
 
         log.info("JSON String: " + options.toString(2));

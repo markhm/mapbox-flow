@@ -23,7 +23,7 @@ public class MapboxOptions extends JSONObject
         return getString(OptionType.container.toString());
     }
 
-    public void setInitialView(GeoLocation initialView)
+    public void setCenter(GeoLocation initialView)
     {
         put(OptionType.center.toString(), initialView);
     }

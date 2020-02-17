@@ -41,7 +41,6 @@ public class DirectionsResponse
         }
 
         return instance;
-
     }
 
     public static void main(String[] args) throws Exception

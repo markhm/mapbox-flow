@@ -7,7 +7,7 @@ public class Layer extends JSONObject
 {
     private JSONArray features = null;
 
-    public Layer(String id, String type)
+    public Layer(String id, Type type)
     {
         // id and type
         put("id", id);
@@ -110,4 +110,10 @@ public class Layer extends JSONObject
             put("text-anchor", "top");
         }
     }
+
+    public enum Type
+    {
+        fill, line, symbol, circle, heatmap, raster, hillshade, background; //, fill-extrusion
+    }
+
 }

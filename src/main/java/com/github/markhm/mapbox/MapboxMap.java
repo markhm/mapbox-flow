@@ -6,10 +6,8 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.Page;
-import com.vaadin.flow.internal.JsonSerializer;
 import elemental.json.Json;
 import elemental.json.JsonObject;
-import elemental.json.JsonValue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -85,13 +83,25 @@ public class MapboxMap extends Div
         // render mapbox
         options = new MapboxOptions();
         options.setInitialZoom(initialZoom);
-        options.setInitialView(initialView);
+        options.setCenter(initialView);
 
         // This works to create a map, but should not.
-        executeJs("renderDefaultMap(" + initialView.getLongLat() + ", " + initialZoom + ")");
+        // executeJs("renderDefaultMap(" + initialView.getLongLat() + ", " + initialZoom + ")");
+        if (dkMap)
+        {
+            executeJs("renderDKMap(" + initialView.getLongLat() + ", " + initialZoom + ")");
+        }
+        else
+        {
+            executeJs("renderDefaultMap(" + initialView.getLongLat() + ", " + initialZoom + ")");
+        }
+
+        // page.executeJs("renderOptionsMap($0)", options.toString());
+        // page.executeJs("renderOptionsMap(" + options.toString() + ");");
 
         // The correct way should be as follows, but this does not work.
         // executeJs("renderCustomMap($0, $1, $2);", getMapStyle(dkMap), initialView.getLongLat(), initialZoom);
+        // executeJs("renderCustomMap( " + getMapStyle(dkMap) + ", " + initialView.getLongLat() + ", " + initialZoom + ")"); //" //, getMapStyle(dkMap), initialView.getLongLat(), initialZoom);
 
         // This does not work, neither does the call that follows.
         // executeJs("renderOptionsMap($0);", getJsonObject());
@@ -115,26 +125,32 @@ public class MapboxMap extends Div
 
     public void addAnimatedItem(AnimatedItem animatedItem)
     {
-        Layer carLayer = new Layer(animatedItem.getLayerId(), "symbol");
+        Layer itemLayer = new Layer(animatedItem.getLayerId(), Layer.Type.symbol);
 
         GeoLocation initialPosition = animatedItem.getLocation();
         log.info("Adding " + animatedItem.getDescription() + " to initial position " + initialPosition + " on map.");
 
-        Layer.Properties carProperties = new Layer.Properties("", animatedItem.getSprite().toString());
-        Layer.Feature carFeature = new Layer.Feature("Feature", carProperties, initialPosition);
-        carLayer.addFeature(carFeature);
+        Layer.Properties itemProperties = new Layer.Properties(animatedItem.getDescription(), animatedItem.getSprite().toString());
+        Layer.Feature itemFeature = new Layer.Feature("Feature", itemProperties, initialPosition);
+        itemLayer.addFeature(itemFeature);
 
-        log.info("CARLAYER: "+carLayer); // see below
+        log.info("Feature to be added: " + itemFeature);
+
+        log.info("CARLAYER: "+itemLayer); // see below
 
         // This should work, but does not
-        // executeJs("addLayer($0);", carLayer.toString());
+        // executeJs("addLayer($0);", itemLayer.toString());
 
         // This should not work, but does. Note that .toString() is nót called on the Layer class (which extends JSONObject)
-        executeJs("addLayer(" + carLayer + ")");
+        executeJs("addLayer(" + itemLayer + ")");
     }
 
     public void addLine(Geometry geometry, Color color)
     {
+//        JSONObject geometryObject = new JSONObject();
+//        geometryObject.put("type", "Point");
+//        geometryObject.put("coordinates", geometry.getCoordinates());
+
         ObjectMapper objectMapper = new ObjectMapper();
         ObjectWriter writer = objectMapper.writerFor(Geometry.class);
 
@@ -149,8 +165,10 @@ public class MapboxMap extends Div
             log.error(jpe);
         }
 
+        // log.info("geometry as String: "+geometryAsString);
+
         // This should work, but it doesn't.
-        // executeJs("addLine($0, $1);", geometryAsString, color.toStringForJS());
+        // page.executeJs("addLine($0, $1);", geometryAsString + "", color.getHexValue());
 
         // This shouldn't work, but it does.
         page.executeJs("addLine("+geometryAsString +", "+ color.toStringForJS()+")");
@@ -291,6 +309,7 @@ public class MapboxMap extends Div
 //        "id":"cars",
 //            "source":
 //        {
+//            "type":"geojson"
 //            "data":
 //            {
 //                "features":
@@ -304,7 +323,6 @@ public class MapboxMap extends Div
 //                        ],
 //                "type":"FeatureCollection"
 //            },
-//            "type":"geojson"
 //        },
 //        "type":"symbol"
 //    }

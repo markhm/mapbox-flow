@@ -17,6 +17,22 @@ function renderDefaultMap(center, initialZoom)
     });
 }
 
+function renderDKMap(center, initialZoom)
+{
+    console.log("center: "+center);
+    console.log("initialZoom: "+initialZoom);
+
+    // var centerObject = JSON.parse(center);
+
+    map = new mapboxgl.Map(
+        {
+            container: 'map', // container id" +
+            style: 'mapbox://styles/markhm/ck4b4hiy41bmh1ck5ns089mhh', // stylesheet location" +
+            center: center, // starting position [lng, lat]" +
+            zoom: initialZoom // starting zoom" +
+        });
+}
+
 function renderCustomMap(mapStyle, center, initialZoom)
 {
     console.log("mapStyle = " + mapStyle);
@@ -34,14 +50,23 @@ function renderOptionsMap(mapOptions)
 {
     console.log("Map options passed is: " + mapOptions);
 
+    var options =
+    {
+        container: 'map',
+        style: mapOptions.style,
+        center: mapOptions.center,
+        zoom: mapOptions.zoom
+    };
+
+    console.log("mapOptions = " + options);
     // var mapOptionsString = "'" + JSON.stringify(mapOptions) + "'";
     // console.log("mapOptionsString = " + mapOptionsString);
 
-    // var optionsObject = JSON.parse(mapOptions);
+    var optionsObject = JSON.parse(options);
 
     // console.log("optionsObject created is: " + optionsObject);
 
-    map = new mapboxgl.Map(mapOptions);
+    map = new mapboxgl.Map(optionsObject);
 }
 
 function activatePointerLocation()
@@ -205,6 +230,15 @@ function addLayer(layer)
     console.log("Adding layer "+layer);
     map.addLayer(layer);
 }
+
+function addFeature(layerId, feature)
+{
+    console.log("Adding feature.");
+    var layer = map.getLayer(layerId);
+    // var layerString = JSON.stringify(layer);
+    console.log("layerString is: " + layer);
+}
+
 
 function removeLayer(id)
 {
