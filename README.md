@@ -3,7 +3,9 @@
 # Mapbox Integration for Vaadin Flow (10+)
 Mapbox integration for Vaadin Flow. NB: This project is not affiliated with Mapbox or Vaadin.
 
-This project is in early stage and contains some examples of how to work with the Mapbox GL JS API.  
+This project is in early stage and contains some examples of how to work with the Mapbox GL JS API.
+
+Find a demo here: https://mapbox-flow.herokuapp.com/mapbox-flow.  
 
 ### Characteristics
 - Based on Vaadin <del>14.1.1</del> - 14.0.15, due to larger memory footprint for 14.1
