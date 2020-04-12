@@ -37,7 +37,7 @@ public class DKKommunerView extends VerticalLayout
 
         addTopButtons();
 
-        mapboxMap = new MapboxMap(GeoLocation.InitialView_Denmark, 6, true);
+        mapboxMap = new MapboxMap(GeoLocation.InitialView_Denmark, 6, false);
         add(mapboxMap);
 
         addBottomButtons();
