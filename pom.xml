@@ -5,8 +5,8 @@
 
     <groupId>com.github.markhm</groupId>
     <artifactId>mapbox-flow</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <version>0.0.3-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <!-- https://www.roytuts.com/create-both-war-and-jar-files-using-maven/ -->
     <!-- https://maven.apache.org/plugins/maven-war-plugin/examples/war-manifest-guide.html -->
@@ -358,6 +358,33 @@
                     </webApp>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>.</directory>
+                            <includes>
+                                <include>package.json</include>
+                                <include>package-lock.json</include>
+                                <include>webpack.config.js</include>
+                                <include>webpack.generated.js</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                        <fileset>
+                            <directory>./node_modules</directory>
+                            <includes>
+                                <include>**/**</include>
+                            </includes>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 
