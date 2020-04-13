@@ -6,7 +6,7 @@
     <groupId>com.github.markhm</groupId>
     <artifactId>mapbox-flow</artifactId>
     <version>0.0.3-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <!-- https://www.roytuts.com/create-both-war-and-jar-files-using-maven/ -->
     <!-- https://maven.apache.org/plugins/maven-war-plugin/examples/war-manifest-guide.html -->
@@ -22,7 +22,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-	<failOnMissingWebXml>false</failOnMissingWebXml>
+    	<failOnMissingWebXml>false</failOnMissingWebXml>
+
         <vaadin.version>14.0.15</vaadin.version>
         <jetty.version>9.4.15.v20190215</jetty.version>
         <logback.version>1.2.3</logback.version>
@@ -383,6 +384,23 @@
                         </fileset>
                     </filesets>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <configuration>
+<!--                            <attachClasses>true</attachClasses>-->
+                            <webXml>${basedir}/src/main/webapp/WEB-INF/web.xml</webXml>
+                        </configuration>
+                        <goals>
+                            <goal>inplace</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

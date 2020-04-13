@@ -73,15 +73,17 @@ public class DKKommunerView extends VerticalLayout
         HorizontalLayout defaultButtons = new HorizontalLayout();
         defaultButtons.setAlignItems(Alignment.CENTER);
 
-        Button addWireframe = new Button("Trådramme", e -> addSource());
-        Button addSelection = new Button("Udvalgte kommuner", e -> addSelection());
+        Button addWireframe = new Button("Trådramme", e -> addWireframeLayer());
+        Button addSelection = new Button("Udvalgte kommuner", e -> addSelectionLayer());
 
-        defaultButtons.add(new Label("Tilføj:"), addWireframe, addSelection);
+        Button removeSelection = new Button("Fjern markering", e -> removeSelection());
+
+        defaultButtons.add(new Label("Tilføj:"), addWireframe, addSelection, removeSelection);
 
         add(defaultButtons);
     }
 
-    private void addSource()
+    private void addWireframeLayer()
     {
         String sourceString = getSourceString();
 
@@ -118,6 +120,7 @@ public class DKKommunerView extends VerticalLayout
         try
         {
             sourceString = SourceConverter.toJsonString(source);
+            log.info("sourceString = "+sourceString);
         }
         catch (JsonProcessingException jpe)
         {
@@ -126,39 +129,49 @@ public class DKKommunerView extends VerticalLayout
         return sourceString;
     }
 
-    private void addSelection()
+    private void addSelectionLayer()
     {
-        String command = "map.addLayer({" +
+        String addSourceCommand = "map.addSource('Danske_Kommuner', " +getSourceString()+")";
+
+        String addLayerLimited = "map.addLayer({" +
+                "'id': 'color'," +
+                "'type': 'fill'," +
+                "'source-layer': 'Danske_Kommuner')" +
+                "'paint': {" +
+                "'fill-color': " +
+                "['match',['get', 'name']," +
+                "['Skive','Haderslev','Esbjerg','Lejre','Køge','Nyborg','Brønderslev','Rødovre','Aarhus','Odder']," +
+                "'hsla(271, 38%, 61%, 0.5)','hsla(0, 0%, 0%, 0)'" +
+                "]" +
+                "}" +
+                "}, );";
+
+        String addLayerFull = "map.addLayer({" +
                 "'id': 'color'," +
                 "'type': 'fill'," +
                 "'source': "+getSourceString()+"," +
                 "'source-layer': 'Danske_Kommuner'," +
                 "'paint': {" +
-                "'fill-color': " +
-                "[" +
-                "'match'," +
-                "['get', 'name']," +
-                "[" +
-                "'Skive'," +
-                "'Haderslev'," +
-                "'Esbjerg'," +
-                "'Lejre'," +
-                "'Køge'," +
-                "'Nyborg'," +
-                "'Brønderslev'," +
-                "'Rødovre'," +
-                "'Aarhus'," +
-                "'Odder'" +
-                "]," +
-                "'hsla(271, 38%, 61%, 0.5)'," +
-                "'hsla(0, 0%, 0%, 0)'" +
-                "]" +
-                "}" +
+                    "'fill-color': " +
+                    "['match',['get', 'name']," +
+                        "['Skive','Haderslev','Esbjerg','Lejre','Køge','Nyborg','Brønderslev','Rødovre','Aarhus','Odder']," +
+                        "'hsla(271, 38%, 61%, 0.5)','hsla(0, 0%, 0%, 0)'" +
+                    "]" +
+                    "}" +
                 "}, );";
 
-        mapboxMap.executeJs(command);
+         mapboxMap.executeJs(addSourceCommand);
+         mapboxMap.executeJs(addLayerLimited);
+
+//        mapboxMap.executeJs(addLayerFull);
     }
 
+    private void removeSelection()
+    {
+        String command = "map.removeLayer('color')";
+        mapboxMap.executeJs(command);
+
+    }
 
     public static Layer getExampleLayer()
     {

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.Page;
+import com.vaadin.flow.component.page.PendingJavaScriptResult;
 import elemental.json.Json;
 import elemental.json.JsonObject;
 import org.apache.commons.logging.Log;
@@ -123,7 +124,7 @@ public class MapboxMap extends Div
         }
     }
 
-    public void addAnimatedItem(AnimatedItem animatedItem)
+    public PendingJavaScriptResult addAnimatedItem(AnimatedItem animatedItem)
     {
         Layer itemLayer = new Layer(animatedItem.getLayerId(), Layer.Type.symbol);
 
@@ -142,10 +143,10 @@ public class MapboxMap extends Div
         // executeJs("addLayer($0);", itemLayer.toString());
 
         // This should not work, but does. Note that .toString() is nót called on the Layer class (which extends JSONObject)
-        executeJs("addLayer(" + itemLayer + ")");
+        return executeJs("addLayer(" + itemLayer + ")");
     }
 
-    public void addLine(Geometry geometry, Color color)
+    public PendingJavaScriptResult addLine(Geometry geometry, Color color)
     {
 //        JSONObject geometryObject = new JSONObject();
 //        geometryObject.put("type", "Point");
@@ -171,54 +172,54 @@ public class MapboxMap extends Div
         // page.executeJs("addLine($0, $1);", geometryAsString + "", color.getHexValue());
 
         // This shouldn't work, but it does.
-        page.executeJs("addLine("+geometryAsString +", "+ color.toStringForJS()+")");
+        return page.executeJs("addLine("+geometryAsString +", "+ color.toStringForJS()+")");
 
         // This should be identical to the previous call, and yes, here it works (NB: in drawOriginDestinationFlight(..) below, it does not).
         // executeJs("addLine("+geometryAsString +", "+ color.toStringForJS()+")");
     }
 
-    public void removeAnimatedItem(AnimatedItem animatedItem)
+    public PendingJavaScriptResult removeAnimatedItem(AnimatedItem animatedItem)
     {
-        executeJs("removeLayer($0);", animatedItem.getLayerId());
+        return executeJs("removeLayer($0);", animatedItem.getLayerId());
     }
 
-    public void zoomTo(GeoLocation geoLocation, int zoomLevel)
+    public PendingJavaScriptResult zoomTo(GeoLocation geoLocation, int zoomLevel)
     {
         // This should work, but does not
         // executeJs("map.flyTo({center: $0, zoomLevel: $1});", geoLocation.getLongLat(), zoomLevel);
 
         // This should not work, but does.
-        executeJs("map.flyTo({center: " + geoLocation.getLongLat() + ", zoom: " + zoomLevel + "})");
+        return executeJs("map.flyTo({center: " + geoLocation.getLongLat() + ", zoom: " + zoomLevel + "})");
     }
 
-    public void flyTo(GeoLocation geoLocation)
+    public PendingJavaScriptResult flyTo(GeoLocation geoLocation)
     {
         // This should work, but does not
         // executeJs("map.flyTo({center: $0 });", geoLocation.getLongLat());
 
         // This works
-        executeJs("map.flyTo({center: "+geoLocation.getLongLat()+"})");
+        return executeJs("map.flyTo({center: "+geoLocation.getLongLat()+"})");
     }
 
-    public void zoomTo(int zoomLevel)
+    public PendingJavaScriptResult zoomTo(int zoomLevel)
     {
         // This works as expected (wow..!)
-        page.executeJs("zoomTo($0);", zoomLevel);
+        return page.executeJs("zoomTo($0);", zoomLevel);
     }
 
-    public void startAnimation()
+    public PendingJavaScriptResult startAnimation()
     {
         // This works as expected
-        executeJs("startAnimation();");
+        return executeJs("startAnimation();");
     }
 
-    public void drawOriginDestinationFlight(GeoLocation origin, GeoLocation destination)
+    public PendingJavaScriptResult drawOriginDestinationFlight(GeoLocation origin, GeoLocation destination)
     {
         // Expected to work but does not.
         // executeJs("fromOriginToDestination($0, $1);", origin.getLongLat() ,destination.getLongLat());
 
         // Should not work, but does
-        page.executeJs("fromOriginToDestination(" + origin.getLongLat() + ", " + destination.getLongLat() + ");");
+        return page.executeJs("fromOriginToDestination(" + origin.getLongLat() + ", " + destination.getLongLat() + ");");
 
         // Even more strange, the following does not work, which is really identical to the previous method.
         // executeJs("fromOriginToDestination(" + origin.getLongLat() + ", " + origin.getLongLat() + ")");
@@ -238,15 +239,17 @@ public class MapboxMap extends Div
         return jsonObject;
     }
 
-    public void executeJs(String javaScript, Serializable... parameters)
+    public PendingJavaScriptResult executeJs(String javaScript, Serializable... parameters)
     {
-        page.executeJs(javaScript, parameters);
+        PendingJavaScriptResult result = page.executeJs(javaScript, parameters);
+
+        return result;
     }
 
-    public void executeJs(String javaScript)
-    {
-        page.executeJs(javaScript);
-    }
+//    public PendingJavaScriptResult executeJs(String javaScript)
+//    {
+//        return page.executeJs(javaScript);
+//    }
 
     // Documents regarding importing
     // https://github.com/vaadin/flow/issues/6582

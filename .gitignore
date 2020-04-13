@@ -6,6 +6,7 @@
 /package-lock.json
 /node_modules
 webpack.generated.js
+tsconfig.json
 
 dependency_tree.txt
 
