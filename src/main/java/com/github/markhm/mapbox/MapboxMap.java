@@ -83,6 +83,9 @@ public class MapboxMap extends Div
 
     private void render(boolean dkMap)
     {
+//         page.addStyleSheet("frontend://com/github/markhm/mapbox-flow/mapbox.css");
+//         page.addJavaScript("frontend://com/github/markhm/mapbox-flow/mapbox.js");
+
          page.addStyleSheet("./com/github/markhm/mapbox-flow/mapbox.css");
          page.addJavaScript("./com/github/markhm/mapbox-flow/mapbox.js");
 
