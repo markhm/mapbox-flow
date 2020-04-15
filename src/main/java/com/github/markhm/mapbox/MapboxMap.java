@@ -4,15 +4,28 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.dependency.CssImport;
+import com.vaadin.flow.component.dependency.JavaScript;
+import com.vaadin.flow.component.dependency.JsModule;
+import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.page.PendingJavaScriptResult;
+import com.vaadin.flow.shared.ui.LoadMode;
 import elemental.json.Json;
 import elemental.json.JsonObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
+
+// @Tag("mapbox-wrapper")
+
+@JavaScript(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js",  loadMode = LoadMode.EAGER)
+@StyleSheet(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css",  loadMode = LoadMode.EAGER)
+@JavaScript(value = "https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js", loadMode = LoadMode.EAGER)
+//@StyleSheet("/com/github/markhm/mapbox-flow/mapbox.css")
+//@JavaScript("/com/github/markhm/mapbox-flow/mapbox.js")
 
 public class MapboxMap extends Div
 {
@@ -70,12 +83,8 @@ public class MapboxMap extends Div
 
     private void render(boolean dkMap)
     {
-        page.addStyleSheet("https://api.tiles.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.css");
-        page.addJavaScript("https://api.tiles.mapbox.com/mapbox-gl-js/v1.7.0/mapbox-gl.js");
-        page.addJavaScript("https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js");
-
-        page.addStyleSheet("./mapbox.css");
-        page.addJavaScript("./mapbox.js");
+         page.addStyleSheet("./com/github/markhm/mapbox-flow/mapbox.css");
+         page.addJavaScript("./com/github/markhm/mapbox-flow/mapbox.js");
 
         String accessToken = AccessToken.getToken();
 
