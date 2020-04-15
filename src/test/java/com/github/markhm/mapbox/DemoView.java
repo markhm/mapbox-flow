@@ -11,7 +11,7 @@ import com.vaadin.flow.router.Route;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-@Route("mapbox-flow")
+@Route("")
 public class DemoView extends VerticalLayout
 {
     // http://www.jsonschema2pojo.org/
