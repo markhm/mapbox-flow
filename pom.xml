@@ -24,6 +24,7 @@
 
     	<failOnMissingWebXml>false</failOnMissingWebXml>
 
+<!--        <vaadin.version>15.0.4</vaadin.version>-->
         <vaadin.version>14.0.15</vaadin.version>
         <jetty.version>9.4.15.v20190215</jetty.version>
         <logback.version>1.2.3</logback.version>
@@ -334,6 +335,7 @@
                     <execution>
                         <goals>
                             <goal>prepare-frontend</goal>
+                            <goal>build-frontend</goal>
                         </goals>
                     </execution>
                 </executions>
