@@ -6,8 +6,6 @@ function renderDefaultMap(center, initialZoom)
     console.log("center: "+center);
     console.log("initialZoom: "+initialZoom);
 
-    // var centerObject = JSON.parse(center);
-
     map = new mapboxgl.Map(
     {
         container: 'map', // container id" +
@@ -21,8 +19,6 @@ function renderDKMap(center, initialZoom)
 {
     console.log("center: "+center);
     console.log("initialZoom: "+initialZoom);
-
-    // var centerObject = JSON.parse(center);
 
     map = new mapboxgl.Map(
         {
@@ -74,7 +70,7 @@ function activatePointerLocation()
     map.on('mousemove', function(e)
     {
         document.getElementById('info').innerHTML =
-    // e.point is the x, y coordinates of the mousemove event relative
+    // e.point is the x, y coordinates of the mouse move event relative
     // to the top-left corner of the map
             JSON.stringify(e.point) +
             '<br />' +
