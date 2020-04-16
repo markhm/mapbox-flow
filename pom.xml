@@ -25,7 +25,8 @@
     	<failOnMissingWebXml>false</failOnMissingWebXml>
 
         <vaadin.version>14.1.25</vaadin.version>
-<!--       <vaadin.version>15.0.4</vaadin.version>-->
+<!--        NB: Mapbox-flow does not work for Vaadin 15.0.4:-->
+<!--        <vaadin.version>15.0.4</vaadin.version>-->
 
         <jetty.version>9.4.15.v20190215</jetty.version>
         <logback.version>1.2.3</logback.version>
