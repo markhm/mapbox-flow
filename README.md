@@ -8,7 +8,7 @@ This project is in early stage and contains some examples of how to work with th
 Find a demo via: https://mapbox-flow.herokuapp.com/.  
 
 ### Characteristics
-- Based on Vaadin <del>14.1.1</del> - 14.0.15, due to larger memory footprint for 14.1
+- Based on Vaadin 14.1.25, although 14.1.\* seems to have a larger memory footprint than 14.0.\*.
 
 ### To get started
 - Create an account at [Mapbox](https://account.mapbox.com/auth/signup/) and save your API token in a file called `mapbox.properties` that contains the following line (replace by your own token):
