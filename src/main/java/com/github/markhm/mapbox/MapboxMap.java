@@ -19,14 +19,12 @@ import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
 
-// @Tag("mapbox-wrapper")
 
-@JavaScript(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js",  loadMode = LoadMode.EAGER)
-@StyleSheet(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css",  loadMode = LoadMode.EAGER)
-@JavaScript(value = "https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js", loadMode = LoadMode.EAGER)
-//@StyleSheet("/com/github/markhm/mapbox-flow/mapbox.css")
-//@JavaScript("/com/github/markhm/mapbox-flow/mapbox.js")
-
+@JavaScript(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js")
+@StyleSheet(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css")
+@JavaScript(value = "https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js")
+//@CssImport("./com/github/markhm/mapbox-flow/mapbox.css")
+//@JsModule("./com/github/markhm/mapbox-flow/mapbox.js")
 public class MapboxMap extends Div
 {
     private static Log log = LogFactory.getLog(MapboxMap.class);
