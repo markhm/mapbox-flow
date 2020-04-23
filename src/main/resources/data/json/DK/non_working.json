@@ -1,0 +1,17 @@
+{
+  "layout": {
+    "line-join": "round",
+    "line-cap": "round"
+  },
+  "paint": {
+    "line-width": 1,
+    "line-color": "#ff69b4"
+  },
+  "id": "terrain-data",
+  "source": {
+    "id": "danske-kommuner",
+    "source-layer": "Danske_Kommuner",
+    "type": "geojson"
+  },
+  "type": "line"
+}

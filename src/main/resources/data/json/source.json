@@ -1,0 +1,26 @@
+{
+  "type": "geojson",
+  "data":
+  {
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties":
+        {
+          "icon": "car",
+          "title": "Madrid"
+        },
+        "geometry":
+        {
+          "type": "Point",
+          "coordinates":
+          [
+            -3.70379,
+            40.416775
+          ]
+        }
+      }
+    ]
+  }
+}

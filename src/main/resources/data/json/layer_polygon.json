@@ -1,0 +1,26 @@
+{
+  "id": "polygon",
+  "type": "fill",
+  "layout": {},
+  "paint":
+  {
+    "fill-color": "#d54648",
+    "fill-opacity": 0.5
+  },
+  "source":
+  {
+    "type": "geojson",
+    "data":
+    {
+      "type": "Feature",
+      "geometry":
+      {
+        "type": "Polygon",
+        "coordinates":
+        [[-80.4, 25.2],
+         [-64.7, 32.3],
+         [-65.6, 18.4]]
+      }
+    }
+  }
+}

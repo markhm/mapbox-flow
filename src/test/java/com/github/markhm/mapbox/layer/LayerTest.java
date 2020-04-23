@@ -1,9 +1,8 @@
 package com.github.markhm.mapbox.layer;
 
-import com.github.markhm.mapbox.Color;
+import com.github.markhm.mapbox.util.Color;
 import com.github.markhm.mapbox.Data;
 import com.github.markhm.mapbox.Geometry;
-import com.github.markhm.mapbox.MapboxMap;
 import com.github.markhm.mapbox.directions.Type;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -26,7 +25,7 @@ public class LayerTest
     {
         // creating layer
         Layer layer = new Layer();
-        layer.setID("routeLine");
+        layer.setId("routeLine");
         layer.setType("line");
 
         Source source = new Source();

@@ -1,19 +1,24 @@
 package com.github.markhm.mapbox;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.github.markhm.mapbox.directions.Converter;
-import com.github.markhm.mapbox.layer.Source;
-import com.github.markhm.mapbox.layer.SourceConverter;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import elemental.json.Json;
+import elemental.json.JsonArray;
+import elemental.json.JsonObject;
+import mapboxflow.layer.Layer;
+
+import mapboxflow.layer.Paint;
+import mapboxflow.layer.Source;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONArray;
 
 @Route("dk_map")
+@Deprecated
 public class DKKommunerView extends VerticalLayout
 {
     private static Log log = LogFactory.getLog(DKKommunerView.class);
@@ -27,6 +32,8 @@ public class DKKommunerView extends VerticalLayout
         if (!alreadyRendered)
         {
             render();
+
+            alreadyRendered = true;
         }
     }
 
@@ -42,12 +49,6 @@ public class DKKommunerView extends VerticalLayout
 
         addBottomButtons();
     }
-
-    public void referencingGeneratedClasses()
-    {
-        Converter converter = null;
-    }
-
 
     private void addTopButtons()
     {
@@ -85,116 +86,113 @@ public class DKKommunerView extends VerticalLayout
 
     private void addWireframeLayer()
     {
-        String sourceString = getSourceString();
-
-        String sourceCommand = "map.addSource('danske-kommuner', " + sourceString + ");";
-        mapboxMap.executeJs(sourceCommand);
-
-        String layerCommand = "map.addLayer({" +
-                "'id': 'terrain-data'," +
-                "'type': 'line'," +
-                "'source': 'danske-kommuner'," +
-                "'source-layer': 'Danske_Kommuner'," +
-                "'layout': {" +
-                "'line-join': 'round'," +
-                "'line-cap': 'round'" +
-                "}," +
-                "'paint': " +
-                "{" +
-                "'line-color': '#ff69b4'," +
-//                    "'fill-color': '#ff8ad0'," +
-                "'line-width': 1" +
-                "}" +
-                "});";
-
-        mapboxMap.executeJs(layerCommand);
-    }
-
-    private String getSourceString()
-    {
         Source source = new Source();
         source.setType("vector");
-        source.setUrl("mapbox://markhm.ck4aedo8f03l32nmyksha2171-5k3o4");
+        source.put("url", "mapbox://markhm.ck4aedo8f03l32nmyksha2171-5k3o4");
 
-        String sourceString = null;
-        try
+        mapboxMap.addSource("danske-kommuner", source);
+
+        Paint paint = new Paint(Paint.Type.line);
+        paint.setLineColor("#ff69b4");
+        paint.setLineWidth(1);
+
+        Layer layer = new Layer("terrain-data", Layer.Type.line);
+        // layer.setLayout(lineLayout);
+        layer.setPaint(paint);
+        layer.put("source", "danske-kommuner");
+        layer.put("source-layer", "Danske_Kommuner");
+
+        mapboxMap.addLayer(layer);
+    }
+
+    private JSONArray getKommuner()
+    {
+        String[] kommuner = {"Skive","Haderslev","Esbjerg","Lejre","Køge","Nyborg","Brønderslev","Rødovre","Aarhus","Odder"};
+
+        JSONArray resultArray = new JSONArray();
+
+        for (int i=0; i < kommuner.length; i++)
         {
-            sourceString = SourceConverter.toJsonString(source);
-            log.info("sourceString = "+sourceString);
+            resultArray.put(i, kommuner[i]);
         }
-        catch (JsonProcessingException jpe)
-        {
-            log.error(jpe);
-        }
-        return sourceString;
+
+        return resultArray;
     }
 
     private void addSelectionLayer()
     {
-        String addSourceCommand = "map.addSource('Danske_Kommuner', " +getSourceString()+")";
+        Source source = new Source();
+        source.setType("vector");
+        source.put("url", "mapbox://markhm.ck4aedo8f03l32nmyksha2171-5k3o4");
 
-        String addLayerLimited = "map.addLayer({" +
-                "'id': 'color'," +
-                "'type': 'fill'," +
-                "'source-layer': 'Danske_Kommuner')" +
-                "'paint': {" +
-                "'fill-color': " +
-                "['match',['get', 'name']," +
-                "['Skive','Haderslev','Esbjerg','Lejre','Køge','Nyborg','Brønderslev','Rødovre','Aarhus','Odder']," +
-                "'hsla(271, 38%, 61%, 0.5)','hsla(0, 0%, 0%, 0)'" +
-                "]" +
-                "}" +
-                "}, );";
+        mapboxMap.addSource("danske-kommuner", source);
 
-        String addLayerFull = "map.addLayer({" +
-                "'id': 'color'," +
-                "'type': 'fill'," +
-                "'source': "+getSourceString()+"," +
-                "'source-layer': 'Danske_Kommuner'," +
-                "'paint': {" +
-                    "'fill-color': " +
-                    "['match',['get', 'name']," +
-                        "['Skive','Haderslev','Esbjerg','Lejre','Køge','Nyborg','Brønderslev','Rødovre','Aarhus','Odder']," +
-                        "'hsla(271, 38%, 61%, 0.5)','hsla(0, 0%, 0%, 0)'" +
-                    "]" +
-                    "}" +
-                "}, );";
+        Layer layer = new Layer("color", Layer.Type.fill);
+        layer.put("source", "danske-kommuner");
+        layer.put("source-layer", "Danske_Kommuner");
+        Paint paint = new Paint(Paint.Type.fill);
 
-         mapboxMap.executeJs(addSourceCommand);
-         mapboxMap.executeJs(addLayerLimited);
+        JSONArray paintArray = new JSONArray();
 
-//        mapboxMap.executeJs(addLayerFull);
+        JSONArray paintNameArray = new JSONArray();
+        paintNameArray.put(0, "get");
+        paintNameArray.put(1, "name");
+
+        paintArray.put(0, "match");
+        paintArray.put(1, paintNameArray);
+        paintArray.put(2, getKommuner());
+        paintArray.put(3, "hsla(271, 38%, 61%, 0.5)");
+        paintArray.put(4, "hsla(0, 0%, 0%, 0)");
+
+        paint.setFillColor(paintArray);
+        layer.setPaint(paint);
+
+        if (!sourceAlreadyAdded)
+        {
+            mapboxMap.addSource("Danske_Kommuner", source);
+            sourceAlreadyAdded = true;
+        }
+
+        mapboxMap.addLayer(layer);
     }
+
+    private boolean sourceAlreadyAdded = false;
 
     private void removeSelection()
     {
         String command = "map.removeLayer('color')";
         mapboxMap.executeJs(command);
-
-    }
-
-    public static Layer getExampleLayer()
-    {
-        // getLayer().toString() or getLayer().toString().replace("\"", "\'") is not needed
-        Layer layer = new Layer("points", Layer.Type.symbol);
-
-        Layer.Properties mapboxDCProperties = new Layer.Properties("National Bank", Sprite.Bank.toString());
-        GeoLocation mapboxDCLocation = new GeoLocation(-77.03238901390978, 38.913188059745586);
-        Layer.Feature mapboxDCFeature = new Layer.Feature("Feature", mapboxDCProperties, mapboxDCLocation);
-        layer.addFeature(mapboxDCFeature);
-
-        Layer.Properties mapboxDangerProperties = new Layer.Properties("National danger", Sprite.Danger.toString());
-        GeoLocation mapboxDangerLocation = new GeoLocation(30, -20);
-        Layer.Feature mapboxDangerFeature = new Layer.Feature("Feature", mapboxDangerProperties, mapboxDangerLocation);
-        layer.addFeature(mapboxDangerFeature);
-
-        Layer.Properties mapboxSFProperties = new Layer.Properties("Helicopter Haven", Sprite.Helicopter.toString());
-        GeoLocation mapboxSFLocation = new GeoLocation(-122.414, 37.776);
-        Layer.Feature mapboxSFFeature = new Layer.Feature("Feature", mapboxSFProperties, mapboxSFLocation);
-        layer.addFeature(mapboxSFFeature);
-
-        // System.out.println(layer.toString(2));
-
-        return layer;
     }
 }
+
+// --------------------------------------------
+// Working:
+//
+//    String layerCommand = "map.addLayer({" +
+//            "'id': 'terrain-data'," +
+//            "'type': 'line'," +
+//            "'source': 'danske-kommuner'," +
+//            "'source-layer': 'Danske_Kommuner'," +
+//            "'layout': {" +
+//            "'line-join': 'round'," +
+//            "'line-cap': 'round'" +
+//            "}," +
+//            "'paint': " +
+//            "{" +
+//            "'line-color': '#ff69b4'," +
+////                    "'fill-color': '#ff8ad0'," +
+//            "'line-width': 1" +
+//            "}" +
+//            "})";
+
+// Working:
+//        String addLayerLimited = "map.addLayer({" +
+//                "    'id': 'color'," +
+//                "    'type': 'fill'," +
+//                "    'source': 'danske-kommuner'," +
+//                "    'source-layer': 'Danske_Kommuner'," +
+//                "    'paint': " +
+//                "    {" +
+//                "      'fill-color': ['match', ['get', 'name'], ['Skive'], 'hsla(271, 38%, 61%, 0.5)', 'hsla(0, 0%, 0%, 0)']" +
+//                "    }" +
+//                "      }, );";

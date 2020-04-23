@@ -13,13 +13,13 @@ public class Layer
     private Paint paint;
 
     @JsonProperty("id")
-    public String getID()
+    public String getId()
     {
         return id;
     }
 
     @JsonProperty("id")
-    public void setID(String value)
+    public void setId(String value)
     {
         this.id = value;
     }
@@ -71,4 +71,9 @@ public class Layer
     {
         this.paint = value;
     }
+
+//    public enum Type
+//    {
+//        fill, line, symbol, circle, heatmap, raster, hillshade, background; //, fill-extrusion
+//    }
 }

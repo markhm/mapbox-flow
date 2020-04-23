@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.github.markhm.mapbox.Color;
+import com.github.markhm.mapbox.util.Color;
 import com.github.markhm.mapbox.ColorDeserializer;
 import com.github.markhm.mapbox.ColorSerializer;
 

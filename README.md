@@ -29,4 +29,4 @@ Feedback and contributions are appreciated.
 Dec 2019, @markhm.
 
 ### Screenshot
-![Screenshot](mapbox-flow-screenshot.png)
+![Screenshot](docs/img/mapbox-flow-screenshot.png)

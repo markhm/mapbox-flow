@@ -1,0 +1,53 @@
+{
+  "layout": {
+    "text-field": [
+      "get",
+      "title"
+    ],
+    "text-offset": [
+      0,
+      0.7
+    ],
+    "text-anchor": "top",
+    "icon-image": [
+      "concat",
+      [
+        "get",
+        "icon"
+      ],
+      "-15"
+    ],
+    "text-font": [
+      "Open Sans Semibold"
+    ]
+  },
+  "id": "points",
+  "type": "symbol",
+  "source":
+  {
+    "type": "geojson",
+    "data":
+    {
+      "type": "FeatureCollection",
+      "features": [
+        {
+          "type": "Feature",
+          "properties":
+          {
+            "icon": "bank",
+            "title": "National Bank"
+          },
+          "geometry":
+          {
+            "type": "Point",
+            "coordinates":
+            [
+              -77.03238901390978,
+              38.913188059745586
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

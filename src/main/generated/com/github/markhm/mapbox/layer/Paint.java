@@ -3,7 +3,7 @@
 package com.github.markhm.mapbox.layer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.markhm.mapbox.Color;
+import com.github.markhm.mapbox.util.Color;
 
 public class Paint
 {

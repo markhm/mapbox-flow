@@ -1,60 +1,97 @@
 package com.github.markhm.mapbox;
 
-import com.github.markhm.mapbox.directions.Converter;
+import com.github.markhm.mapbox.component.InfoBox;
+import com.github.markhm.mapbox.component.LayerSelectBox;
 import com.github.markhm.mapbox.directions.DirectionsResponse;
+import com.github.markhm.mapbox.util.Color;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.Route;
+import mapboxflow.ConversionUtil;
+import mapboxflow.layer.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Route("")
+// @StyleSheet("./com/github/markhm/mapbox-flow/mapbox.css")
+// @JavaScript("./com/github/markhm/mapbox-flow/mapbox.js")
 public class DemoView extends VerticalLayout
 {
     // http://www.jsonschema2pojo.org/
 
     private static Log log = LogFactory.getLog(DemoView.class);
 
+    private static final String LEADING_WIDTH = "125px";
+
     private MapboxMap mapboxMap = null;
+    private LayerSelectBox layerSelectBox = null;
+
+    private TextArea textArea = null;
 
     boolean alreadyRendered = false;
 
-    private static final String LEADING_WIDTH = "125px";
-
     public DemoView()
     {
+        setAlignItems(Alignment.CENTER);
+
         if (!alreadyRendered)
         {
             render();
+            alreadyRendered = true;
         }
     }
 
     private void render()
     {
+        VerticalLayout contentBox = new VerticalLayout();
+        contentBox.setWidth("1200px");
+        add(contentBox);
+
+        HorizontalLayout titleBox = new HorizontalLayout();
         H3 title = new H3("Mapbox-Flow Demo");
-        add(title);
+        titleBox.add(title);
+        contentBox.add(titleBox);
 
-        addTopButtons();
+        contentBox.add(renderZoomButtons());
 
-        add(new InfoBox());
+        HorizontalLayout mapboxLine = new HorizontalLayout();
         mapboxMap = new MapboxMap(GeoLocation.InitialView_Turku_NY, 2);
-        add(mapboxMap);
+        Set<String> initialLayers = new HashSet<>();
+        layerSelectBox = new LayerSelectBox(mapboxMap, initialLayers);
+        mapboxLine.add(mapboxMap, layerSelectBox);
 
-        addLayerButtons();
-        addAnimationButtons();
-        addControlButtons();
+        contentBox.add(mapboxLine);
+
+        contentBox.add(renderLayerButtons());
+        contentBox.add(renderAnimationButtons());
+        contentBox.add(renderControlButtons());
+
+        textArea = renderTextArea();
+        contentBox.add(textArea);
+        contentBox.add(ViewUtil.verticalWhitespace(5));
+        contentBox.add(new InfoBox());
     }
 
-    public void referencingGeneratedClasses()
+    private TextArea renderTextArea()
     {
-        Converter converter = null;
+        TextArea textArea = new TextArea("Last JavaScript command");
+        textArea.setHeight("120px");
+        textArea.setWidth("1200px");
+        textArea.getStyle().set("align-self", "center");
+
+        return textArea;
     }
 
-
-    private void addTopButtons()
+    private HorizontalLayout renderZoomButtons()
     {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setAlignItems(Alignment.CENTER);
@@ -73,51 +110,136 @@ public class DemoView extends VerticalLayout
 
         horizontalLayout.add(leadingLabel, zoomTurku, zoomCopenhagen, zoomAmsterdam, zoomParis, zoomNewYork, zoomWorld, zoomToLevel16);
 
-        add(horizontalLayout);
+        return horizontalLayout;
     }
 
-    private void addLayerButtons()
+    private HorizontalLayout renderLayerButtons()
     {
         HorizontalLayout layerButtons = new HorizontalLayout();
         layerButtons.setAlignItems(Alignment.CENTER);
 
-        Button addLayer = new Button("Add", e -> mapboxMap.executeJs("addLayer(" + getExampleLayer() + ");"));
-        // Button removeLayer = new Button("Remove layer", e -> mapboxMap.executeJS("removeLayer('" + getLayer().getId()+ "');"));
-        Button hideLayer = new Button("Hide", e -> mapboxMap.executeJs("hideLayer('" + getExampleLayer().getId()+ "');"));
-        Button unhideLayer = new Button("Unhide", e -> mapboxMap.executeJs("unhideLayer('" + getExampleLayer().getId()+ "');"));
+        Button addLayer = new Button("Add point(s)", e ->
+        {
+            Layer layer = getExampleLayer();
+            String command = "addLayer(" + layer + ")";
+            textArea.setValue(command);
+            mapboxMap.addLayer(getExampleLayer());
+            layerSelectBox.addLayer(layer.getId());
+        });
 
-        String layerId = "cars";
+        Button addLine = new Button("Add line", e ->
+        {
+            String layerId = "route_line";
+            Layer routeLineLayer = getLineLayer(layerId);
+            mapboxMap.addLayer(routeLineLayer);
+            layerSelectBox.addLayer(layerId);
 
-        Layer.Feature feature = getFeature();
+        });
 
-        Button queryLayer = new Button("Query", e -> mapboxMap.executeJs("addFeature('" + layerId + "', " + feature + ")"));
+        Button addPolygon = new Button("Add polygon", e ->
+        {
+            String layerId = "polygon";
+            Layer polygonLayer = getPolygonLayer(layerId);
+            mapboxMap.addLayer(polygonLayer);
+            layerSelectBox.addLayer(layerId);
+        });
 
-        Button addRoute = new Button("Utrecht -> Roskilde",
-                e -> mapboxMap.addLine(DirectionsResponse.getInstance().getRoutes().get(0).getGeometry(), Color.NAVY_BLUE));
+        Button revisePolygon = new Button ("Revise polygon", e ->
+        {
+            mapboxflow.layer.Geometry geometry = new mapboxflow.layer.Geometry(mapboxflow.layer.Geometry.Type.Polygon);
 
-        Button addCarInRoskilde = new Button("Add car Roskilde", e -> addCar("Car 1", GeoLocation.Roskilde) );
-        Button addCarInMadrid = new Button("Add car Madrid", e -> addCar("Car 2", GeoLocation.Madrid) );
+            List<List<Double>> coordinates = new ArrayList<>();
+            coordinates.add(GeoLocation.Amsterdam.getCoordList());
+            coordinates.add(GeoLocation.Copenhagen.getCoordList());
+            coordinates.add(GeoLocation.Berlin.getCoordList());
+            geometry.setCoordinates(coordinates);
 
-        Label leadingLabel = new Label("Layer functions: ");
+            mapboxflow.layer.Data data = new mapboxflow.layer.Data(mapboxflow.layer.Data.Type.single);
+            Feature feature = new Feature(Feature.FEATURE, new Properties(), geometry);
+            data.addFeature(feature);
+
+            mapboxMap.resetSourceData("polygon", data);
+        });
+
+        Button addCarInRoskilde = new Button("Add car New York", e -> addCar("car_NY", "New York", GeoLocation.NewYork) );
+        Button addCarInMadrid = new Button("Add car Madrid", e -> addCar("car_Madrid,", "Madrid", GeoLocation.Madrid) );
+
+        Button addTenCars = new Button("Add 10 cars", e -> addCars());
+
+        Label leadingLabel = new Label("Layer examples: ");
         leadingLabel.setWidth(LEADING_WIDTH);
 
-        layerButtons.add(leadingLabel, addLayer, hideLayer, unhideLayer, queryLayer, addRoute, addCarInRoskilde, addCarInMadrid);
+        layerButtons.add(leadingLabel, addLayer, addLine, addPolygon, revisePolygon,
+                ViewUtil.horizontalWhiteSpace(30), addCarInRoskilde, addCarInMadrid, addTenCars);
 
-        add(layerButtons);
+        return layerButtons;
     }
 
-    private Layer.Feature getFeature()
+    private Layer getPolygonLayer(String layerId)
     {
-        GeoLocation initialPosition = GeoLocation.Bornholm;
-        // log.info("Adding " + animatedItem.getDescription() + " to initial position " + initialPosition + " on map.");
+        Layer layer = new Layer(layerId, Layer.Type.fill);
+        Layout fillLayout = new Layout(Layer.Type.fill);
+        layer.setLayout(fillLayout);
+        Paint paint = new Paint(Paint.Type.fill);
+        paint.setFillColor(Color.RED_LINE);
+        paint.setFillOpacity(0.5);
+        layer.setPaint(paint);
 
-        Layer.Properties itemProperties = new Layer.Properties("Car 2", Sprite.Car.toString());
-        Layer.Feature itemFeature = new Layer.Feature("Feature", itemProperties, initialPosition);
+        mapboxflow.layer.Geometry geometry = new mapboxflow.layer.Geometry(mapboxflow.layer.Geometry.Type.Polygon);
 
-        return itemFeature;
+        List<List<Double>> coordinates = new ArrayList<>();
+        coordinates.add(GeoLocation.Bermuda_1_Florida.getCoordList());
+        coordinates.add(GeoLocation.Bermuda_2_Bermuda.getCoordList());
+        coordinates.add(GeoLocation.Bermuda_3_PuertoRico.getCoordList());
+        geometry.setCoordinates(coordinates);
+
+        mapboxflow.layer.Data data = new mapboxflow.layer.Data(mapboxflow.layer.Data.Type.single);
+        Feature feature = new Feature(Feature.FEATURE, new Properties(), geometry);
+        data.addFeature(feature);
+
+        Source source = new Source();
+        source.setData(data);
+        layer.setSource(source);
+
+        return layer;
     }
 
-    private void addCar(String description, GeoLocation location)
+    private Layer getLineLayer(String layerId)
+    {
+        Layer layer = new Layer(layerId, Layer.Type.line);
+        Layout lineLayout = new Layout(Layer.Type.line);
+        layer.setLayout(lineLayout);
+        layer.setPaint(new Paint(Paint.Type.line, Color.RED_LINE, 3));
+
+        Geometry geometry = DirectionsResponse.getInstance().getRoutes().get(0).getGeometry();
+        mapboxflow.layer.Geometry convertedGeometry = ConversionUtil.convert(geometry);
+
+        Source source = new Source();
+        mapboxflow.layer.Data data = new mapboxflow.layer.Data(mapboxflow.layer.Data.Type.single);
+        Feature feature = new Feature(Feature.FEATURE, null, convertedGeometry);
+        data.addFeature(feature);
+
+        source.setData(data);
+        layer.setSource(source);
+
+        return layer;
+    }
+
+    private void addCars()
+    {
+        addCar("car_1", "Aarhus", GeoLocation.Aarhus);
+        addCar("car-2", "Odense", GeoLocation.Odense);
+        addCar("car-3", "Aalborg", GeoLocation.Aalborg);
+        addCar("car-4", "Bornholm", GeoLocation.Bornholm);
+        addCar("car_5", "Roskilde", GeoLocation.Roskilde);
+        addCar("car-6", "Kijkduin", GeoLocation.Kijkduin);
+        addCar("car-7", "Amsterdam", GeoLocation.Amsterdam);
+        addCar("car-8", "Utrecht", GeoLocation.Utrecht);
+        addCar("car-9", "Boston", GeoLocation.Boston);
+        addCar("car-10", "Moscow", GeoLocation.Moscow);
+    }
+
+    private void addCar(String id, String description, GeoLocation location)
     {
         AnimatedItem car = new AnimatedItem()
         {
@@ -144,68 +266,84 @@ public class DemoView extends VerticalLayout
             {
                 return description;
             }
+
+            @Override
+            public String getId()
+            {
+                return id;
+            }
         };
 
-        mapboxMap.addAnimatedItem(car);
+        String command = mapboxMap.addAnimatedItem(car);
+        layerSelectBox.addLayer(car.getLayerId());
 
+        textArea.setValue(command);
     }
 
-    private void addControlButtons()
+    private HorizontalLayout renderControlButtons()
     {
         HorizontalLayout controlButtons = new HorizontalLayout();
         controlButtons.setAlignItems(Alignment.CENTER);
-        Button activatePointerCoordinates = new Button("Add pointer coordinates", e -> mapboxMap.executeJs("activatePointerLocation();"));
+        Button activatePointerCoordinates = new Button("Coordinate listener", e -> mapboxMap.executeJs("activatePointerLocation();"));
         Button deactivatePointerCoordinates = new Button("Deactivate all listeners", e -> mapboxMap.executeJs("deactivateAllListeners();"));
 
         Label leadingLabel = new Label("Controls: ");
         leadingLabel.setWidth(LEADING_WIDTH);
 
         controlButtons.add(leadingLabel, activatePointerCoordinates, deactivatePointerCoordinates);
-        add(controlButtons);
+        return controlButtons;
     }
 
-    private void addAnimationButtons()
+    private HorizontalLayout renderAnimationButtons()
     {
         HorizontalLayout animationsButtons = new HorizontalLayout();
         animationsButtons.setAlignItems(Alignment.CENTER);
 
-        Button turkuNewYork = new Button("Fly Turku to New York", e ->
+        Button turkuNewYork = new Button("Airplane Turku to New York", e ->
         {
             mapboxMap.drawOriginDestinationFlight(GeoLocation.Turku, GeoLocation.NewYork_JFK);
+
+            layerSelectBox.addLayer("airplane");
+            layerSelectBox.addLayer("airplane_route");
+
         });
         turkuNewYork.setId("replay");
 
-        Button startAnimation = new Button("Circle animation", e -> mapboxMap.startAnimation());
+        Button startAnimation = new Button("Circle animation", e ->
+        {
+            mapboxMap.startAnimation();
+            layerSelectBox.addLayer("circle_animation");
+        });
 
         Label leadingLabel = new Label("Animations: ");
         leadingLabel.setWidth(LEADING_WIDTH);
 
         animationsButtons.add(leadingLabel, turkuNewYork, startAnimation);
 
-        add(animationsButtons);
+        return animationsButtons;
     }
 
     public static Layer getExampleLayer()
     {
         // getLayer().toString() or getLayer().toString().replace("\"", "\'") is not needed
-        Layer layer = new Layer("points", Layer.Type.symbol);
+        Layer layer = new Layer("symbols", Layer.Type.symbol);
 
-        Layer.Properties mapboxDCProperties = new Layer.Properties("National Bank", Sprite.Bank.toString());
+        Properties mapboxDCProperties = new Properties("National Bank", Sprite.Bank.toString());
         GeoLocation mapboxDCLocation = new GeoLocation(38.913188059745586, -77.03238901390978);
-        Layer.Feature mapboxDCFeature = new Layer.Feature("Feature", mapboxDCProperties, mapboxDCLocation);
+        Feature mapboxDCFeature = new Feature("Feature", mapboxDCProperties, mapboxDCLocation);
         layer.addFeature(mapboxDCFeature);
 
-        Layer.Properties mapboxDangerProperties = new Layer.Properties("National danger", Sprite.Danger.toString());
+        Properties mapboxDangerProperties = new Properties("National danger", Sprite.Fire_Station.toString());
         GeoLocation mapboxDangerLocation = new GeoLocation(-20, 30);
-        Layer.Feature mapboxDangerFeature = new Layer.Feature("Feature", mapboxDangerProperties, mapboxDangerLocation);
+        Feature mapboxDangerFeature = new Feature("Feature", mapboxDangerProperties, mapboxDangerLocation);
         layer.addFeature(mapboxDangerFeature);
 
-        Layer.Properties mapboxSFProperties = new Layer.Properties("Helicopter Haven", Sprite.Helicopter.toString());
+        Properties mapboxSFProperties = new Properties("Helicopter Haven", Sprite.Helicopter.toString());
         GeoLocation mapboxSFLocation = new GeoLocation(37.776, -122.414);
-        Layer.Feature mapboxSFFeature = new Layer.Feature("Feature", mapboxSFProperties, mapboxSFLocation);
+        Feature mapboxSFFeature = new Feature("Feature", mapboxSFProperties, mapboxSFLocation);
         layer.addFeature(mapboxSFFeature);
 
-        log.info("adding feature: "+mapboxSFFeature.toString(2));
+        // log.info("adding feature: "+mapboxSFFeature.toString(2));
 
         // System.out.println(layer.toString(2));
 

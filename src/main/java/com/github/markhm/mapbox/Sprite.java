@@ -22,6 +22,7 @@ public class Sprite
 
     public static final Sprite Bank = new Sprite("bank");
     public static final Sprite Helicopter = new Sprite("heliport");
+    public static final Sprite Fire_Station = new Sprite("fire-station");
 
     // Unevaluated
     public static final Sprite Harbor = new Sprite("harbor");
@@ -36,7 +37,6 @@ public class Sprite
 
     public static final Sprite Doctor = new Sprite("doctor");
     public static final Sprite Police = new Sprite("police");
-    public static final Sprite Fire_Station = new Sprite("fire-station");
     public static final Sprite Hospital = new Sprite("hospital");
 
     public static final Sprite Globe = new Sprite("globe");
@@ -45,7 +45,7 @@ public class Sprite
     public static final Sprite Marker_Open = new Sprite("marker-stroked");
 
     public static final Sprite Flag = new Sprite("embassy");
-    public static final Sprite Cross = new Sprite("cross");
+
     public static final Sprite Heart = new Sprite("heart");
     public static final Sprite Star = new Sprite("star");
     public static final Sprite Star_Open = new Sprite("star-stroked");
@@ -72,4 +72,5 @@ public class Sprite
 
     // Unavailable in the default map
     public static final Sprite Danger = new Sprite("danger");
+    public static final Sprite Cross = new Sprite("cross");
 }

@@ -2,6 +2,8 @@ package com.github.markhm.mapbox;
 
 public interface AnimatedItem
 {
+    String getId();
+
     String getLayerId();
 
     /* How the item will be depicted on the map.*/

@@ -65,11 +65,18 @@ function renderOptionsMap(mapOptions)
     map = new mapboxgl.Map(optionsObject);
 }
 
+function setTextForInfo()
+{
+    document.getElementById("infoBox").innerHTML = "test";
+}
+
 function activatePointerLocation()
 {
     map.on('mousemove', function(e)
     {
-        document.getElementById('info').innerHTML =
+        console.log("Mouse moved to: " + JSON.stringify(e.point) + " which equals " + JSON.stringify(e.lngLat.wrap()));
+        // document.getElementsByClassName('info').innerHTML = "test";
+        document.getElementById("infoBox").innerHTML =
     // e.point is the x, y coordinates of the mouse move event relative
     // to the top-left corner of the map
             JSON.stringify(e.point) +
@@ -194,7 +201,7 @@ function startAnimation()
 
     map.addLayer(
         {
-            "id": "animation",
+            "id": "circle_animation",
             "source": "animation",
             "type": "circle",
             "paint": {
@@ -224,7 +231,23 @@ function startAnimation()
 function addLayer(layer)
 {
     console.log("Adding layer "+layer);
+    console.log("Adding layer "+JSON.stringify(layer));
+
     map.addLayer(layer);
+}
+
+
+function addSource(source_id, source)
+{
+    console.log("Adding source "+source);
+    map.addSource(source_id, source);
+}
+
+function setData(source_id, data)
+{
+    console.log("Setting data "+ source_id);
+    console.log("Data = "+data);
+    map.getSource(source_id).setData(data);
 }
 
 function addFeature(layerId, feature)
@@ -234,7 +257,6 @@ function addFeature(layerId, feature)
     // var layerString = JSON.stringify(layer);
     console.log("layerString is: " + layer);
 }
-
 
 function removeLayer(id)
 {
@@ -259,8 +281,8 @@ function unhideLayer(id)
 // A single point that animates along the route.
 // Coordinates are initially set to origin.
 
-var route;
-var point;
+var airplane_route;
+var airplane;
 
 var lineDistance; // = turf.lineDistance(route.features[0], 'kilometers');
 
@@ -277,7 +299,7 @@ var counter = 0;
 function setOriginDestination(origin, destination)
 {
     // A simple line from origin to destination
-    route = {
+    airplane_route = {
         type: "FeatureCollection",
         features: [{
             type: "Feature",
@@ -293,7 +315,7 @@ function setOriginDestination(origin, destination)
 
 // A single point that animates along the route.
 // Coordinates initially set to origin.
-    point = {
+    airplane = {
         "type": "FeatureCollection",
         "features": [{
             "type": "Feature",
@@ -305,17 +327,17 @@ function setOriginDestination(origin, destination)
         }]
     };
 
-    lineDistance = turf.lineDistance(route.features[0], 'kilometers');
+    lineDistance = turf.lineDistance(airplane_route.features[0], 'kilometers');
 
     // Draw an arc between the `origin` & `destination` of the two points
     for (var i = 0; i < lineDistance; i += lineDistance / steps)
     {
-        var segment = turf.along(route.features[0], i, "kilometers");
+        var segment = turf.along(airplane_route.features[0], i, "kilometers");
         arc.push(segment.geometry.coordinates);
     }
 
     // Update the route with calculated arc coordinates
-    route.features[0].geometry.coordinates = arc;
+    airplane_route.features[0].geometry.coordinates = arc;
 }
 
 function fromOriginToDestination(origin, destination)
@@ -324,21 +346,21 @@ function fromOriginToDestination(origin, destination)
     // and the arc for the flight
     setOriginDestination(origin, destination);
 
-    map.addSource('route',
+    map.addSource('airplane_route',
         {
             "type": "geojson",
-            "data": route
+            "data": airplane_route
         });
 
-    map.addSource('point',
+    map.addSource('airplane',
         {
             "type": "geojson",
-            "data": point
+            "data": airplane
         });
 
     map.addLayer({
-        "id": "originDestinationRoute",
-        "source": "route",
+        "id": "airplane_route",
+        "source": "airplane_route",
         "type": "line",
         "paint": {
             "line-width": 2,
@@ -347,8 +369,8 @@ function fromOriginToDestination(origin, destination)
     });
 
     map.addLayer({
-        "id": "point",
-        "source": "point",
+        "id": "airplane",
+        "source": "airplane",
         "type": "symbol",
         "layout": {
             "icon-image": "airport-15",
@@ -362,23 +384,23 @@ function fromOriginToDestination(origin, destination)
     function animate()
     {
         // console.log(point);
-        // console.log(route);
+        // console.log(airplane_route);
 
         // Update point geometry to a new position based on counter denoting
         // the index to access the arc.
-        point.features[0].geometry.coordinates = route.features[0].geometry.coordinates[counter];
+        airplane.features[0].geometry.coordinates = airplane_route.features[0].geometry.coordinates[counter];
 
-        // Calculate the bearing to ensure the icon is rotated to match the route arc
+        // Calculate the bearing to ensure the icon is rotated to match the airplane_route arc
         // The bearing is calculate between the current point and the next point, except
         // at the end of the arc use the previous point and the current point
 
-        point.features[0].properties.bearing = turf.bearing(
-            turf.point(route.features[0].geometry.coordinates[counter >= steps ? counter - 1 : counter]),
-            turf.point(route.features[0].geometry.coordinates[counter >= steps ? counter : counter + 1])
+        airplane.features[0].properties.bearing = turf.bearing(
+            turf.point(airplane_route.features[0].geometry.coordinates[counter >= steps ? counter - 1 : counter]),
+            turf.point(airplane_route.features[0].geometry.coordinates[counter >= steps ? counter : counter + 1])
         );
 
         // Update the source with this new data.
-        map.getSource('point').setData(point);
+        map.getSource('airplane').setData(airplane);
 
         // Request the next frame of animation so long the end has not been reached.
         if (counter < steps)
@@ -392,10 +414,10 @@ function fromOriginToDestination(origin, destination)
     document.getElementById('replay').addEventListener('click', function()
     {
         // Set the coordinates of the original point back to origin
-        point.features[0].geometry.coordinates = origin;
+        airplane.features[0].geometry.coordinates = origin;
 
         // Update the source layer
-        map.getSource('point').setData(point);
+        map.getSource('airplane').setData(airplane);
 
         // Reset the counter
         counter = 0;

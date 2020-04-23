@@ -3,28 +3,33 @@ package com.github.markhm.mapbox;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.github.markhm.mapbox.util.Color;
 import com.vaadin.flow.component.*;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.dependency.JavaScript;
-import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.Page;
 import com.vaadin.flow.component.page.PendingJavaScriptResult;
-import com.vaadin.flow.shared.ui.LoadMode;
 import elemental.json.Json;
 import elemental.json.JsonObject;
+import mapboxflow.layer.Data;
+import mapboxflow.layer.Feature;
+import mapboxflow.layer.Layer;
+import mapboxflow.layer.Properties;
+import mapboxflow.layer.Source;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.Serializable;
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @JavaScript(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js")
 @StyleSheet(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css")
 @JavaScript(value = "https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js")
-//@CssImport("./com/github/markhm/mapbox-flow/mapbox.css")
-//@JsModule("./com/github/markhm/mapbox-flow/mapbox.js")
+// @JsModule("./com/github/markhm/mapbox-flow/mapbox.js")
 public class MapboxMap extends Div
 {
     private static Log log = LogFactory.getLog(MapboxMap.class);
@@ -38,6 +43,8 @@ public class MapboxMap extends Div
     boolean dkMap = false;
 
     private MapboxOptions options = null;
+
+    private Map<String, Source> sourcesInUse = new HashMap<>();
 
     private MapboxMap()
     {
@@ -63,7 +70,6 @@ public class MapboxMap extends Div
         this(initialView, initialZoom, false);
     }
 
-
     public MapboxMap(GeoLocation initialView, int initialZoom, boolean dkMap)
     {
         this();
@@ -84,8 +90,7 @@ public class MapboxMap extends Div
 //         page.addStyleSheet("frontend://com/github/markhm/mapbox-flow/mapbox.css");
 //         page.addJavaScript("frontend://com/github/markhm/mapbox-flow/mapbox.js");
 
-         page.addStyleSheet("./com/github/markhm/mapbox-flow/mapbox.css");
-         page.addJavaScript("./com/github/markhm/mapbox-flow/mapbox.js");
+        page.addJavaScript("./com/github/markhm/mapbox-flow/mapbox.js");
 
         String accessToken = AccessToken.getToken();
 
@@ -134,26 +139,106 @@ public class MapboxMap extends Div
         }
     }
 
-    public PendingJavaScriptResult addAnimatedItem(AnimatedItem animatedItem)
+    public Source getSource(String layerId)
     {
+        return sourcesInUse.get(layerId);
+    }
+
+    public String addAnimatedItem(AnimatedItem animatedItem)
+    {
+        boolean sourceAlreadyExists = true;
+        Source source = getSource(animatedItem.getLayerId());
+
+        if (source == null)
+        {
+            sourceAlreadyExists = false;
+        }
+
+        Properties itemProperties = new Properties(animatedItem.getDescription(), animatedItem.getSprite().toString());
+        Feature itemFeature = new Feature(Feature.FEATURE, itemProperties, animatedItem.getLocation());
+
+        String command;
+        if (sourceAlreadyExists)
+        {
+            command = addToExistingLayer(animatedItem, source, itemFeature);
+        }
+        else
+        {
+            command = addToNewLayer(animatedItem, itemFeature);
+        }
+
+        return command;
+    }
+
+    public void unhideLayer(String layerId)
+    {
+        executeJs("unhideLayer('" + layerId + "')");
+    }
+
+    public void hideLayer(String layerId)
+    {
+        executeJs("hideLayer('" + layerId + "')");
+    }
+
+    public String resetSourceData(String sourceId, Data newData)
+    {
+        String command = "setData('"+sourceId+"', " + newData + ")";
+        executeJs(command);
+
+        return command;
+    }
+
+    private String addToExistingLayer(AnimatedItem animatedItem, Source source, Feature itemFeature)
+    {
+        mapboxflow.layer.Data data = source.getData();
+        data.addFeature(itemFeature);
+        String command = "setData('"+animatedItem.getLayerId()+"'," + data + ")";
+        executeJs(command);
+
+        return command;
+    }
+
+    private String addToNewLayer(AnimatedItem animatedItem, Feature itemFeature)
+    {
+        mapboxflow.layer.Data data = new mapboxflow.layer.Data(Data.Type.collection);
+        data.addFeature(itemFeature);
+        Source source = new Source();
+        source.setData(data);
+
+        addSource(animatedItem.getLayerId(), source);
+
         Layer itemLayer = new Layer(animatedItem.getLayerId(), Layer.Type.symbol);
+        itemLayer.setSourceId(animatedItem.getLayerId());
 
-        GeoLocation initialPosition = animatedItem.getLocation();
-        log.info("Adding " + animatedItem.getDescription() + " to initial position " + initialPosition + " on map.");
+        addLayer(itemLayer);
 
-        Layer.Properties itemProperties = new Layer.Properties(animatedItem.getDescription(), animatedItem.getSprite().toString());
-        Layer.Feature itemFeature = new Layer.Feature("Feature", itemProperties, initialPosition);
-        itemLayer.addFeature(itemFeature);
+        return "no comment";
+    }
 
-        log.info("Feature to be added: " + itemFeature);
+    public void addSource(String id, Source source)
+    {
+        if (!sourcesInUse.keySet().contains(id))
+        {
+            executeJs("addSource('" + id + "'," + source + ")");
 
-        log.info("CARLAYER: "+itemLayer); // see below
+            sourcesInUse.put(id, source);
+        }
+        else
+        {
+            log.warn("Source "+id+" already exists, ignoring request");
+        }
+    }
 
-        // This should work, but does not
-        // executeJs("addLayer($0);", itemLayer.toString());
+    public PendingJavaScriptResult addLayerAlt(JsonObject layer)
+    {
+        return executeJs("addLayer(" + layer.toJson() + ")");
+        // return executeJs("addLayer($0)", layer);
+    }
 
-        // This should not work, but does. Note that .toString() is nót called on the Layer class (which extends JSONObject)
-        return executeJs("addLayer(" + itemLayer + ")");
+    public PendingJavaScriptResult addLayer(Layer layer)
+    {
+        String command = "addLayer(" + layer + ")";
+        return executeJs(command);
     }
 
     public PendingJavaScriptResult addLine(Geometry geometry, Color color)
@@ -182,7 +267,9 @@ public class MapboxMap extends Div
         // page.executeJs("addLine($0, $1);", geometryAsString + "", color.getHexValue());
 
         // This shouldn't work, but it does.
-        return page.executeJs("addLine("+geometryAsString +", "+ color.toStringForJS()+")");
+
+        // return executeJs("addLine("+geometry +", "+ color.toStringForJS()+")");
+        return executeJs("addLine("+geometryAsString +", "+ color.toStringForJS()+")");
 
         // This should be identical to the previous call, and yes, here it works (NB: in drawOriginDestinationFlight(..) below, it does not).
         // executeJs("addLine("+geometryAsString +", "+ color.toStringForJS()+")");
@@ -242,7 +329,6 @@ public class MapboxMap extends Div
         jsonObject.put(MapboxOptions.OptionType.container.toString(), "map");
         jsonObject.put(MapboxOptions.OptionType.style.toString(), "mapbox://styles/mapbox/streets-v11");
 
-
         jsonObject.put(MapboxOptions.OptionType.center.toString(), GeoLocation.InitialView_Denmark.getLongLat());
         jsonObject.put(MapboxOptions.OptionType.zoom.toString(), 6);
 
@@ -270,6 +356,46 @@ public class MapboxMap extends Div
 
 // --------------------------------------------------------------------------------------------------------------------
 
+//    public String addAnimatedItem(AnimatedItem animatedItem)
+//    {
+//        boolean layerAlreadyExists = true;
+//        Layer itemLayer = getLayer(animatedItem.getLayerId());
+//
+//        if (itemLayer == null)
+//        {
+//            layerAlreadyExists = false;
+//            itemLayer = new Layer(animatedItem.getLayerId(), Layer.Type.symbol);
+//        }
+//
+//        GeoLocation initialPosition = animatedItem.getLocation();
+//        log.info("Adding " + animatedItem.getDescription() + " to initial position " + initialPosition + " on map.");
+//        Layer.Properties itemProperties = new Layer.Properties(animatedItem.getDescription(), animatedItem.getSprite().toString());
+//        Layer.Feature itemFeature = new Layer.Feature("Feature", itemProperties, initialPosition);
+//
+//        itemLayer.addFeature(itemFeature);
+//
+//        String command = null;
+//        if (layerAlreadyExists)
+//        {
+//            Layer.Data data = itemLayer.getSource().getData();
+//            command = "setData('"+animatedItem.getLayerId()+"_source'," + data + ")";
+//        }
+//        else
+//        {
+//            command = "addLayer(" + itemLayer + ")";
+//            layersInUse.put(animatedItem.getLayerId(), itemLayer);
+//        }
+//
+//        executeJs(command);
+//        return command;
+//
+//        // This should work, but does not
+//        // executeJs("addLayer($0);", itemLayer.toString());
+//
+//        // This should not work, but does. Note that .toString() is nót called on the Layer class (which extends JSONObject)
+//        // return executeJs("addLayer(" + itemLayer + ")");
+//    }
+//
 // DRAGONS here, please ignore
 
 //TODO The problem seems to be that the String returned from initialView.getLongLat() arrives at the other side as a String,

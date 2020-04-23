@@ -6,6 +6,9 @@ import elemental.json.impl.JsonUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GeoLocation
 {
     private String name = null;
@@ -105,6 +108,16 @@ public class GeoLocation
         return result;
     }
 
+    public List<Double> getCoordList()
+    {
+        List<Double> resultList = new ArrayList<>();
+        resultList.add(longitude);
+        resultList.add(latitude);
+
+        return resultList;
+    }
+
+
     public double getLatitude()
     {
         return latitude;
@@ -131,6 +144,8 @@ public class GeoLocation
     public static GeoLocation Utrecht = new GeoLocation("Utrecht", 52.09083, 5.12222);
     public static GeoLocation Veenendaal = new GeoLocation("Veenendaal", 52.0263009, 5.5544309);
 
+    public static GeoLocation Berlin = new GeoLocation("Berlin", 52.520008, 13.404954);
+
     public static GeoLocation Copenhagen = new GeoLocation("Copenhagen", 55.6761, 12.5683);
     public static GeoLocation Aalborg = new GeoLocation("Aalborg", 57.048, 9.9187);
     public static GeoLocation Aarhus = new GeoLocation("Aarhus", 56.1629, 10.2039);
@@ -138,7 +153,6 @@ public class GeoLocation
     public static GeoLocation Odense = new GeoLocation("Odense", 55.39594, 10.38831);
     public static GeoLocation Roskilde = new GeoLocation("Roskilde", 55.64152, 12.08035);
     public static GeoLocation Skagen = new GeoLocation("Skagen", 57.72093, 10.58394);
-
 
     public static GeoLocation Nivaa = new GeoLocation("Nivaa", 55.9340515, 12.5048504);
 
@@ -154,6 +168,10 @@ public class GeoLocation
     public static GeoLocation NewYork_JFK = new GeoLocation("New York JFK",  40.627947, -73.771702);
     public static GeoLocation SanFrancisco = new GeoLocation("San Francisco", 37.776, -122.414);
     public static GeoLocation WashingtonDC = new GeoLocation("Washington DC", 38.913, -77.032 );
+
+    public static GeoLocation Bermuda_1_Florida = new GeoLocation("Florida", 25.2, -80.4);
+    public static GeoLocation Bermuda_2_Bermuda = new GeoLocation("Bermuda", 32.3, -64.7);
+    public static GeoLocation Bermuda_3_PuertoRico = new GeoLocation("Bermuda", 18.4, -65.6);
 
     @Override
     public boolean equals(Object o)
