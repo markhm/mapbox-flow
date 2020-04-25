@@ -163,17 +163,16 @@ function addLine(geometry, color)
 // ]
 }
 
-
+// done
 function deactivateAllListeners()
 {
     map.removeAllListeners();
 }
 
+// done
 function zoomTo(level)
 {
-    map.zoomTo(level,
-        { "duration": 1500 }
-    );
+    map.zoomTo(level, { "duration": 1500 } );
 }
 
 function pointOnCircle(angle)
@@ -228,6 +227,7 @@ function startAnimation()
 // --*  https://docs.mapbox.com/mapbox-gl-js/example/geojson-markers/                    *--
 // --*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--*--
 
+// done
 function addLayer(layer)
 {
     console.log("Adding layer "+layer);
@@ -236,13 +236,14 @@ function addLayer(layer)
     map.addLayer(layer);
 }
 
-
+// done
 function addSource(source_id, source)
 {
     console.log("Adding source "+source);
     map.addSource(source_id, source);
 }
 
+// done
 function setData(source_id, data)
 {
     console.log("Setting data "+ source_id);
@@ -264,11 +265,13 @@ function removeLayer(id)
     if (map.getLayer(id)) map.removeLayer(id);
 }
 
+// done
 function hideLayer(id)
 {
     map.setFilter(id, ['==', 'type', 'Feature']);
 }
 
+// done
 function unhideLayer(id)
 {
     map.setFilter(id, null);
