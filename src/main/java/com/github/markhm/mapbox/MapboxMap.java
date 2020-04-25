@@ -90,7 +90,7 @@ public class MapboxMap extends Div
 //         page.addStyleSheet("frontend://com/github/markhm/mapbox-flow/mapbox.css");
 //         page.addJavaScript("frontend://com/github/markhm/mapbox-flow/mapbox.js");
 
-        page.addJavaScript("./com/github/markhm/mapbox-flow/mapbox.js");
+        // page.addJavaScript("./com/github/markhm/mapbox-flow/mapbox.js");
 
         String accessToken = AccessToken.getToken();
 
