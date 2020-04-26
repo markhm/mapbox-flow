@@ -22,8 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 @Route("")
-// @StyleSheet("./com/github/markhm/mapbox-flow/mapbox.css")
-// @JavaScript("./com/github/markhm/mapbox-flow/mapbox.js")
 public class DemoView extends VerticalLayout
 {
     // http://www.jsonschema2pojo.org/
@@ -33,9 +31,9 @@ public class DemoView extends VerticalLayout
     private static final String LEADING_WIDTH = "125px";
 
     private MapboxMap mapboxMap = null;
-    private LayerSelectBox layerSelectBox = null;
+    // private MapboxMap mapboxMap = null;
 
-    private TextArea textArea = null;
+    private LayerSelectBox layerSelectBox = null;
 
     boolean alreadyRendered = false;
 
@@ -61,12 +59,19 @@ public class DemoView extends VerticalLayout
         titleBox.add(title);
         contentBox.add(titleBox);
 
-        contentBox.add(renderZoomButtons());
+        // contentBox.add(renderZoomButtons());
 
         HorizontalLayout mapboxLine = new HorizontalLayout();
-        mapboxMap = new MapboxMap(GeoLocation.InitialView_Turku_NY, 2);
+
+        String accessToken = AccessToken.getToken();
+        mapboxMap = new MapboxMap(accessToken, GeoLocation.InitialView_Turku_NY, 2);
+        // mapboxMap = new MapboxMap(GeoLocation.InitialView_Turku_NY, 2);
+
+        mapboxMap.setWidth("1000px");
+        mapboxMap.setHeight("700px");
         Set<String> initialLayers = new HashSet<>();
         layerSelectBox = new LayerSelectBox(mapboxMap, initialLayers);
+
         mapboxLine.add(mapboxMap, layerSelectBox);
 
         contentBox.add(mapboxLine);
@@ -75,9 +80,6 @@ public class DemoView extends VerticalLayout
         contentBox.add(renderAnimationButtons());
         contentBox.add(renderControlButtons());
 
-        textArea = renderTextArea();
-        contentBox.add(textArea);
-        contentBox.add(ViewUtil.verticalWhitespace(5));
         contentBox.add(new InfoBox());
     }
 
@@ -96,13 +98,13 @@ public class DemoView extends VerticalLayout
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setAlignItems(Alignment.CENTER);
 
-        Button zoomTurku = new Button("Turku", e -> mapboxMap.zoomTo(GeoLocation.Turku, 10));
-        Button zoomCopenhagen = new Button("Copenhagen", e -> mapboxMap.zoomTo(GeoLocation.Copenhagen, 16));
+        Button zoomTurku = new Button("Turku", e -> mapboxMap.flyTo(GeoLocation.Turku, 10));
+        Button zoomCopenhagen = new Button("Copenhagen", e -> mapboxMap.flyTo(GeoLocation.Copenhagen, 16));
         Button zoomAmsterdam = new Button("Amsterdam", e -> mapboxMap.flyTo(GeoLocation.Amsterdam));
-        Button zoomParis = new Button("Paris", e -> mapboxMap.zoomTo(GeoLocation.Paris,8));
+        Button zoomParis = new Button("Paris", e -> mapboxMap.flyTo(GeoLocation.Paris,8));
         Button zoomNewYork = new Button("New York JFK", e -> mapboxMap.flyTo(GeoLocation.NewYork_JFK));
 
-        Button zoomWorld = new Button("World", e -> mapboxMap.zoomTo(GeoLocation.Center, 1));
+        Button zoomWorld = new Button("World", e -> mapboxMap.flyTo(GeoLocation.Center, 1));
         Button zoomToLevel16 = new Button("Zoom in", e -> mapboxMap.zoomTo( 16));
 
         Label leadingLabel = new Label("Zoom to: ");
@@ -121,10 +123,8 @@ public class DemoView extends VerticalLayout
         Button addLayer = new Button("Add point(s)", e ->
         {
             Layer layer = getExampleLayer();
-            String command = "addLayer(" + layer + ")";
-            textArea.setValue(command);
             mapboxMap.addLayer(getExampleLayer());
-            layerSelectBox.addLayer(layer.getId());
+            layerSelectBox.registerLayer(layer.getId());
         });
 
         Button addLine = new Button("Add line", e ->
@@ -132,7 +132,7 @@ public class DemoView extends VerticalLayout
             String layerId = "route_line";
             Layer routeLineLayer = getLineLayer(layerId);
             mapboxMap.addLayer(routeLineLayer);
-            layerSelectBox.addLayer(layerId);
+            layerSelectBox.registerLayer(layerId);
 
         });
 
@@ -141,7 +141,7 @@ public class DemoView extends VerticalLayout
             String layerId = "polygon";
             Layer polygonLayer = getPolygonLayer(layerId);
             mapboxMap.addLayer(polygonLayer);
-            layerSelectBox.addLayer(layerId);
+            layerSelectBox.registerLayer(layerId);
         });
 
         Button revisePolygon = new Button ("Revise polygon", e ->
@@ -161,7 +161,7 @@ public class DemoView extends VerticalLayout
             mapboxMap.resetSourceData("polygon", data);
         });
 
-        Button addCarInRoskilde = new Button("Add car New York", e -> addCar("car_NY", "New York", GeoLocation.NewYork) );
+        Button addCarInNewYork = new Button("Add car New York", e -> addCar("car_NY", "New York", GeoLocation.NewYork) );
         Button addCarInMadrid = new Button("Add car Madrid", e -> addCar("car_Madrid,", "Madrid", GeoLocation.Madrid) );
 
         Button addTenCars = new Button("Add 10 cars", e -> addCars());
@@ -170,7 +170,7 @@ public class DemoView extends VerticalLayout
         leadingLabel.setWidth(LEADING_WIDTH);
 
         layerButtons.add(leadingLabel, addLayer, addLine, addPolygon, revisePolygon,
-                ViewUtil.horizontalWhiteSpace(30), addCarInRoskilde, addCarInMadrid, addTenCars);
+                ViewUtil.horizontalWhiteSpace(30), addCarInNewYork, addCarInMadrid, addTenCars);
 
         return layerButtons;
     }
@@ -274,18 +274,16 @@ public class DemoView extends VerticalLayout
             }
         };
 
-        String command = mapboxMap.addAnimatedItem(car);
-        layerSelectBox.addLayer(car.getLayerId());
-
-        textArea.setValue(command);
+        mapboxMap.addAnimatedItem(car);
+        layerSelectBox.registerLayer(car.getLayerId());
     }
 
     private HorizontalLayout renderControlButtons()
     {
         HorizontalLayout controlButtons = new HorizontalLayout();
         controlButtons.setAlignItems(Alignment.CENTER);
-        Button activatePointerCoordinates = new Button("Coordinate listener", e -> mapboxMap.executeJs("activatePointerLocation();"));
-        Button deactivatePointerCoordinates = new Button("Deactivate all listeners", e -> mapboxMap.executeJs("deactivateAllListeners();"));
+        Button activatePointerCoordinates = new Button("Coordinate listener", e -> mapboxMap.activatePointerLocation());
+        Button deactivatePointerCoordinates = new Button("Deactivate all listeners", e -> mapboxMap.deactivateListeners());
 
         Label leadingLabel = new Label("Controls: ");
         leadingLabel.setWidth(LEADING_WIDTH);
@@ -302,23 +300,25 @@ public class DemoView extends VerticalLayout
         Button turkuNewYork = new Button("Airplane Turku to New York", e ->
         {
             mapboxMap.drawOriginDestinationFlight(GeoLocation.Turku, GeoLocation.NewYork_JFK);
+            CommonViewElements.showNotification("This example does not work yet");
 
-            layerSelectBox.addLayer("airplane");
-            layerSelectBox.addLayer("airplane_route");
+            layerSelectBox.registerLayer("airplane");
+            layerSelectBox.registerLayer("airplane_route");
 
         });
         turkuNewYork.setId("replay");
 
-        Button startAnimation = new Button("Circle animation", e ->
-        {
-            mapboxMap.startAnimation();
-            layerSelectBox.addLayer("circle_animation");
-        });
+//        Button startAnimation = new Button("Circle animation", e ->
+//        {
+//            mapboxMap.startAnimation();
+//            layerSelectBox.addLayer("circle_animation");
+//        });
 
         Label leadingLabel = new Label("Animations: ");
         leadingLabel.setWidth(LEADING_WIDTH);
 
-        animationsButtons.add(leadingLabel, turkuNewYork, startAnimation);
+        // animationsButtons.add(leadingLabel, turkuNewYork, startAnimation);
+        animationsButtons.add(leadingLabel, turkuNewYork);
 
         return animationsButtons;
     }

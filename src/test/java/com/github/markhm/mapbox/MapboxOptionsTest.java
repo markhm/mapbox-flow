@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class MapboxOptionsTest
 {
-    private static Log log = LogFactory.getLog(MapboxMap.class);
+    private static Log log = LogFactory.getLog(DeprecatedMapboxMap.class);
 
     public MapboxOptionsTest()
     {

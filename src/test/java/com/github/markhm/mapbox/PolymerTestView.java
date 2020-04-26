@@ -9,13 +9,19 @@ import com.vaadin.flow.router.Route;
 @Route(value = "polymer")
 public class PolymerTestView extends VerticalLayout
 {
-    private PolymerMapboxMap map = null;
+    private MapboxMap map = null;
+
+    boolean alreadyRendered = false;
 
     public PolymerTestView()
     {
         setAlignItems(Alignment.CENTER);
 
-        render();
+        if (!alreadyRendered)
+        {
+            render();
+            alreadyRendered = true;
+        }
     }
 
     private void render()
@@ -27,7 +33,7 @@ public class PolymerTestView extends VerticalLayout
         contentBox.add(new H3("Mapbox-Flow based on Polymer - Vaadin v14.2.0.alpha11"));
 
         String accessToken = AccessToken.getToken();
-        map = new PolymerMapboxMap(accessToken, GeoLocation.NewYork);
+        map = new MapboxMap(accessToken, GeoLocation.NewYork);
         map.setWidth("1200px");
         map.setHeight("700px");
 

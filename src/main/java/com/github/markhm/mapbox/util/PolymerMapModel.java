@@ -24,6 +24,10 @@ public interface PolymerMapModel extends TemplateModel
     @Encode(SourceEncoder.class)
     void setSource(Source source);
 
+    @Encode(GeoLocationEncoder.class)
+    void setZoomCenter(GeoLocation zoomCenter);
+    void setZoomLevel(int zoomLevel);
+
     // For use in hiding and unhiding
     void setLayerId(String layerId);
 
@@ -33,5 +37,10 @@ public interface PolymerMapModel extends TemplateModel
     @Encode(DataEncoder.class)
     void setData(Data data);
 
-    void setZoomLevel(int zoomLevel);
+    // For the flight example
+    @Encode(GeoLocationEncoder.class)
+    void setOrigin(GeoLocation origin);
+    @Encode(GeoLocationEncoder.class)
+    void setDestination(GeoLocation destination);
+
 }

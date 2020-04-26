@@ -5,7 +5,7 @@
 
     <groupId>com.github.markhm</groupId>
     <artifactId>mapbox-flow</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <!-- https://www.roytuts.com/create-both-war-and-jar-files-using-maven/ -->
@@ -27,6 +27,7 @@
 <!--        <vaadin.version>14.1.25</vaadin.version>-->
         <vaadin.version>14.2.0.alpha11</vaadin.version>
 <!--        <vaadin.version>15.0.5</vaadin.version>-->
+
 <!--        NB: Mapbox-flow does not work for Vaadin 15.0.4:-->
 <!--        <vaadin.version>15.0-SNAPSHOT</vaadin.version>-->
 

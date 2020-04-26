@@ -6,9 +6,6 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import elemental.json.Json;
-import elemental.json.JsonArray;
-import elemental.json.JsonObject;
 import mapboxflow.layer.Layer;
 
 import mapboxflow.layer.Paint;
@@ -23,6 +20,7 @@ public class DKKommunerView extends VerticalLayout
 {
     private static Log log = LogFactory.getLog(DKKommunerView.class);
 
+    // private DeprecatedMapboxMap mapboxMap = null;
     private MapboxMap mapboxMap = null;
 
     boolean alreadyRendered = false;
@@ -44,7 +42,10 @@ public class DKKommunerView extends VerticalLayout
 
         addTopButtons();
 
-        mapboxMap = new MapboxMap(GeoLocation.InitialView_Denmark, 6, false);
+        // mapboxMap = new DeprecatedMapboxMap(GeoLocation.InitialView_Denmark, 6, false);
+        mapboxMap = new MapboxMap(AccessToken.getToken(), GeoLocation.InitialView_Denmark, 6);
+        mapboxMap.setWidth("1200px");
+        mapboxMap.setHeight("700px");
         add(mapboxMap);
 
         addBottomButtons();
@@ -55,14 +56,14 @@ public class DKKommunerView extends VerticalLayout
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setAlignItems(Alignment.CENTER);
 
-        Button zoomAarhus = new Button("Aarhus", e -> mapboxMap.zoomTo(GeoLocation.Aarhus, 12));
-        Button zoomAalborg = new Button("Aalborg", e -> mapboxMap.zoomTo(GeoLocation.Aalborg, 12));
-        Button zoomBornholm = new Button("Bornholm", e -> mapboxMap.zoomTo(GeoLocation.Bornholm, 10));
-        Button zoomCopenhagen = new Button("Copenhagen", e -> mapboxMap.zoomTo(GeoLocation.Copenhagen, 10));
-        Button zoomSkagen = new Button("Skagen", e -> mapboxMap.zoomTo(GeoLocation.Skagen, 12));
-        Button zoomParis = new Button("Odense", e -> mapboxMap.zoomTo(GeoLocation.Odense, 14));
+        Button zoomAarhus = new Button("Aarhus", e -> mapboxMap.flyTo(GeoLocation.Aarhus, 12));
+        Button zoomAalborg = new Button("Aalborg", e -> mapboxMap.flyTo(GeoLocation.Aalborg, 12));
+        Button zoomBornholm = new Button("Bornholm", e -> mapboxMap.flyTo(GeoLocation.Bornholm, 10));
+        Button zoomCopenhagen = new Button("Copenhagen", e -> mapboxMap.flyTo(GeoLocation.Copenhagen, 10));
+        Button zoomSkagen = new Button("Skagen", e -> mapboxMap.flyTo(GeoLocation.Skagen, 12));
+        Button zoomParis = new Button("Odense", e -> mapboxMap.flyTo(GeoLocation.Odense, 14));
 
-        Button zoomDenmark = new Button("Denmark", e -> mapboxMap.zoomTo(GeoLocation.InitialView_Denmark, 6));
+        Button zoomDenmark = new Button("Denmark", e -> mapboxMap.flyTo(GeoLocation.InitialView_Denmark, 6));
 
         horizontalLayout.add(new Label("Zoom til:"), zoomAarhus, zoomAalborg, zoomBornholm, zoomCopenhagen, zoomSkagen, zoomParis, zoomDenmark);
 
@@ -160,7 +161,7 @@ public class DKKommunerView extends VerticalLayout
 
     private void removeSelection()
     {
-        String command = "map.removeLayer('color')";
+        String command = "this.map.removeLayer('color')";
         mapboxMap.executeJs(command);
     }
 }

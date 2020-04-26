@@ -14,6 +14,7 @@ public class LayerSelectBox extends VerticalLayout
 {
     private static Log log = LogFactory.getLog(LayerSelectBox.class);
 
+    // private MapboxMap mapboxMap = null;
     private MapboxMap mapboxMap = null;
     private MultiSelectListBox<String> listBox = null;
 
@@ -61,7 +62,7 @@ public class LayerSelectBox extends VerticalLayout
         add(listBox);
     }
 
-    public void addLayer(String layer)
+    public void registerLayer(String layer)
     {
         selectableLayers.add(layer);
 

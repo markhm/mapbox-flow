@@ -1,13 +1,9 @@
 package mapboxflow.layer;
 
 import com.github.markhm.mapbox.GeoLocation;
-import com.github.markhm.mapbox.MapboxMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.List;
 
 public class Feature extends JSONObject
 {

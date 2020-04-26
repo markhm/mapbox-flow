@@ -1,11 +1,9 @@
 package elemental.json.test;
 
 import com.github.markhm.mapbox.GeoLocation;
-import com.github.markhm.mapbox.MapboxMap;
 import com.github.markhm.mapbox.MapboxOptions;
 import elemental.json.Json;
 import elemental.json.JsonObject;
-import elemental.json.JsonValue;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
