@@ -220,9 +220,9 @@
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
             </resource>
-            <resource>
-                <directory>${project.basedir}/src/test/resources</directory>
-            </resource>
+<!--            <resource>-->
+<!--                <directory>${project.basedir}/src/test/resources</directory>-->
+<!--            </resource>-->
             <resource>
                 <directory>${project.basedir}/src/main/generated</directory>
             </resource>
@@ -244,7 +244,7 @@
                         <configuration>
                             <sources>
                                 <source>src/main/generated</source>
-                                <source>src/test/java</source>
+<!--                                <source>src/test/java</source>-->
                             </sources>
                         </configuration>
                     </execution>
@@ -305,41 +305,6 @@
                 </executions>
             </plugin>
 
-            <!-- <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>make-a-jar</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <version>3.1.0</version>
-                <configuration>
-                    <archive>
-                        <index>true</index>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Vaadin-Package-Version>1</Vaadin-Package-Version>
-                        </manifestEntries>
-                    </archive>
-<!- -                    <includes>- ->
-<!- -                        <include>src/main/java/**/*.java</include>- ->
-<!- -                        <include>src/main/generated/**/*.java</include>- ->
-<!- -                        <include>target/classes/**/*.class</include>- ->
-<!- -                    </includes>- ->
-                    <!- - Generated file that shouldn't be included in add-ons - ->
-                    <excludes>
-                        <exclude>META-INF/VAADIN/config/flow-build-info.json</exclude>
-                    </excludes>
-                </configuration>
-            </plugin> -->
             <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
@@ -374,6 +339,26 @@
                         </resourceBases>
                     </webApp>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>process-test-classes</phase>
+                        <configuration>
+                            <target>
+                                <copy todir="${basedir}/target/classes">
+                                    <fileset dir="${basedir}/target/test-classes" includes="**/*" />
+                                </copy>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
