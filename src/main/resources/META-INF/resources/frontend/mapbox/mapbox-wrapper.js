@@ -130,11 +130,11 @@ class MapboxWrapper extends PolymerElement {
     flyTo()
     {
         if (this.zoomLevel) {
-            this.map.flyTo({center: this.zoomCenter, zoom: this.zoomLevel, duration: 1500});
+            this.map.flyTo({center: JSON.parse(this.zoomCenter), zoom: this.zoomLevel, duration: 1500});
         }
         else
         {
-            this.map.flyTo({center: this.zoomCenter, duration: 1500});
+            this.map.flyTo({center: JSON.parse(this.zoomCenter), duration: 1500});
         }
     }
 
