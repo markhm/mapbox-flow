@@ -4,10 +4,13 @@ import com.github.markhm.mapbox.util.PolymerMapModel;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.*;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.polymertemplate.TemplateParser;
+import com.vaadin.flow.server.VaadinService;
 import mapboxflow.layer.*;
 import mapboxflow.layer.Data;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jsoup.nodes.Element;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +28,17 @@ public class MapboxMap extends PolymerTemplate<PolymerMapModel> implements HasSi
 
     public MapboxMap(String accessToken)
     {
+        // NB: This trick is necessary to ensure the mapbox-wrapper.js can be found when deploying
+        super(new TemplateParser()
+        {
+            @Override
+            public TemplateData getTemplateContent(Class<? extends PolymerTemplate<?>> clazz, String tag, VaadinService service)
+            {
+                TemplateData data = new TemplateData("./mapbox/mapbox-wrapper.js", new Element("mapbox-wrapper"));
+                return data;
+            }
+        }, VaadinService.getCurrent());
+
         setId("map");
         getStyle().set("align-self", "center");
         getStyle().set("border", "1px solid black");
