@@ -15,7 +15,6 @@ import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 
 @Route("dk_map")
-@Deprecated
 public class DKKommunerView extends VerticalLayout
 {
     private static Log log = LogFactory.getLog(DKKommunerView.class);
@@ -69,11 +68,11 @@ public class DKKommunerView extends VerticalLayout
         Button zoomBornholm = new Button("Bornholm", e -> mapboxMap.flyTo(GeoLocation.Bornholm, 10));
         Button zoomCopenhagen = new Button("Copenhagen", e -> mapboxMap.flyTo(GeoLocation.Copenhagen, 10));
         Button zoomSkagen = new Button("Skagen", e -> mapboxMap.flyTo(GeoLocation.Skagen, 12));
-        Button zoomParis = new Button("Odense", e -> mapboxMap.flyTo(GeoLocation.Odense, 14));
+        Button zoomOdense = new Button("Odense", e -> mapboxMap.flyTo(GeoLocation.Odense, 14));
 
         Button zoomDenmark = new Button("Denmark", e -> mapboxMap.flyTo(GeoLocation.InitialView_Denmark, 6));
 
-        horizontalLayout.add(new Label("Zoom til:"), zoomAarhus, zoomAalborg, zoomBornholm, zoomCopenhagen, zoomSkagen, zoomParis, zoomDenmark);
+        horizontalLayout.add(new Label("Zoom til:"), zoomAarhus, zoomAalborg, zoomBornholm, zoomCopenhagen, zoomSkagen, zoomOdense, ViewUtil.horizontalWhiteSpace(10), zoomDenmark);
 
         return horizontalLayout;
     }
