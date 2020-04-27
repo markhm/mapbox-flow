@@ -20,13 +20,19 @@ public class DKKommunerView extends VerticalLayout
 {
     private static Log log = LogFactory.getLog(DKKommunerView.class);
 
-    // private DeprecatedMapboxMap mapboxMap = null;
+    private VerticalLayout content = new VerticalLayout();
+
     private MapboxMap mapboxMap = null;
 
     boolean alreadyRendered = false;
 
     public DKKommunerView()
     {
+        setAlignItems(Alignment.CENTER);
+
+        content.setAlignItems(Alignment.START);
+        content.setWidth("1200px");
+
         if (!alreadyRendered)
         {
             render();
@@ -38,20 +44,22 @@ public class DKKommunerView extends VerticalLayout
     private void render()
     {
         H3 title = new H3("Danmarks Kommuner");
-        add(title);
+        content.add(title);
 
-        addTopButtons();
+        content.add(addTopButtons());
 
         // mapboxMap = new DeprecatedMapboxMap(GeoLocation.InitialView_Denmark, 6, false);
         mapboxMap = new MapboxMap(AccessToken.getToken(), GeoLocation.InitialView_Denmark, 6);
         mapboxMap.setWidth("1200px");
         mapboxMap.setHeight("700px");
-        add(mapboxMap);
+        content.add(mapboxMap);
 
-        addBottomButtons();
+        content.add(addBottomButtons());
+
+        add(content);
     }
 
-    private void addTopButtons()
+    private HorizontalLayout addTopButtons()
     {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setAlignItems(Alignment.CENTER);
@@ -67,10 +75,10 @@ public class DKKommunerView extends VerticalLayout
 
         horizontalLayout.add(new Label("Zoom til:"), zoomAarhus, zoomAalborg, zoomBornholm, zoomCopenhagen, zoomSkagen, zoomParis, zoomDenmark);
 
-        add(horizontalLayout);
+        return horizontalLayout;
     }
 
-    private void addBottomButtons()
+    private HorizontalLayout addBottomButtons()
     {
         HorizontalLayout defaultButtons = new HorizontalLayout();
         defaultButtons.setAlignItems(Alignment.CENTER);
@@ -82,7 +90,7 @@ public class DKKommunerView extends VerticalLayout
 
         defaultButtons.add(new Label("Tilføj:"), addWireframe, addSelection, removeSelection);
 
-        add(defaultButtons);
+        return defaultButtons;
     }
 
     private void addWireframeLayer()
