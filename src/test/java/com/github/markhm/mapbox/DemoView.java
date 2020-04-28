@@ -13,6 +13,7 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.Route;
 import mapboxflow.ConversionUtil;
 import mapboxflow.layer.*;
+import mapboxflow.layer.Data;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -77,7 +78,7 @@ public class DemoView extends VerticalLayout
         contentBox.add(mapboxLine);
 
         contentBox.add(renderLayerButtons());
-        contentBox.add(renderAnimationButtons());
+        // contentBox.add(renderAnimationButtons());
         contentBox.add(renderControlButtons());
 
         contentBox.add(new InfoBox());
@@ -123,7 +124,7 @@ public class DemoView extends VerticalLayout
         Button addLayer = new Button("Add point(s)", e ->
         {
             Layer layer = getExampleLayer();
-            mapboxMap.addLayer(getExampleLayer());
+            mapboxMap.addLayer(layer);
             layerSelectBox.registerLayer(layer.getId());
         });
 
@@ -144,7 +145,7 @@ public class DemoView extends VerticalLayout
             layerSelectBox.registerLayer(layerId);
         });
 
-        Button revisePolygon = new Button ("Revise polygon", e ->
+        Button revisePolygon = new Button ("Move polygon", e ->
         {
             mapboxflow.layer.Geometry geometry = new mapboxflow.layer.Geometry(mapboxflow.layer.Geometry.Type.Polygon);
 
@@ -154,7 +155,7 @@ public class DemoView extends VerticalLayout
             coordinates.add(GeoLocation.Berlin.getCoordList());
             geometry.setCoordinates(coordinates);
 
-            mapboxflow.layer.Data data = new mapboxflow.layer.Data(mapboxflow.layer.Data.Type.single);
+            Data data = new Data(Data.Type.single);
             Feature feature = new Feature(Feature.FEATURE, new Properties(), geometry);
             data.addFeature(feature);
 
@@ -288,7 +289,7 @@ public class DemoView extends VerticalLayout
         Label leadingLabel = new Label("Controls: ");
         leadingLabel.setWidth(LEADING_WIDTH);
 
-        controlButtons.add(leadingLabel, activatePointerCoordinates, deactivatePointerCoordinates);
+        controlButtons.add(leadingLabel, activatePointerCoordinates);
         return controlButtons;
     }
 
@@ -299,11 +300,12 @@ public class DemoView extends VerticalLayout
 
         Button turkuNewYork = new Button("Airplane Turku to New York", e ->
         {
-            mapboxMap.drawOriginDestinationFlight(GeoLocation.Turku, GeoLocation.NewYork_JFK);
             CommonViewElements.showNotification("This example does not work yet");
 
-            layerSelectBox.registerLayer("airplane");
-            layerSelectBox.registerLayer("airplane_route");
+            // mapboxMap.drawOriginDestinationFlight(GeoLocation.Turku, GeoLocation.NewYork_JFK);
+
+            // layerSelectBox.registerLayer("airplane");
+            // layerSelectBox.registerLayer("airplane_route");
 
         });
         turkuNewYork.setId("replay");
