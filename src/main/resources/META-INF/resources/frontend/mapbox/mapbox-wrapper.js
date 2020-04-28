@@ -107,7 +107,7 @@ class MapboxWrapper extends PolymerElement {
 
     addLayerArgumented(layer)
     {
-        // console.log("Adding layer: " + this.layer);
+        console.log("Adding layer: " + layer);
         this.map.addLayer(JSON.parse(layer));
     }
 
