@@ -101,16 +101,21 @@ class MapboxWrapper extends PolymerElement {
     }
 
     addLayer() {
+        console.log("Adding layer: " + this.layer);
         this.map.addLayer(JSON.parse(this.layer));
     }
 
-    addSource()
+    addLayerArgumented(layer)
     {
+        // console.log("Adding layer: " + this.layer);
+        this.map.addLayer(JSON.parse(layer));
+    }
+
+    addSource() {
         this.map.addSource(this.sourceId, JSON.parse(this.source));
     }
 
-    resetData()
-    {
+    resetData() {
         this.map.getSource(this.sourceId).setData(JSON.parse(this.data));
     }
 
