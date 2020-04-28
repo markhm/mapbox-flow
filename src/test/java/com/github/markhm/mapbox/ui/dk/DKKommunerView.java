@@ -94,7 +94,7 @@ public class DKKommunerView extends VerticalLayout
         Button removeWireframe = new Button("Fjern trådramme", e -> removeSelectionLayer("wireframe"));
 
         Button addSelection = new Button("Udvalgte kommuner", e -> addSelectionLayer_1());
-        Button removeSelection = new Button("Fjern markering", e -> removeSelectionLayer("color"));
+        Button removeSelection = new Button("Fjern markering", e -> removeSelectionLayer("layer_1"));
 
         defaultButtons.add(new Label("Tilføj:"), addWireframe, removeWireframe,
                 ViewUtil.horizontalWhiteSpace(15), addSelection, removeSelection);
@@ -181,12 +181,18 @@ public class DKKommunerView extends VerticalLayout
 
         mapboxMap.addLayer(layer);
     }
+    // private String color1 = "hsla(271, 38%, 61%, 0.5)";
 
-    private String color1 = "hsla(271, 38%, 61%, 0.5)";
-    private String color2 = "hsla(271, 38%, 51%, 0.5)";
-    private String color3 = "hsla(271, 38%, 41%, 0.5)";
-    private String color4 = "hsla(271, 38%, 31%, 0.5)";
-    private String color5 = "hsla(271, 38%, 21%, 0.5)";
+    private String color1 = "hsla(120, 100%, 10%, 0.7)";
+    private String color2 = "hsla(120, 100%, 18%, 0.7)";
+    private String color3 = "hsla(120, 100%, 26%, 0.7)";
+    private String color4 = "hsla(120, 100%, 34%, 0.7)";
+    private String color5 = "hsla(120, 100%, 42%, 0.7)";
+
+//    private String color2 = "hsla(271, 38%, 51%, 0.5)";
+//    private String color3 = "hsla(271, 38%, 41%, 0.5)";
+//    private String color4 = "hsla(271, 38%, 31%, 0.5)";
+//    private String color5 = "hsla(271, 38%, 21%, 0.5)";
 
     private void addSourceIfNeeded()
     {
@@ -206,7 +212,7 @@ public class DKKommunerView extends VerticalLayout
         // String niceBlue = "hsla(195, 100%, 50%, 0.5)";
         // String[] kommuner = {"Skive", "Haderslev", "Esbjerg", "Lejre", "Køge", "Nyborg", "Brønderslev", "Rødovre", "Aarhus", "Odder"};
         String[] kommuner_1 = {"Skive", "Haderslev"};
-        Layer layer_1 = LayerHelper.createBinLayer("layer_1_kleur", LayerHelper.mapToJSONArray(kommuner_1), color1);
+        Layer layer_1 = LayerHelper.createBinLayer("layer_1", LayerHelper.mapToJSONArray(kommuner_1), color1);
         mapboxMap.addLayer(layer_1);
     }
 
@@ -215,7 +221,7 @@ public class DKKommunerView extends VerticalLayout
         addSourceIfNeeded();
 
         String[] kommuner_2 = {"Odder", "Lejre"};
-        Layer layer_2 = LayerHelper.createBinLayer("layer_2_big", LayerHelper.mapToJSONArray(kommuner_2), color2);
+        Layer layer_2 = LayerHelper.createBinLayer("layer_2", LayerHelper.mapToJSONArray(kommuner_2), color2);
         mapboxMap.addLayer(layer_2);
     }
 
@@ -252,7 +258,7 @@ public class DKKommunerView extends VerticalLayout
     {
         addSourceIfNeeded();
 
-        Layer newLayer = LayerHelper.createBinLayer("layer_"+layerCounter, LayerHelper.mapToJSONArray(pickRandomKommuner(5)), color5);
+        Layer newLayer = LayerHelper.createBinLayer("layer_"+layerCounter, LayerHelper.mapToJSONArray(pickRandomKommuner(5)), color1);
         mapboxMap.addLayer(newLayer);
 
         layerCounter++;
