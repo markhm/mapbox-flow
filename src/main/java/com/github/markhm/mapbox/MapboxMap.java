@@ -68,7 +68,7 @@ public class MapboxMap extends PolymerTemplate<PolymerMapModel> implements HasSi
 
     public void addLayer(Layer layer)
     {
-        // This works, but when called rapidly in series, it does not
+        // This works, but when called rapidly in series, it does not:
         getModel().setLayer(layer);
         getElement().callJsFunction("addLayer");
 
