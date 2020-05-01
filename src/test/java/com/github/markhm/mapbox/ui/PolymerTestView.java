@@ -1,5 +1,9 @@
-package com.github.markhm.mapbox;
+package com.github.markhm.mapbox.ui;
 
+import com.github.markhm.mapbox.AccessToken;
+import com.github.markhm.mapbox.GeoLocation;
+import com.github.markhm.mapbox.MapboxMap;
+import com.github.markhm.mapbox.ui.DemoView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;

@@ -1,10 +1,12 @@
-package com.github.markhm.mapbox;
+package com.github.markhm.mapbox.ui;
 
+import com.github.markhm.mapbox.*;
 import com.github.markhm.mapbox.component.InfoBox;
 import com.github.markhm.mapbox.component.LayerSelectBox;
 import com.github.markhm.mapbox.directions.DirectionsResponse;
 import com.github.markhm.mapbox.util.Color;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Anchor;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -31,7 +33,7 @@ public class DemoView extends VerticalLayout
 
     private static final String LEADING_WIDTH = "125px";
 
-    private MapboxMap mapboxMap = null;
+    private ItemMapboxMap mapboxMap = null;
     // private MapboxMap mapboxMap = null;
 
     private LayerSelectBox layerSelectBox = null;
@@ -55,21 +57,25 @@ public class DemoView extends VerticalLayout
         contentBox.setWidth("1200px");
         add(contentBox);
 
+        Anchor sourceLink = new Anchor("https://github.com/markhm/mapbox-flow", " (source code on GitHub)");
+        sourceLink.setTarget("_blank");
+
         HorizontalLayout titleBox = new HorizontalLayout();
+        titleBox.setAlignItems(Alignment.BASELINE);
         H3 title = new H3("Mapbox-Flow Demo");
-        titleBox.add(title);
+        titleBox.add(title, sourceLink);
         contentBox.add(titleBox);
 
-        // contentBox.add(renderZoomButtons());
+        contentBox.add(renderZoomButtons());
 
         HorizontalLayout mapboxLine = new HorizontalLayout();
 
         String accessToken = AccessToken.getToken();
-        mapboxMap = new MapboxMap(accessToken, GeoLocation.InitialView_Turku_NY, 2);
+        mapboxMap = new ItemMapboxMap(accessToken, GeoLocation.InitialView_Turku_NY, 2);
         // mapboxMap = new MapboxMap(GeoLocation.InitialView_Turku_NY, 2);
 
         mapboxMap.setWidth("1000px");
-        mapboxMap.setHeight("700px");
+        mapboxMap.setHeight("500px");
         Set<String> initialLayers = new HashSet<>();
         layerSelectBox = new LayerSelectBox(mapboxMap, initialLayers);
 
@@ -212,7 +218,7 @@ public class DemoView extends VerticalLayout
         layer.setLayout(lineLayout);
         layer.setPaint(new Paint(Paint.Type.line, Color.RED_LINE, 3));
 
-        Geometry geometry = DirectionsResponse.getInstance().getRoutes().get(0).getGeometry();
+        com.github.markhm.mapbox.Geometry geometry = DirectionsResponse.getInstance().getRoutes().get(0).getGeometry();
         mapboxflow.layer.Geometry convertedGeometry = ConversionUtil.convert(geometry);
 
         Source source = new Source();
@@ -330,17 +336,17 @@ public class DemoView extends VerticalLayout
         // getLayer().toString() or getLayer().toString().replace("\"", "\'") is not needed
         Layer layer = new Layer("symbols", Layer.Type.symbol);
 
-        Properties mapboxDCProperties = new Properties("National Bank", Sprite.Bank.toString());
+        Properties mapboxDCProperties = new Properties("bank", "National Bank", Sprite.Bank.toString());
         GeoLocation mapboxDCLocation = new GeoLocation(38.913188059745586, -77.03238901390978);
         Feature mapboxDCFeature = new Feature("Feature", mapboxDCProperties, mapboxDCLocation);
         layer.addFeature(mapboxDCFeature);
 
-        Properties mapboxDangerProperties = new Properties("National danger", Sprite.Fire_Station.toString());
+        Properties mapboxDangerProperties = new Properties("danger", "Danger", Sprite.Fire_Station.toString());
         GeoLocation mapboxDangerLocation = new GeoLocation(-20, 30);
         Feature mapboxDangerFeature = new Feature("Feature", mapboxDangerProperties, mapboxDangerLocation);
         layer.addFeature(mapboxDangerFeature);
 
-        Properties mapboxSFProperties = new Properties("Helicopter Haven", Sprite.Helicopter.toString());
+        Properties mapboxSFProperties = new Properties("helicopter", "Helicopter Haven", Sprite.Helicopter.toString());
         GeoLocation mapboxSFLocation = new GeoLocation(37.776, -122.414);
         Feature mapboxSFFeature = new Feature("Feature", mapboxSFProperties, mapboxSFLocation);
         layer.addFeature(mapboxSFFeature);

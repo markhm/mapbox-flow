@@ -3,7 +3,9 @@ package mapboxflow.layer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Source extends JSONObject
+import java.io.Serializable;
+
+public class Source extends JSONObject implements Serializable
 {
     public Source()
     {

@@ -69,11 +69,6 @@ class MapboxWrapper extends PolymerElement {
 
         console.log("at ready()");
 
-        // this.color = require('onecolor');
-        // const div = document.createElement('div');
-        // this.appendChild(div);
-        // this.updateConfig();
-
         mapboxgl.accessToken = this.accessToken;
 
         console.log("initialLocation = " + this.initialLocation);

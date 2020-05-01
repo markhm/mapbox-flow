@@ -5,7 +5,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
-public class Feature extends JSONObject
+import java.io.Serializable;
+
+public class Feature extends JSONObject implements Serializable
 {
     private static Log log = LogFactory.getLog(Feature.class);
 
@@ -44,5 +46,27 @@ public class Feature extends JSONObject
     {
         return (Geometry) get("geometry");
     }
+
+    public Properties getProperty()
+    {
+        return (Properties) get("properties");
+    }
+
+    public String getId()
+    {
+        return getProperty().getString("id");
+    }
+
+    public void setLocation(GeoLocation location)
+    {
+        JSONObject geometryObject = new JSONObject();
+        geometryObject.put("type", "Point");
+        geometryObject.put("coordinates", location.getCoordArray());
+
+        put("geometry", geometryObject);
+    }
+
+
+
 
 }

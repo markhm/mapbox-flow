@@ -16,7 +16,6 @@ public class AccessTokenTest
     {
         String fileLocation = AccessToken.getJSFileLocation();
         log.warn("fileLocation = "+fileLocation);
-
     }
 
 }

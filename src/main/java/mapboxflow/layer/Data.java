@@ -1,10 +1,16 @@
 package mapboxflow.layer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class Data extends JSONObject
+import java.io.Serializable;
+
+public class Data extends JSONObject implements Serializable
 {
+    private static Log log = LogFactory.getLog(Data.class);
+
     private JSONArray features = null;
 
     private Type type;
@@ -36,6 +42,21 @@ public class Data extends JSONObject
             int currentLength = features.length();
             features.put(currentLength, feature);
         }
+    }
+
+    public Feature getFeatureWith(String id)
+    {
+        for (int i=0; i < features.length(); i++)
+        {
+            Feature feature = (Feature) features.get(i);
+            String featureId = feature.getId();
+            if (id.equals(featureId))
+            {
+                return feature;
+            }
+        }
+        log.error("Could not find feature with id: "+id + ", returning null.");
+        return null;
     }
 
     public void addProperties(Properties properties)

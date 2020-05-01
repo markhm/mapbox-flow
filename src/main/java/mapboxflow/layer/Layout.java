@@ -3,7 +3,9 @@ package mapboxflow.layer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class Layout extends JSONObject
+import java.io.Serializable;
+
+public class Layout extends JSONObject implements Serializable
 {
     public Layout(Layer.Type type)
     {

@@ -2,13 +2,16 @@ package mapboxflow.layer;
 
 import org.json.JSONObject;
 
-public class Properties extends JSONObject
+import java.io.Serializable;
+
+public class Properties extends JSONObject implements Serializable
 {
     public Properties()
     {}
 
-    public Properties(String title, String icon)
+    public Properties(String id, String title, String icon)
     {
+        put("id", id);
         put("title", title);
         put("icon", icon);
     }

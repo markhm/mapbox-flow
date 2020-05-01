@@ -4,7 +4,9 @@ import com.github.markhm.mapbox.util.Color;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class Paint extends JSONObject
+import java.io.Serializable;
+
+public class Paint extends JSONObject implements Serializable
 {
     private Type type = null;
 

@@ -2,10 +2,11 @@ package mapboxflow.layer;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Geometry extends JSONObject
+public class Geometry extends JSONObject implements Serializable
 {
     public Geometry(Type type)
     {

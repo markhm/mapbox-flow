@@ -6,6 +6,7 @@ import mapboxflow.layer.Paint;
 import org.json.JSONArray;
 
 import java.util.List;
+import java.util.Set;
 
 public class LayerHelper
 {
@@ -34,7 +35,7 @@ public class LayerHelper
         return layer;
     }
 
-    public static JSONArray mapToJSONArray(List<String> values)
+    public static JSONArray mapToJSONArray(Set<String> values)
     {
         return mapToJSONArray(values.toArray(new String[values.size()]));
     }

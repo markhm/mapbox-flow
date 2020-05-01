@@ -340,7 +340,7 @@ public class DeprecatedMapboxMap extends Div
             sourceAlreadyExists = false;
         }
 
-        Properties itemProperties = new Properties(animatedItem.getDescription(), animatedItem.getSprite().toString());
+        Properties itemProperties = new Properties(animatedItem.getId(), animatedItem.getDescription(), animatedItem.getSprite().toString());
         Feature itemFeature = new Feature(Feature.FEATURE, itemProperties, animatedItem.getLocation());
 
         String command;

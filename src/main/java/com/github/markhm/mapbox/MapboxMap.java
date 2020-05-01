@@ -3,9 +3,11 @@ package com.github.markhm.mapbox;
 import com.github.markhm.mapbox.util.PolymerMapModel;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.*;
+import com.vaadin.flow.component.page.PendingJavaScriptResult;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import com.vaadin.flow.component.polymertemplate.TemplateParser;
 import com.vaadin.flow.server.VaadinService;
+import elemental.json.JsonObject;
 import mapboxflow.layer.*;
 import mapboxflow.layer.Data;
 import org.apache.commons.logging.Log;
@@ -15,8 +17,8 @@ import org.jsoup.nodes.Element;
 import java.util.HashMap;
 import java.util.Map;
 
-@JavaScript(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.js")
-@StyleSheet(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css")
+@JavaScript(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js")
+@StyleSheet(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css")
 @JavaScript(value = "https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js")
 @Tag("mapbox-wrapper")
 @JsModule("./mapbox/mapbox-wrapper.js")
@@ -24,7 +26,7 @@ public class MapboxMap extends PolymerTemplate<PolymerMapModel> implements HasSi
 {
     private static Log log = LogFactory.getLog(MapboxMap.class);
 
-    private Map<String, Source> sourcesInUse = new HashMap<>();
+    protected Map<String, Source> sourcesInUse = new HashMap<>();
 
     public MapboxMap(String accessToken)
     {
@@ -61,16 +63,21 @@ public class MapboxMap extends PolymerTemplate<PolymerMapModel> implements HasSi
         getModel().setZoomLevel(initialZoom);
     }
 
-    public void executeJs(String command)
+    public PendingJavaScriptResult executeJs(String command)
     {
-        getElement().executeJs(command);
+        return getElement().executeJs(command);
     }
 
-    public void addLayer(Layer layer)
+    public PendingJavaScriptResult addLayer(JsonObject layer)
+    {
+        return getElement().executeJs("this.map.addLayer($0);", layer);
+    }
+
+    public PendingJavaScriptResult addLayer(Layer layer)
     {
         // This works, but when called rapidly in series, it does not:
-        getModel().setLayer(layer);
-        getElement().callJsFunction("addLayer");
+        // getModel().setLayer(layer);
+        // getElement().callJsFunction("addLayer");
 
         // This does not work:
         // getElement().executeJs("addLayerArgumented($0);", layer.toString());
@@ -78,17 +85,36 @@ public class MapboxMap extends PolymerTemplate<PolymerMapModel> implements HasSi
         // This does not work either:
         // getElement().executeJs("this.map.addLayer($0);", layer.toString());
 
-        // This does not work either:
-        // getElement().callJsFunction("this.map.addLayer($0);", layer.toString());
+        // This works:
+        return getElement().executeJs("this.map.addLayer("+layer.toString()+");");
     }
 
-    public void addSource(String sourceId, Source source)
+    public PendingJavaScriptResult addSource(String sourceId, JsonObject source)
     {
+        PendingJavaScriptResult result = null;
+
         if (!sourcesInUse.keySet().contains(sourceId))
         {
-            getModel().setSourceId(sourceId);
-            getModel().setSource(source);
-            getElement().callJsFunction("addSource");
+            result = getElement().executeJs("this.map.addSource($0, $1);", sourceId, source);
+            // sourcesInUse.put(sourceId, source);
+        }
+        else
+        {
+            log.warn("Source "+sourceId+" already exists, ignoring request");
+        }
+        return result;
+    }
+
+    public PendingJavaScriptResult addSource(String sourceId, Source source)
+    {
+        PendingJavaScriptResult result = null;
+        if (!sourcesInUse.keySet().contains(sourceId))
+        {
+//            getModel().setSourceId(sourceId);
+//            getModel().setSource(source);
+//            getElement().callJsFunction("addSource");
+
+            result = getElement().executeJs("this.map.addSource('" + sourceId + "', " + source + ")");
 
             sourcesInUse.put(sourceId, source);
         }
@@ -96,49 +122,66 @@ public class MapboxMap extends PolymerTemplate<PolymerMapModel> implements HasSi
         {
             log.warn("Source "+sourceId+" already exists, ignoring request");
         }
+
+        return result;
     }
 
-    public void hideLayer(String layerId)
+    public PendingJavaScriptResult hideLayer(String layerId)
     {
-        getModel().setLayerId(layerId);
-        getElement().callJsFunction("hideLayer");
+        // getModel().setLayerId(layerId);
+        // getElement().callJsFunction("hideLayer");
+
+        return getElement().executeJs("this.map.setFilter('"+layerId+"', ['==', 'type', 'Feature']);");
     }
 
-    public void unhideLayer(String layerId)
+    public PendingJavaScriptResult unhideLayer(String layerId)
     {
-        getModel().setLayerId(layerId);
-        getElement().callJsFunction("unhideLayer");
+//        getModel().setLayerId(layerId);
+//        getElement().callJsFunction("unhideLayer");
+
+        return getElement().executeJs("this.map.setFilter('"+layerId+"', null);");
     }
 
-    public void resetSourceData(String sourceId, Data data)
+    public PendingJavaScriptResult resetSourceData(String sourceId, Data data)
     {
-        getModel().setSourceId(sourceId);
-        getModel().setData(data);
-        getElement().callJsFunction("resetData");
+//        getModel().setSourceId(sourceId);
+//        getModel().setData(data);
+//        getElement().callJsFunction("resetData");
+
+        return getElement().executeJs("this.map.getSource('"+sourceId+"').setData(" + data + ");");
     }
 
-    public void zoomTo(int zoomLevel)
+    public PendingJavaScriptResult zoomTo(int zoomLevel)
     {
-        getModel().setZoomLevel(zoomLevel);
-        getElement().callJsFunction("zoomTo");
+//        getModel().setZoomLevel(zoomLevel);
+//        getElement().callJsFunction("zoomTo");
+
+        return getElement().executeJs("this.map.zoomTo(" + zoomLevel + ", { 'duration': 1500 } );");
     }
 
-    public void flyTo(GeoLocation geoLocation, int zoomLevel)
+    public PendingJavaScriptResult flyTo(GeoLocation geoLocation, int zoomLevel)
     {
-        getModel().setZoomLevel(zoomLevel);
-        getModel().setZoomCenter(geoLocation);
-        getElement().callJsFunction("flyTo");
+//        getModel().setZoomLevel(zoomLevel);
+//        getModel().setZoomCenter(geoLocation);
+//        getElement().callJsFunction("flyTo");
+
+        return getElement().executeJs("this.map.flyTo({center: " + geoLocation + ", zoom: " +
+                zoomLevel + ", duration: 1500});");
     }
 
-    public void flyTo(GeoLocation geoLocation)
+    public PendingJavaScriptResult flyTo(GeoLocation geoLocation)
     {
-        getModel().setZoomCenter(geoLocation);
-        getElement().callJsFunction("flyTo");
+//        getModel().setZoomCenter(geoLocation);
+//        getElement().callJsFunction("flyTo");
+
+        // this.map.flyTo({center: JSON.parse(this.zoomCenter), duration: 1500});
+
+        return getElement().executeJs("this.map.flyTo({center: " + geoLocation + ", duration: 1500});");
     }
 
-    public void deactivateListeners()
+    public PendingJavaScriptResult deactivateListeners()
     {
-        getElement().callJsFunction("removeListeners");
+        return getElement().callJsFunction("removeListeners");
     }
 
     public Source getSource(String layerId)
@@ -146,42 +189,19 @@ public class MapboxMap extends PolymerTemplate<PolymerMapModel> implements HasSi
         return sourcesInUse.get(layerId);
     }
 
-    public void addAnimatedItem(AnimatedItem animatedItem)
-    {
-        boolean sourceAlreadyExists = true;
-        Source source = getSource(animatedItem.getLayerId());
-
-        if (source == null)
-        {
-            sourceAlreadyExists = false;
-        }
-
-        Properties itemProperties = new Properties(animatedItem.getDescription(), animatedItem.getSprite().toString());
-        Feature itemFeature = new Feature(Feature.FEATURE, itemProperties, animatedItem.getLocation());
-
-        if (sourceAlreadyExists)
-        {
-            addToExistingLayer(animatedItem, source, itemFeature);
-        }
-        else
-        {
-            addToNewLayer(animatedItem, itemFeature);
-        }
-    }
-
     public void activatePointerLocation()
     {
         getElement().callJsFunction("activatePointerLocation");
     }
 
-    private void addToExistingLayer(AnimatedItem animatedItem, Source source, Feature itemFeature)
+    protected void addToExistingLayer(AnimatedItem animatedItem, Source source, Feature itemFeature)
     {
         mapboxflow.layer.Data data = source.getData();
         data.addFeature(itemFeature);
         resetSourceData(animatedItem.getLayerId(), data);
     }
 
-    private void addToNewLayer(AnimatedItem animatedItem, Feature itemFeature)
+    protected void addToNewLayer(AnimatedItem animatedItem, Feature itemFeature)
     {
         mapboxflow.layer.Data data = new mapboxflow.layer.Data(Data.Type.collection);
         data.addFeature(itemFeature);
