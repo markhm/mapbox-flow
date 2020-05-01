@@ -4,6 +4,7 @@ import com.github.markhm.mapbox.AccessToken;
 import com.github.markhm.mapbox.GeoLocation;
 import com.github.markhm.mapbox.MapboxMap;
 import com.github.markhm.mapbox.ViewUtil;
+import com.github.markhm.mapbox.component.LayerLegend;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
@@ -15,10 +16,10 @@ import mapboxflow.layer.Paint;
 import mapboxflow.layer.Source;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import sun.security.provider.SHA;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Route("dk_map")
 public class DKKommunerView extends VerticalLayout
@@ -26,6 +27,7 @@ public class DKKommunerView extends VerticalLayout
     private static Log log = LogFactory.getLog(DKKommunerView.class);
 
     private MapboxMap mapboxMap = null;
+    private LayerLegend legend = null;
 
     boolean alreadyRendered = false;
 
@@ -50,17 +52,19 @@ public class DKKommunerView extends VerticalLayout
 
     private void render()
     {
-        H3 title = new H3("Danmarks Kommuner");
+        H3 title = new H3("Servicebrug af Danmarks Kommuner");
         content.add(title);
 
         content.add(addTopButtons());
 
+        HorizontalLayout mapLine = new HorizontalLayout();
         mapboxMap = new MapboxMap(AccessToken.getToken(), GeoLocation.InitialView_Denmark, 6);
-        mapboxMap.setWidth("1200px");
-        mapboxMap.setHeight("700px");
-        content.add(mapboxMap);
+        mapboxMap.setWidth("1000px");
+        mapboxMap.setHeight("500px");
+        legend = createLayerLegend();
+        mapLine.add(mapboxMap, legend);
+        content.add(mapLine);
 
-        content.add(addSelectionButtons());
         content.add(addBottomButtons());
 
         add(content);
@@ -93,71 +97,63 @@ public class DKKommunerView extends VerticalLayout
         Button addWireframe = new Button("Trådramme", e -> addWireframeLayer("wireframe"));
         Button removeWireframe = new Button("Fjern trådramme", e -> removeSelectionLayer("wireframe"));
 
-        Button addSelection = new Button("Udvalgte kommuner", e -> addSelectionLayer_1());
-        Button removeSelection = new Button("Fjern markering", e -> removeSelectionLayer("layer_1"));
+        Button addSelection = new Button("Servicebrug nov 2019", e -> addServiceUsageLayers());
+        Button removeSelection = new Button("Fjern markering", e -> removeServiceUsageLayers());
 
         defaultButtons.add(new Label("Tilføj:"), addWireframe, removeWireframe,
                 ViewUtil.horizontalWhiteSpace(15), addSelection, removeSelection);
 
-        Button addData = new Button("Add service usage data", e -> addServiceUsageData());
-
         return defaultButtons;
     }
 
-    private HorizontalLayout addSelectionButtons()
+    private void removeServiceUsageLayers()
     {
-        HorizontalLayout selectionButtons = new HorizontalLayout();
-        selectionButtons.setAlignItems(Alignment.CENTER);
-
-        Button addAllSelections = new Button("All selections", e ->
+        for (int i = 1; i < 8 ; i++)
         {
-            addSelectionLayer_1();
-            addSelectionLayer_2();
-            addSelectionLayer_3();
-            addSelectionLayer_4();
-            addSelectionLayer_5();
-        });
-
-        Button addSelection_1 = new Button("Selection 1", e -> addSelectionLayer_1());
-        Button addSelection_2 = new Button("Selection 2", e -> addSelectionLayer_2());
-        Button addSelection_3 = new Button("Selection 3", e -> addSelectionLayer_3());
-        Button addSelection_4 = new Button("Selection 4", e -> addSelectionLayer_4());
-        Button addSelection_5 = new Button("Selection 5", e -> addSelectionLayer_5());
-
-        Button addSelectionRandom = new Button("Selection Random", e -> addSelectionLayerRandom());
-
-        selectionButtons.add(new Label("Tilføj:"), addAllSelections, ViewUtil.horizontalWhiteSpace(15),
-                addSelection_1, addSelection_2, addSelection_3, addSelection_4, addSelection_5, ViewUtil.horizontalWhiteSpace(15), addSelectionRandom);
-
-        return selectionButtons;
-    }
-
-    public List<String> pickRandomKommuner(int amount)
-    {
-        int currentAmount = 0;
-        List<String> result = new ArrayList<>();
-        while (currentAmount < amount)
-        {
-            String nextPick = pickRandomKommune();
-            if (!result.contains(nextPick))
-            {
-                result.add(nextPick);
-                currentAmount++;
-            }
+            removeSelectionLayer("layer_"+i);
         }
-        return result;
+
+        legend.setVisible(false);
     }
 
-    public String pickRandomKommune()
+    private LayerLegend createLayerLegend()
     {
-        Random random = new Random();
-        int luckyNumber = random.nextInt(99);
-        return DK_KOMMUNER[luckyNumber];
+        LayerLegend layerLegend = new LayerLegend();
+        layerLegend.setVisible(false);
+
+        layerLegend.addLegendLineFrom(5000000, SHADES_OF_GREEN[7 - 1]);
+        layerLegend.addLegendLine(2000000, 5000000, SHADES_OF_GREEN[6 - 1]);
+        layerLegend.addLegendLine(1000000, 2000000, SHADES_OF_GREEN[5 - 1]);
+        layerLegend.addLegendLine(500000, 1000000, SHADES_OF_GREEN[4 - 1]);
+        layerLegend.addLegendLine(200000, 5000000, SHADES_OF_GREEN[3 - 1]);
+        layerLegend.addLegendLine(20000, 200000, SHADES_OF_GREEN[2 - 1]);
+        layerLegend.addLegendLine(2000, 20000, SHADES_OF_GREEN[1 - 1]);
+
+        return layerLegend;
     }
 
-    private void addServiceUsageData()
+    private void addServiceUsageLayers()
     {
+        addSourceIfNeeded();
 
+        DataLoader dataLoader = new DataLoader(DataLoader.DATA_FILE);
+        dataLoader.load();
+
+        List<DataLoader.KommuneData> list = dataLoader.getData();
+
+        for (int i = 1 ; i < 8 ; i++)
+        {
+            Layer layer = LayerHelper.createBinLayer("layer_"+i, LayerHelper.mapToJSONArray(getKommunerForBin(list, i)), SHADES_OF_GREEN[i-1]);
+            mapboxMap.addLayer(layer);
+        }
+
+        legend.setVisible(true);
+    }
+
+    public Set<String> getKommunerForBin(List<DataLoader.KommuneData> data, int bin)
+    {
+        Set<String> layerData = data.stream().filter(item -> item.getBin() == bin).map(DataLoader.KommuneData::getKommune).collect(Collectors.toSet());
+        return layerData;
     }
 
     private void addWireframeLayer(String layerId)
@@ -183,16 +179,21 @@ public class DKKommunerView extends VerticalLayout
     }
     // private String color1 = "hsla(271, 38%, 61%, 0.5)";
 
-    private String color1 = "hsla(120, 100%, 10%, 0.7)";
-    private String color2 = "hsla(120, 100%, 18%, 0.7)";
-    private String color3 = "hsla(120, 100%, 26%, 0.7)";
-    private String color4 = "hsla(120, 100%, 34%, 0.7)";
-    private String color5 = "hsla(120, 100%, 42%, 0.7)";
+    private String green_1 = "hsla(120, 100%, 66%, 0.7)";
+    private String green_2 = "hsla(120, 100%, 50%, 0.7)";
+    private String green_3 = "hsla(120, 100%, 42%, 0.7)";
+    private String green_4 = "hsla(120, 100%, 34%, 0.7)";
+    private String green_5 = "hsla(120, 100%, 26%, 0.7)";
+    private String green_6 = "hsla(120, 100%, 18%, 0.7)";
+    private String green_7 = "hsla(120, 100%, 10%, 0.7)";
 
-//    private String color2 = "hsla(271, 38%, 51%, 0.5)";
-//    private String color3 = "hsla(271, 38%, 41%, 0.5)";
-//    private String color4 = "hsla(271, 38%, 31%, 0.5)";
-//    private String color5 = "hsla(271, 38%, 21%, 0.5)";
+    private String[] SHADES_OF_GREEN = {green_1, green_2, green_3, green_4, green_5, green_6, green_7};
+
+    private String[] kommuner_1 = {"Skive", "Haderslev"};
+    private String[] kommuner_2 = {"Odder", "Lejre"};
+    private String[] kommuner_3 = {"Køge", "Nyborg"};
+    private String[] kommuner_4 = {"Brønderslev", "Esbjerg"};
+    private String[] kommuner_5 = {"Aarhus", "Rødovre"};
 
     private void addSourceIfNeeded()
     {
@@ -203,66 +204,18 @@ public class DKKommunerView extends VerticalLayout
         }
     }
 
-    private void addSelectionLayer_1()
-    {
-        addSourceIfNeeded();
-
-        String colorRgB = "rgb(157, 118, 193)";
-
-        // String niceBlue = "hsla(195, 100%, 50%, 0.5)";
-        // String[] kommuner = {"Skive", "Haderslev", "Esbjerg", "Lejre", "Køge", "Nyborg", "Brønderslev", "Rødovre", "Aarhus", "Odder"};
-        String[] kommuner_1 = {"Skive", "Haderslev"};
-        Layer layer_1 = LayerHelper.createBinLayer("layer_1", LayerHelper.mapToJSONArray(kommuner_1), color1);
-        mapboxMap.addLayer(layer_1);
-    }
-
-    private void addSelectionLayer_2()
-    {
-        addSourceIfNeeded();
-
-        String[] kommuner_2 = {"Odder", "Lejre"};
-        Layer layer_2 = LayerHelper.createBinLayer("layer_2", LayerHelper.mapToJSONArray(kommuner_2), color2);
-        mapboxMap.addLayer(layer_2);
-    }
-
-    private void addSelectionLayer_3()
-    {
-        addSourceIfNeeded();
-
-        String[] kommuner_3 = {"Køge", "Nyborg"};
-        Layer layer_3 = LayerHelper.createBinLayer("layer_3", LayerHelper.mapToJSONArray(kommuner_3), color3);
-        mapboxMap.addLayer(layer_3);
-    }
-
-    private void addSelectionLayer_4()
-    {
-        addSourceIfNeeded();
-
-        String[] kommuner_4 = {"Brønderslev", "Esbjerg"};
-        Layer layer_4 = LayerHelper.createBinLayer("layer_4", LayerHelper.mapToJSONArray(kommuner_4), color4);
-        mapboxMap.addLayer(layer_4);
-    }
-
-    private void addSelectionLayer_5()
-    {
-        addSourceIfNeeded();
-
-        String[] kommuner_5 = {"Aarhus", "Rødovre"};
-        Layer layer_5 = LayerHelper.createBinLayer("layer_5", LayerHelper.mapToJSONArray(kommuner_5), color5);
-        mapboxMap.addLayer(layer_5);
-    }
-
-    int layerCounter = 6;
-
-    private void addSelectionLayerRandom()
-    {
-        addSourceIfNeeded();
-
-        Layer newLayer = LayerHelper.createBinLayer("layer_"+layerCounter, LayerHelper.mapToJSONArray(pickRandomKommuner(5)), color1);
-        mapboxMap.addLayer(newLayer);
-
-        layerCounter++;
-    }
+//    private void addSelectionLayer(String layerId, String[] kommuner, String color)
+//    {
+//        addSourceIfNeeded();
+//
+//        // String colorRgB = "rgb(157, 118, 193)";
+//
+//        // String niceBlue = "hsla(195, 100%, 50%, 0.5)";
+//        // String[] kommuner = {"Skive", "Haderslev", "Esbjerg", "Lejre", "Køge", "Nyborg", "Brønderslev", "Rødovre", "Aarhus", "Odder"};
+//
+//        Layer layer = LayerHelper.createBinLayer("layer_"+layerId, LayerHelper.mapToJSONArray(kommuner), color);
+//        mapboxMap.addLayer(layer);
+//    }
 
     @Deprecated // To be moved to mapboxMap
     private void removeSelectionLayer(String layerId)
@@ -289,7 +242,6 @@ public class DKKommunerView extends VerticalLayout
             "Nordfyns", "Vordingborg", "Frederikssund", "Køge", "Greve", "Halsnæs", "Assens", "Ikast-Brande", "Vesthimmerlands", "Bornholm", "Tårnby", "Jammerbugt", "Herlev", "Lemvig",
             "Furesø", "Sorø", "Vallensbæk", "Glostrup", "Morsø", "Stevns", "Struer", "Allerød", "Tønder", "Solrød", "Rebild", "Ishøj", "Brønderslev", "Faxe", "Ringsted", "Fanø",
             "Hørsholm", "Langeland", "Lejre", "Samsø", "Dragør", "Læsø"};
-
 }
 
 // --------------------------------------------
