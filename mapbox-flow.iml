@@ -80,6 +80,29 @@
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-classic:1.2.3" level="project" />
     <orderEntry type="library" name="Maven: ch.qos.logback:logback-core:1.2.3" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20190722" level="project" />
+    <orderEntry type="library" name="Maven: org.vaadin.addon:paper-slider:1.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:paper-slider:3.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.iftachsadeh:paper-range-slider:1.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:paper-styles:2.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:font-roboto:1.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:paper-progress:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:iron-range-behavior:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:paper-input:2.2.3" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:iron-input:2.1.3" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:iron-a11y-announcer:2.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:iron-validatable-behavior:2.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:iron-meta:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:iron-autogrow-textarea:2.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:iron-behaviors:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:iron-flex-layout:2.0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:iron-form-element-behavior:2.1.3" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:paper-behaviors:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:iron-checked-element-behavior:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:paper-ripple:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymer:polymer:2.7.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.webcomponents:shadycss:1.8.0" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.webcomponents:webcomponentsjs:1.2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.webjars.bowergithub.polymerelements:iron-a11y-keys-behavior:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.junit.jupiter:junit-jupiter:5.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.junit.jupiter:junit-jupiter-api:5.5.2" level="project" />
     <orderEntry type="library" name="Maven: org.opentest4j:opentest4j:1.2.0" level="project" />

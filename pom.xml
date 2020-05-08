@@ -25,8 +25,8 @@
     	<failOnMissingWebXml>false</failOnMissingWebXml>
 
 <!--        <vaadin.version>14.1.25</vaadin.version>-->
-        <vaadin.version>14.2.0.alpha11</vaadin.version>
-<!--        <vaadin.version>15.0.5</vaadin.version>-->
+<!--        <vaadin.version>14.2.0.alpha11</vaadin.version>-->
+        <vaadin.version>15.0.6</vaadin.version>
 
 <!--        NB: Mapbox-flow does not work for Vaadin 15.0.4:-->
 <!--        <vaadin.version>15.0-SNAPSHOT</vaadin.version>-->
@@ -184,6 +184,27 @@
             <version>20190722</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20190722</version>
+        </dependency>
+
+        <!-- Upgraded to v14 by MHM -->
+        <!-- Lives at: https://github.com/markhm/vaadin-paper-sliders -->
+        <dependency>
+            <groupId>org.vaadin.addon</groupId>
+            <artifactId>paper-slider</artifactId>
+            <version>1.0.1</version>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.vaadin.matti</groupId>-->
+<!--            <artifactId>paperslider-for-flow</artifactId>-->
+<!--            <version>1.1</version>-->
+<!--        </dependency>-->
+
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -324,7 +345,7 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
-<!--                    <reload>manual</reload>-->
+                    <!--                    <reload>manual</reload>-->
                     <scanIntervalSeconds>3</scanIntervalSeconds>
                     <!-- Use test scope because the UI/demo classes are in
                             the test package. -->
@@ -339,26 +360,6 @@
                         </resourceBases>
                     </webApp>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <phase>process-test-classes</phase>
-                        <configuration>
-                            <target>
-                                <copy todir="${basedir}/target/classes">
-                                    <fileset dir="${basedir}/target/test-classes" includes="**/*" />
-                                </copy>
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
@@ -493,6 +494,27 @@
 
             <build>
                 <plugins>
+
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.0.0</version>
+                        <executions>
+                            <execution>
+                                <phase>process-test-classes</phase>
+                                <configuration>
+                                    <target>
+                                        <copy todir="${basedir}/target/classes">
+                                            <fileset dir="${basedir}/target/test-classes" includes="**/*" />
+                                        </copy>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
                     <plugin>
                         <groupId>com.vaadin</groupId>
                         <artifactId>vaadin-maven-plugin</artifactId>
