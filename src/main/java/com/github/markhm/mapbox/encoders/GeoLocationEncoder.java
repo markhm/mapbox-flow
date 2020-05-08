@@ -16,8 +16,6 @@ public class GeoLocationEncoder implements ModelEncoder<GeoLocation, String>
         JSONObject result = new JSONObject();
         result.put("lng", value.getLongitude());
         result.put("lat", value.getLatitude());
-
-        log.info(result.toString());
         return result.toString();
     }
 

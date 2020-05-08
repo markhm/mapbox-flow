@@ -5,17 +5,17 @@ import mapboxflow.layer.Layer;
 import mapboxflow.layer.Paint;
 import org.json.JSONArray;
 
-import java.util.List;
 import java.util.Set;
 
 public class LayerHelper
 {
-    public static Layer createBinLayer(String layerId, JSONArray kommuner, String colorString)
+    public static Layer createBinLayer(String layerId, JSONArray kommuner, String colorString, double opacity)
     {
         Layer layer = new Layer(layerId, Layer.Type.fill);
         layer.put("source", "danske-kommuner");
         layer.put("source-layer", "Danske_Kommuner");
         Paint paint = new Paint(Paint.Type.fill);
+        paint.setFillOpacity(opacity);
 
         JSONArray paintArray = new JSONArray();
 

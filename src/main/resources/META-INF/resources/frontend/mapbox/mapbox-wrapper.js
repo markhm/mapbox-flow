@@ -64,6 +64,24 @@ class MapboxWrapper extends PolymerElement {
         }
     }
 
+    // ready() {
+    //     super.ready();
+    //
+    //     console.log("at ready()");
+    //
+    //     mapboxgl.accessToken = this.accessToken;
+    //
+    //     console.log("initialLocation = " + this.initialLocation);
+    //
+    //     this.map = new mapboxgl.Map(
+    //         {
+    //             container: 'map', // container id" +
+    //             style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location" +
+    //             center: JSON.parse(this.initialLocation), // starting position [lng, lat]" +
+    //             zoom: this.zoomLevel // starting zoom" +
+    //         });
+    // }
+
     ready() {
         super.ready();
 
@@ -72,6 +90,15 @@ class MapboxWrapper extends PolymerElement {
         mapboxgl.accessToken = this.accessToken;
 
         console.log("initialLocation = " + this.initialLocation);
+    }
+
+    connectedCallback() {
+        super.connectedCallback();
+
+        // to avoid the map being initialized twice
+        if(this.offsetWidth===0){
+            return;
+        }
 
         this.map = new mapboxgl.Map(
             {
@@ -81,6 +108,7 @@ class MapboxWrapper extends PolymerElement {
                 zoom: this.zoomLevel // starting zoom" +
             });
     }
+
 
     /**
      * This is due to the way the eval function works eval("function (){return \"test\"}") will throw an

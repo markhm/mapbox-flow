@@ -87,7 +87,6 @@ public class DemoView extends VerticalLayout
         // contentBox.add(renderAnimationButtons());
         contentBox.add(renderControlButtons());
 
-        contentBox.add(new InfoBox());
     }
 
     private TextArea renderTextArea()
@@ -138,6 +137,9 @@ public class DemoView extends VerticalLayout
         {
             String layerId = "route_line";
             Layer routeLineLayer = getLineLayer(layerId);
+
+            log.info("lineLayer = "+routeLineLayer.toString(2));
+
             mapboxMap.addLayer(routeLineLayer);
             layerSelectBox.registerLayer(layerId);
 
@@ -147,6 +149,7 @@ public class DemoView extends VerticalLayout
         {
             String layerId = "polygon";
             Layer polygonLayer = getPolygonLayer(layerId);
+            log.info("polygonLayer = "+polygonLayer);
             mapboxMap.addLayer(polygonLayer);
             layerSelectBox.registerLayer(layerId);
         });
@@ -295,7 +298,9 @@ public class DemoView extends VerticalLayout
         Label leadingLabel = new Label("Controls: ");
         leadingLabel.setWidth(LEADING_WIDTH);
 
-        controlButtons.add(leadingLabel, activatePointerCoordinates);
+        InfoBox infoBox = new InfoBox();
+
+        controlButtons.add(leadingLabel, activatePointerCoordinates, ViewUtil.horizontalWhiteSpace(30), infoBox);
         return controlButtons;
     }
 
@@ -351,7 +356,7 @@ public class DemoView extends VerticalLayout
         Feature mapboxSFFeature = new Feature("Feature", mapboxSFProperties, mapboxSFLocation);
         layer.addFeature(mapboxSFFeature);
 
-        // log.info("adding feature: "+mapboxSFFeature.toString(2));
+         log.info("adding Layer: "+layer.toString());
 
         // System.out.println(layer.toString(2));
 

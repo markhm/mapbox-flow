@@ -63,6 +63,11 @@ public class MapboxMap extends PolymerTemplate<PolymerMapModel> implements HasSi
         getModel().setZoomLevel(initialZoom);
     }
 
+    public void addFullScreenControl()
+    {
+        executeJs("this.map.addControl(new mapboxgl.FullscreenControl());");
+    }
+
     public PendingJavaScriptResult executeJs(String command)
     {
         return getElement().executeJs(command);
