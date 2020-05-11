@@ -90,7 +90,6 @@ public class LayerHelper
         textOffsetArray.set(0, 0);
         textOffsetArray.set(1, 0.7);
         layout.put("text-offset", textOffsetArray);
-
         layout.put("text-anchor", "top");
     }
 

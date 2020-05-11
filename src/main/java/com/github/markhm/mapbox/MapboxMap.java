@@ -239,4 +239,13 @@ public class MapboxMap extends PolymerTemplate<PolymerMapModel> implements HasSi
         // Even more strange, the following does not work, which is really identical to the previous method.
         // executeJs("fromOriginToDestination(" + origin.getLongLat() + ", " + origin.getLongLat() + ")");
     }
+
+    public void addImage(String url, String iconName)
+    {
+        // getModel().setUrl(url);
+        // getModel().setIconName(iconName);
+
+        getElement().callJsFunction("loadIcon");
+    }
+
 }

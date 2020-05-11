@@ -24,12 +24,8 @@
 
     	<failOnMissingWebXml>false</failOnMissingWebXml>
 
-<!--        <vaadin.version>14.1.25</vaadin.version>-->
-<!--        <vaadin.version>14.2.0.alpha11</vaadin.version>-->
+<!--        <vaadin.version>14.1.27</vaadin.version>-->
         <vaadin.version>15.0.6</vaadin.version>
-
-<!--        NB: Mapbox-flow does not work for Vaadin 15.0.4:-->
-<!--        <vaadin.version>15.0-SNAPSHOT</vaadin.version>-->
 
         <jetty.version>9.4.15.v20190215</jetty.version>
         <logback.version>1.2.3</logback.version>
@@ -123,6 +119,13 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- <dependency>
@@ -241,9 +244,9 @@
             <resource>
                 <directory>${project.basedir}/src/main/resources</directory>
             </resource>
-<!--            <resource>-->
-<!--                <directory>${project.basedir}/src/test/resources</directory>-->
-<!--            </resource>-->
+            <resource>
+                <directory>${project.basedir}/src/test/resources</directory>
+            </resource>
             <resource>
                 <directory>${project.basedir}/src/main/generated</directory>
             </resource>
@@ -287,44 +290,49 @@
 <!--                </configuration>-->
 <!--            </plugin>-->
 
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <!-- here the phase you need -->
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/${project.artifactId}-${project.version}/frontend</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/webapp</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                                <resource>
-                                    <directory>src/test/webapp</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                                <resource>
-                                    <directory>src/main/resources/META-INF/resources/frontend</directory>
-                                    <filtering>false</filtering>
-                                </resource>
-                                <resource>
-                                    <directory>./frontend</directory>
-                                    <includes>
-                                        <include>**/**</include>
-                                    </includes>
-                                    <filtering>false</filtering>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!-- Do we need this plugin...? -->
+<!--            <plugin>-->
+<!--                <artifactId>maven-resources-plugin</artifactId>-->
+<!--                <version>3.1.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>copy-resources</id>-->
+<!--                        &lt;!&ndash; here the phase you need &ndash;&gt;-->
+<!--                        <phase>compile</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>copy-resources</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <outputDirectory>${basedir}/target/${project.artifactId}-${project.version}/frontend</outputDirectory>-->
+<!--                            <resources>-->
+<!--                                <resource>-->
+<!--                                    <directory>src/main/webapp</directory>-->
+<!--                                    <filtering>false</filtering>-->
+<!--                                </resource>-->
+<!--                                <resource>-->
+<!--                                    <directory>src/test/webapp</directory>-->
+<!--                                    <filtering>false</filtering>-->
+<!--                                </resource>-->
+<!--                                <resource>-->
+<!--                                    <directory>src/main/resources/META-INF/resources/frontend</directory>-->
+<!--                                    <filtering>false</filtering>-->
+<!--                                </resource>-->
+<!--&lt;!&ndash;                                <resource>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <directory>src/test/resources/META-INF/resources/frontend</directory>&ndash;&gt;-->
+<!--&lt;!&ndash;                                    <filtering>false</filtering>&ndash;&gt;-->
+<!--&lt;!&ndash;                                </resource>&ndash;&gt;-->
+<!--                                <resource>-->
+<!--                                    <directory>./frontend</directory>-->
+<!--                                    <includes>-->
+<!--                                        <include>**/**</include>-->
+<!--                                    </includes>-->
+<!--                                    <filtering>false</filtering>-->
+<!--                                </resource>-->
+<!--                            </resources>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>com.vaadin</groupId>
@@ -357,6 +365,7 @@
                         <resourceBases>
                             <resourceBase>${project.basedir}/src/main/resources/META-INF/resources</resourceBase>
                             <resourceBase>${project.basedir}/src/test/resources/</resourceBase>
+                            <resourceBase>${project.basedir}/src/test/resources/META-INF/resources</resourceBase>
                         </resourceBases>
                     </webApp>
                 </configuration>

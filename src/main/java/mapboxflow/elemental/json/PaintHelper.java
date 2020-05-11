@@ -4,7 +4,6 @@ import com.github.markhm.mapbox.util.Color;
 import elemental.json.Json;
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
-import org.json.JSONArray;
 
 public class PaintHelper
 {
@@ -58,7 +57,7 @@ public class PaintHelper
 
     public enum Type
     {
-        line, fill;
+        symbol, line, fill;
     }
 
 }

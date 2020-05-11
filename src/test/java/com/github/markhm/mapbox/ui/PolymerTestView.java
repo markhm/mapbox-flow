@@ -34,7 +34,7 @@ public class PolymerTestView extends VerticalLayout
         contentBox.setWidth("1200px");
         add(contentBox);
 
-        contentBox.add(new H3("Mapbox-Flow based on Polymer - Vaadin v14.2.0.alpha11"));
+        contentBox.add(new H3("Mapbox-Flow based on Polymer - Vaadin v15.0.6"));
 
         String accessToken = AccessToken.getToken();
         map = new MapboxMap(accessToken, GeoLocation.NewYork);

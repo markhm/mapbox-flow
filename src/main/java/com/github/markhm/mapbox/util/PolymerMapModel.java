@@ -43,4 +43,7 @@ public interface PolymerMapModel extends TemplateModel
     @Encode(GeoLocationEncoder.class)
     void setDestination(GeoLocation destination);
 
+    void setUrl(String url);
+    void setIconName(String iconName);
+
 }

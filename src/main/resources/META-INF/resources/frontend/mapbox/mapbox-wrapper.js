@@ -45,6 +45,12 @@ class MapboxWrapper extends PolymerElement {
             layerId: {
                 type: String
             },
+            url: {
+                type: String
+            },
+            iconName: {
+                type: String
+            },
             sourceId: {
                 type: String
             },
@@ -220,6 +226,48 @@ class MapboxWrapper extends PolymerElement {
         console.log("**** - At render()");
     }
 
+    loadIcon()
+    {
+        console.log("this.url: "+this.url);
+        console.log("this.iconName: "+this.iconName);
+
+        this.url = "http://localhost:8080/img/atom.png";
+        this.iconName = "atom";
+
+        console.log("this.url: "+this.url);
+        console.log("this.iconName: "+this.iconName);
+
+        this.map.loadImage(this.url,
+            function(error, image) {
+                if (error) throw error;
+                this.map.addImage(this.iconName, image);
+                this.map.addSource('point', {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'FeatureCollection',
+                        'features': [
+                            {
+                                'type': 'Feature',
+                                'geometry': {
+                                    'type': 'Point',
+                                    'coordinates': [0, 0]
+                                }
+                            }
+                        ]
+                    }
+                });
+                this.map.addLayer({
+                    'id': 'points',
+                    'type': 'symbol',
+                    'source': 'point',
+                    'layout': {
+                        'icon-image': this.iconName,
+                        'icon-size': 0.25
+                    }
+                });
+            });
+    }
+
     fromOriginToDestination()
     {
 
@@ -369,6 +417,7 @@ class MapboxWrapper extends PolymerElement {
         // Update the route with calculated arc coordinates
         airplane_route.features[0].geometry.coordinates = arc;
     }
+
 }
 
 customElements.define(MapboxWrapper.is, MapboxWrapper);
