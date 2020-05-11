@@ -24,7 +24,6 @@
 
     	<failOnMissingWebXml>false</failOnMissingWebXml>
 
-<!--        <vaadin.version>14.1.27</vaadin.version>-->
         <vaadin.version>15.0.6</vaadin.version>
 
         <jetty.version>9.4.15.v20190215</jetty.version>
@@ -194,13 +193,13 @@
             <version>20190722</version>
         </dependency>
 
-        <!-- Upgraded to v14 by MHM -->
-        <!-- Lives at: https://github.com/markhm/vaadin-paper-sliders -->
-        <dependency>
-            <groupId>org.vaadin.addon</groupId>
-            <artifactId>paper-slider</artifactId>
-            <version>1.0.1</version>
-        </dependency>
+<!--        &lt;!&ndash; Upgraded to v14 by MHM &ndash;&gt;-->
+<!--        &lt;!&ndash; Lives at: https://github.com/markhm/vaadin-paper-sliders &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.vaadin.addon</groupId>-->
+<!--            <artifactId>paper-slider</artifactId>-->
+<!--            <version>1.0.1</version>-->
+<!--        </dependency>-->
 
 <!--        <dependency>-->
 <!--            <groupId>org.vaadin.matti</groupId>-->

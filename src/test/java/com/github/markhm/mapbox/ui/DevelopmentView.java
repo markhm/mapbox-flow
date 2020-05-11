@@ -17,7 +17,7 @@ import elemental.json.JsonObject;
 import mapboxflow.elemental.json.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.vaadin.addon.sliders.PaperSlider;
+// import org.vaadin.addon.sliders.PaperSlider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +33,8 @@ public class DevelopmentView extends VerticalLayout
 
     private VerticalLayout content = new VerticalLayout();
 
-    private PaperSlider slider = null;
-    private Label sliderValue = null;
+//    private PaperSlider slider = null;
+//    private Label sliderValue = null;
 
     public DevelopmentView()
     {
@@ -56,7 +56,7 @@ public class DevelopmentView extends VerticalLayout
 
         renderHeader(content);
         renderMap(content);
-        renderSlider(content);
+        // renderSlider(content); //deactivated to remove dependency on paper-slider-1.0.1
 
         Button fullScreenControl = new Button("Add fullscreen control", e -> mapboxMap.addFullScreenControl());
         content.add(fullScreenControl);
@@ -86,18 +86,18 @@ public class DevelopmentView extends VerticalLayout
         content.add(mapboxMap);
     }
 
-    private void renderSlider(VerticalLayout content)
-    {
-        sliderValue = new Label("Slider value  ");
-        slider = new PaperSlider(0, 100, 50);
-        slider.addValueChangeListener(e -> sliderValue.setText("Slide value: "+e.getValue()));
-
-        HorizontalLayout sliderLine = new HorizontalLayout();
-        sliderLine.setWidthFull();
-        sliderLine.setAlignItems(Alignment.START);
-        sliderLine.add(sliderValue, ViewUtil.horizontalWhiteSpace(25), slider);
-        content.add(sliderLine);
-    }
+//    private void renderSlider(VerticalLayout content)
+//    {
+//        sliderValue = new Label("Slider value  ");
+//        slider = new PaperSlider(0, 100, 50);
+//        slider.addValueChangeListener(e -> sliderValue.setText("Slide value: "+e.getValue()));
+//
+//        HorizontalLayout sliderLine = new HorizontalLayout();
+//        sliderLine.setWidthFull();
+//        sliderLine.setAlignItems(Alignment.START);
+//        sliderLine.add(sliderValue, ViewUtil.horizontalWhiteSpace(25), slider);
+//        content.add(sliderLine);
+//    }
 
     public void renderNewLayer(VerticalLayout content)
     {
