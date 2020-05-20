@@ -1,13 +1,12 @@
 package com.github.markhm.mapbox.ui;
 
 import com.github.markhm.mapbox.*;
-import com.github.markhm.mapbox.Geometry;
-import com.github.markhm.mapbox.directions.DirectionsResponse;
+import com.github.markhm.mapbox.style.DirectionsResponseLoader;
+import com.github.markhm.mapbox.style.Geometry;
 import com.github.markhm.mapbox.util.Color;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Image;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -17,7 +16,6 @@ import elemental.json.JsonObject;
 import mapboxflow.elemental.json.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-// import org.vaadin.addon.sliders.PaperSlider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +106,7 @@ public class DevelopmentView extends VerticalLayout
         Button addSymbols = new Button("Add symbols", e -> addSymbolLayer());
         buttonLayout.add(addSymbols);
 
-        Button addLine = new Button("Add line", e -> addLineLayer());
+        Button addLine = new Button("Add line", e -> addLineLayer(DirectionsResponseLoader.ACTIVE_PATH));
         buttonLayout.add(addLine);
 
         Button addPolygon = new Button("Add polygon", e -> addPolygonLayer());
@@ -148,14 +146,14 @@ public class DevelopmentView extends VerticalLayout
         mapboxMap.addLayer(polygonLayer);
     }
 
-    public void addLineLayer()
+    public void addLineLayer(String filename)
     {
         JsonObject lineLayer = LayerHelper.createLayer("route_line", LayerHelper.Type.line);
 
         JsonObject paint = PaintHelper.createPaint(PaintHelper.Type.line, Color.RED_LINE, 3);
         lineLayer.put("paint", paint);
 
-        com.github.markhm.mapbox.Geometry geometry = DirectionsResponse.getInstance().getRoutes().get(0).getGeometry();
+        Geometry geometry = DirectionsResponseLoader.createDirectionsResponseFrom(filename).getRoutes().get(0).getGeometry();
 
         JsonObject geometryObject = Json.createObject();
         geometryObject.put("type", "LineString");

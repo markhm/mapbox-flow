@@ -3,9 +3,7 @@ package mapboxflow.elemental.json;
 import elemental.json.Json;
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
-import mapboxflow.layer.Geometry;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GeometryHelper

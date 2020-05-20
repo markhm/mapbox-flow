@@ -7,9 +7,9 @@ import com.github.markhm.mapbox.encoders.LayerEncoder;
 import com.github.markhm.mapbox.encoders.SourceEncoder;
 import com.vaadin.flow.templatemodel.Encode;
 import com.vaadin.flow.templatemodel.TemplateModel;
-import mapboxflow.layer.Data;
-import mapboxflow.layer.Layer;
-import mapboxflow.layer.Source;
+import mapboxflow.jsonobject.layer.Data;
+import mapboxflow.jsonobject.layer.Layer;
+import mapboxflow.jsonobject.layer.Source;
 
 public interface PolymerMapModel extends TemplateModel
 {

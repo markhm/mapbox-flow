@@ -1,9 +1,7 @@
 package com.github.markhm.mapbox.encoders;
 
-import com.github.markhm.mapbox.GeoLocation;
 import com.vaadin.flow.templatemodel.ModelEncoder;
-import mapboxflow.layer.Layer;
-import org.json.JSONObject;
+import mapboxflow.jsonobject.layer.Layer;
 
 public class LayerEncoder implements ModelEncoder<Layer, String>
 {

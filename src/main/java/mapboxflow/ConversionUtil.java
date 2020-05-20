@@ -1,12 +1,12 @@
 package mapboxflow;
 
-import com.github.markhm.mapbox.Geometry;
+import com.github.markhm.mapbox.style.Geometry;
 
 public class ConversionUtil
 {
-    public static mapboxflow.layer.Geometry convert(Geometry fromGeometry)
+    public static mapboxflow.jsonobject.layer.Geometry convert(Geometry fromGeometry)
     {
-        mapboxflow.layer.Geometry result = new mapboxflow.layer.Geometry(mapboxflow.layer.Geometry.Type.LineString);
+        mapboxflow.jsonobject.layer.Geometry result = new mapboxflow.jsonobject.layer.Geometry(mapboxflow.jsonobject.layer.Geometry.Type.LineString);
         result.setCoordinates(fromGeometry.getCoordinates());
 
         return result;

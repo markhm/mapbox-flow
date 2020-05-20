@@ -1,5 +1,6 @@
 package com.github.markhm.mapbox;
 
+import com.github.markhm.mapbox.removal_candidate.DeprecatedMapboxMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;

@@ -115,6 +115,19 @@ class MapboxWrapper extends PolymerElement {
             });
     }
 
+    addFullScreenControl() {
+        super.connectedCallback();
+
+        // to avoid adding the control if the map is not yet available
+        if(!this.map){
+            console.log("this.map not yet available; cannot add fullScreenControl.");
+            return;
+        }
+
+        this.map.addControl(new mapboxgl.FullscreenControl());
+    }
+
+
 
     /**
      * This is due to the way the eval function works eval("function (){return \"test\"}") will throw an

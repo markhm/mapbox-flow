@@ -5,6 +5,9 @@ import com.github.markhm.mapbox.GeoLocation;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
@@ -29,8 +32,8 @@ public class DirectionsRequest extends AbstractRESTClient
 //        GeoLocation from = GeoLocation.Paris;
 //        GeoLocation to = GeoLocation.Copenhagen;
 
-        GeoLocation from = GeoLocation.Veenendaal;
-        GeoLocation to = GeoLocation.Nivaa;
+        GeoLocation from = GeoLocation.Rome;
+        GeoLocation to = GeoLocation.Copenhagen;
 
         String origin =  from.getLongitude() + "," + from.getLatitude();
         String destination = to.getLongitude() + "," + to.getLatitude();
@@ -41,6 +44,9 @@ public class DirectionsRequest extends AbstractRESTClient
         String requestAction = "mapbox/driving/" + encodedCombined + ".json";
         String result = directionsRequest.doGetMethod(requestAction);
 
+        BufferedWriter writer = new BufferedWriter(new FileWriter(new File("rome_to_copenhagen.json")));
+        writer.write(result);
+        writer.close();
         System.out.println("Result:");
         System.out.println("----------------------------------------------------");
         System.out.println(result);

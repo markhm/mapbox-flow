@@ -3,7 +3,7 @@ package com.github.markhm.mapbox.ui;
 import com.github.markhm.mapbox.*;
 import com.github.markhm.mapbox.component.InfoBox;
 import com.github.markhm.mapbox.component.LayerSelectBox;
-import com.github.markhm.mapbox.directions.DirectionsResponse;
+import com.github.markhm.mapbox.style.DirectionsResponseLoader;
 import com.github.markhm.mapbox.util.Color;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Anchor;
@@ -14,8 +14,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.router.Route;
 import mapboxflow.ConversionUtil;
-import mapboxflow.layer.*;
-import mapboxflow.layer.Data;
+import mapboxflow.jsonobject.layer.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -136,7 +135,7 @@ public class DemoView extends VerticalLayout
         Button addLine = new Button("Add line", e ->
         {
             String layerId = "route_line";
-            Layer routeLineLayer = getLineLayer(layerId);
+            Layer routeLineLayer = getLineLayer(layerId, DirectionsResponseLoader.ACTIVE_PATH);
 
             log.info("lineLayer = "+routeLineLayer.toString(2));
 
@@ -156,7 +155,7 @@ public class DemoView extends VerticalLayout
 
         Button revisePolygon = new Button ("Move polygon", e ->
         {
-            mapboxflow.layer.Geometry geometry = new mapboxflow.layer.Geometry(mapboxflow.layer.Geometry.Type.Polygon);
+            Geometry geometry = new Geometry(Geometry.Type.Polygon);
 
             List<List<Double>> coordinates = new ArrayList<>();
             coordinates.add(GeoLocation.Amsterdam.getCoordList());
@@ -195,7 +194,7 @@ public class DemoView extends VerticalLayout
         paint.setFillOpacity(0.5);
         layer.setPaint(paint);
 
-        mapboxflow.layer.Geometry geometry = new mapboxflow.layer.Geometry(mapboxflow.layer.Geometry.Type.Polygon);
+        Geometry geometry = new Geometry(Geometry.Type.Polygon);
 
         List<List<Double>> coordinates = new ArrayList<>();
         coordinates.add(GeoLocation.Bermuda_1_Florida.getCoordList());
@@ -203,7 +202,7 @@ public class DemoView extends VerticalLayout
         coordinates.add(GeoLocation.Bermuda_3_PuertoRico.getCoordList());
         geometry.setCoordinates(coordinates);
 
-        mapboxflow.layer.Data data = new mapboxflow.layer.Data(mapboxflow.layer.Data.Type.single);
+        Data data = new Data(Data.Type.single);
         Feature feature = new Feature(Feature.FEATURE, new Properties(), geometry);
         data.addFeature(feature);
 
@@ -214,18 +213,18 @@ public class DemoView extends VerticalLayout
         return layer;
     }
 
-    private Layer getLineLayer(String layerId)
+    private Layer getLineLayer(String layerId, String filename)
     {
         Layer layer = new Layer(layerId, Layer.Type.line);
         Layout lineLayout = new Layout(Layer.Type.line);
         layer.setLayout(lineLayout);
         layer.setPaint(new Paint(Paint.Type.line, Color.RED_LINE, 3));
 
-        com.github.markhm.mapbox.Geometry geometry = DirectionsResponse.getInstance().getRoutes().get(0).getGeometry();
-        mapboxflow.layer.Geometry convertedGeometry = ConversionUtil.convert(geometry);
+        com.github.markhm.mapbox.style.Geometry geometry = DirectionsResponseLoader.createDirectionsResponseFrom(filename).getRoutes().get(0).getGeometry();
+        Geometry convertedGeometry = ConversionUtil.convert(geometry);
 
         Source source = new Source();
-        mapboxflow.layer.Data data = new mapboxflow.layer.Data(mapboxflow.layer.Data.Type.single);
+        Data data = new Data(Data.Type.single);
         Feature feature = new Feature(Feature.FEATURE, null, convertedGeometry);
         data.addFeature(feature);
 

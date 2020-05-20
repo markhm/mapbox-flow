@@ -3,7 +3,9 @@ package com.github.markhm.mapbox.directions;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.github.markhm.mapbox.Geometry;
+import com.github.markhm.mapbox.style.DirectionsResponse;
+import com.github.markhm.mapbox.style.DirectionsResponseLoader;
+import com.github.markhm.mapbox.style.Geometry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
@@ -21,7 +23,7 @@ public class GeometryTest
 //        DeprecatedDirectionsResponse deprecatedDirectionsResponse = DeprecatedDirectionsResponse.getInstance();
 //        JSONObject jsonObject = deprecatedDirectionsResponse.getGeometry();
 
-        DirectionsResponse directionsResponse = DirectionsResponse.getInstance();
+        DirectionsResponse directionsResponse = DirectionsResponseLoader.createDirectionsResponseFrom(DirectionsResponseLoader.ACTIVE_PATH);
         Geometry geometry = directionsResponse.getRoutes().get(0).getGeometry();
 
         ObjectMapper objectMapper = new ObjectMapper();

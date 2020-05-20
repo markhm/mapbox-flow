@@ -1,13 +1,9 @@
 package com.github.markhm.mapbox;
 
-import com.github.markhm.mapbox.AnimatedItem;
-import com.github.markhm.mapbox.GeoLocation;
-import com.github.markhm.mapbox.Geometry;
-import com.github.markhm.mapbox.MapboxMap;
-import mapboxflow.layer.Data;
-import mapboxflow.layer.Feature;
-import mapboxflow.layer.Properties;
-import mapboxflow.layer.Source;
+import mapboxflow.jsonobject.layer.Data;
+import mapboxflow.jsonobject.layer.Feature;
+import mapboxflow.jsonobject.layer.Properties;
+import mapboxflow.jsonobject.layer.Source;
 
 public class ItemMapboxMap extends MapboxMap
 {

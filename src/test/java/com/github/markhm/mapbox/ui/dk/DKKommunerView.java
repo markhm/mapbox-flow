@@ -12,9 +12,9 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import mapboxflow.layer.Layer;
-import mapboxflow.layer.Paint;
-import mapboxflow.layer.Source;
+import mapboxflow.jsonobject.layer.Layer;
+import mapboxflow.jsonobject.layer.Paint;
+import mapboxflow.jsonobject.layer.Source;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -31,7 +31,7 @@ public class DKKommunerView extends VerticalLayout
     private MapboxMap mapboxMap = null;
     private LayerLegend legend = null;
 
-    private static final double opacity = 1;
+    private static final double opacity = 0.7;
 
     private VerticalLayout content = new VerticalLayout();
     boolean alreadyRendered = false;

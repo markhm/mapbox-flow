@@ -3,8 +3,6 @@ package mapboxflow.elemental.json;
 import elemental.json.Json;
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
-import mapboxflow.layer.Data;
-import org.json.JSONArray;
 
 public class DataHelper
 {

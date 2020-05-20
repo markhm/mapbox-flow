@@ -8,7 +8,6 @@ import elemental.json.JsonFactory;
 import elemental.json.JsonObject;
 import elemental.json.impl.JreJsonFactory;
 import elemental.json.impl.JreJsonObject;
-import mapboxflow.layer.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

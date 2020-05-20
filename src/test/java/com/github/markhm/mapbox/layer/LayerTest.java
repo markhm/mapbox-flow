@@ -1,9 +1,6 @@
 package com.github.markhm.mapbox.layer;
 
 import com.github.markhm.mapbox.util.Color;
-import com.github.markhm.mapbox.Data;
-import com.github.markhm.mapbox.Geometry;
-import com.github.markhm.mapbox.directions.Type;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;

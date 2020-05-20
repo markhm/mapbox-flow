@@ -1,8 +1,8 @@
 package com.github.markhm.mapbox.ui.dk;
 
 // import com.github.markhm.mapbox.util.Color;
-import mapboxflow.layer.Layer;
-import mapboxflow.layer.Paint;
+import mapboxflow.jsonobject.layer.Layer;
+import mapboxflow.jsonobject.layer.Paint;
 import org.json.JSONArray;
 
 import java.util.Set;

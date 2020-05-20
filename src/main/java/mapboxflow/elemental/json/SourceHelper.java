@@ -2,7 +2,6 @@ package mapboxflow.elemental.json;
 
 import elemental.json.Json;
 import elemental.json.JsonObject;
-import mapboxflow.layer.Data;
 
 public class SourceHelper
 {

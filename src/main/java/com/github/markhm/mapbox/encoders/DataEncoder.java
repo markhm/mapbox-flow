@@ -1,8 +1,7 @@
 package com.github.markhm.mapbox.encoders;
 
 import com.vaadin.flow.templatemodel.ModelEncoder;
-import mapboxflow.layer.Data;
-import mapboxflow.layer.Layer;
+import mapboxflow.jsonobject.layer.Data;
 
 public class DataEncoder implements ModelEncoder<Data, String>
 {

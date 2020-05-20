@@ -2,11 +2,7 @@ package mapboxflow.elemental.json;
 
 import com.github.markhm.mapbox.GeoLocation;
 import elemental.json.Json;
-import elemental.json.JsonArray;
 import elemental.json.JsonObject;
-import mapboxflow.layer.Geometry;
-import mapboxflow.layer.Properties;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;

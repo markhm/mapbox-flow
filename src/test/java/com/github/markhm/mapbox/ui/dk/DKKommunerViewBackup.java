@@ -13,9 +13,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import elemental.json.Json;
 import elemental.json.JsonObject;
-import mapboxflow.layer.Layer;
-import mapboxflow.layer.Paint;
-import mapboxflow.layer.Source;
+import mapboxflow.jsonobject.layer.Layer;
+import mapboxflow.jsonobject.layer.Paint;
+import mapboxflow.jsonobject.layer.Source;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

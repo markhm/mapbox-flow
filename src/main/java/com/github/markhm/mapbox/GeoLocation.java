@@ -87,7 +87,6 @@ public class GeoLocation
 //        new JsonValue()
     }
 
-
     public String toJSON()
     {
         return "{ lng: " + longitude + ", lat: " + latitude + "}";
@@ -145,6 +144,7 @@ public class GeoLocation
     public static GeoLocation Veenendaal = new GeoLocation("Veenendaal", 52.0263009, 5.5544309);
 
     public static GeoLocation Berlin = new GeoLocation("Berlin", 52.520008, 13.404954);
+    public static GeoLocation Rome = new GeoLocation("Rome", 47.4925, 19.0513);
 
     public static GeoLocation Copenhagen = new GeoLocation("Copenhagen", 55.6761, 12.5683);
     public static GeoLocation Aalborg = new GeoLocation("Aalborg", 57.048, 9.9187);
