@@ -196,13 +196,6 @@
             <version>20190722</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.json/json -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20190722</version>
-        </dependency>
-
 <!--        &lt;!&ndash; Upgraded to v14 by MHM &ndash;&gt;-->
 <!--        &lt;!&ndash; Lives at: https://github.com/markhm/vaadin-paper-sliders &ndash;&gt;-->
 <!--        <dependency>-->
