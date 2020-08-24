@@ -15,3 +15,6 @@ dependency_tree.txt
 _sokrates/reports
 src/main/resources/mapbox_default.properties
 /src/test/resources/personal/
+
+/pnpm-lock.yaml
+/pnpmfile.js
