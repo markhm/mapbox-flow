@@ -24,7 +24,7 @@
 
     	<failOnMissingWebXml>false</failOnMissingWebXml>
 
-        <vaadin.version>16.0.2</vaadin.version>
+        <vaadin.version>17.0.0</vaadin.version>
         <jackson-version>2.11.0</jackson-version>
 
         <jetty.version>9.4.15.v20190215</jetty.version>
@@ -130,12 +130,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
-        </dependency> -->
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
@@ -182,12 +176,6 @@
             <artifactId>logback-core</artifactId>
             <version>${logback.version}</version>
         </dependency>
-
-<!--        <dependency>-->
-<!--            <groupId>ch.qos.logback</groupId>-->
-<!--            <artifactId>logback-classic</artifactId>-->
-<!--            <version>1.2.3</version>-->
-<!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
@@ -236,7 +224,6 @@
 
     </dependencies>
 
-<!--    <generatedSourcesDirectory>src/main/generated</generatedSourcesDirectory>-->
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>

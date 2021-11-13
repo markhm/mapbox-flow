@@ -16,8 +16,13 @@ import org.apache.commons.logging.LogFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-@JavaScript(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js")
-@StyleSheet(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css")
+// Previous version
+//@JavaScript(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.js")
+//@StyleSheet(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css")
+
+// API version here: https://docs.mapbox.com/mapbox-gl-js/api/
+@JavaScript(value = "https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js")
+@StyleSheet(value = "https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css")
 @JavaScript(value = "https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js")
 @Tag("mapbox-wrapper")
 @JsModule("./mapbox/mapbox-wrapper.js")

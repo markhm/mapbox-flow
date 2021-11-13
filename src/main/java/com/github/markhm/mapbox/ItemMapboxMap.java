@@ -5,6 +5,11 @@ import mapboxflow.jsonobject.layer.Feature;
 import mapboxflow.jsonobject.layer.Properties;
 import mapboxflow.jsonobject.layer.Source;
 
+/** Extended version of the MapboxMap, which supports easy addition
+ * and repositioning of an AnimatedItem, an icon that is positioned
+ * on the map and that can be moved.
+ *
+ */
 public class ItemMapboxMap extends MapboxMap
 {
     public ItemMapboxMap(String accessToken)
