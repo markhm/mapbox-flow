@@ -4,5 +4,6 @@ echo
 echo "Building mapbox-flow for deployment to Heroku"
 echo
 
-mvn clean install war:war -Pproduction 
+cd ..
 
+mvn clean install war:war -Pproduction
