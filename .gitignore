@@ -12,6 +12,8 @@ tsconfig.json
 
 dependency_tree.txt
 
+mapbox-flow.iml
+
 _sokrates/reports
 src/main/resources/mapbox_default.properties
 /src/test/resources/personal/
