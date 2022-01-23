@@ -78,7 +78,15 @@ class MapboxWrapperLit extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
+    }
 
+    firstUpdated(_changedProperties) {
+        super.firstUpdated(_changedProperties);
+
+        this.initializeMap();
+    }
+
+    initializeMap() {
         // to avoid the map being initialized twice
         if(this.offsetWidth === 0) {
             return;
