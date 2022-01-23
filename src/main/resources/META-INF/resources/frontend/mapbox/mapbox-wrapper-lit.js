@@ -80,7 +80,7 @@ class MapboxWrapperLit extends LitElement {
         super.connectedCallback();
 
         // to avoid the map being initialized twice
-        if(this.offsetWidth===0) {
+        if(this.offsetWidth === 0) {
             return;
         }
 
