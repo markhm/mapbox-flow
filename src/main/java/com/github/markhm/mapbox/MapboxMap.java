@@ -5,6 +5,7 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.*;
 import com.vaadin.flow.component.page.PendingJavaScriptResult;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import com.vaadin.flow.component.polymertemplate.TemplateParser;
 import elemental.json.JsonObject;
 import mapboxflow.jsonobject.layer.Feature;
 import mapboxflow.jsonobject.layer.Layer;
@@ -21,9 +22,12 @@ import java.util.Map;
 //@StyleSheet(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.10.0/mapbox-gl.css")
 
 // API version here: https://docs.mapbox.com/mapbox-gl-js/api/
-@JavaScript(value = "https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js")
-@StyleSheet(value = "https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css")
-@JavaScript(value = "https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js")
+//@JavaScript(value = "https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js")
+//@StyleSheet(value = "https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css")
+
+@JavaScript(value = "https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js")
+@StyleSheet(value = "https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css")
+// @JavaScript(value = "https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js")
 @Tag("mapbox-wrapper")
 @JsModule("./mapbox/mapbox-wrapper.js")
 public class MapboxMap extends PolymerTemplate<PolymerMapModel> implements HasSize, HasStyle, HasTheme
@@ -34,7 +38,7 @@ public class MapboxMap extends PolymerTemplate<PolymerMapModel> implements HasSi
 
     public MapboxMap(String accessToken)
     {
-//        // NB: This trick is necessary to ensure the mapbox-wrapper.js can be found when deploying
+        // NB: This trick is necessary to ensure the mapbox-wrapper.js can be found when deploying
 //        super(new TemplateParser()
 //        {
 //            @Override
