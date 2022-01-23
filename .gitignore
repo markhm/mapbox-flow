@@ -18,3 +18,8 @@ src/main/resources/mapbox_default.properties
 
 /pnpm-lock.yaml
 /pnpmfile.js
+
+
+# Added for port to Vaadin 22
+.npmrc
+/frontend/generated/
