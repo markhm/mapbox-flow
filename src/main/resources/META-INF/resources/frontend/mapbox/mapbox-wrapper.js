@@ -1,62 +1,37 @@
-import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {html} from '@polymer/polymer/lib/utils/html-tag.js';
-import '@polymer/polymer/lib/utils/html-tag.js';
+
+import {LitElement, html} from "lit";
 
 // Based on https://github.com/appreciated/apexcharts-flow/blob/master/src/main/resources/META-INF/resources/frontend/com/github/appreciated/apexcharts/apexcharts-wrapper.js
 
-class MapboxWrapper extends PolymerElement {
+class MapboxWrapper extends LitElement {
 
-    static get template() {
+    render() {
         return html`
-        <slot></slot>
+          <slot></slot>
     `;
     }
 
     // ::slotted(map)
 
     static get is() {
-        console.log("**** - At is()");
         return 'mapbox-wrapper';
     }
 
     static get properties() {
-
-        console.log("**** - At properties()");
-
         return {
-            accessToken: {
-                type: String
-            },
-            initialLocation: {
-                type: Object
-            },
-            zoomCenter: {
-                type: Object
-            },
-            layer: {
-                type: Object
-            },
-            source: {
-                type: Object
-            },
-            data: {
-                type: Object
-            },
-            layerId: {
-                type: String
-            },
-            url: {
-                type: String
-            },
-            iconName: {
-                type: String
-            },
-            sourceId: {
-                type: String
-            },
-            zoomLevel: {
-                type: Number
-            }
+            accessToken: { type: String },
+            initialLocation: { type: String },
+            lng: { type: Number },
+            lat: { type: Number },
+            zoomCenter: { type: Object },
+            layer: { type: Object },
+            source: { type: Object },
+            data: { type: Object },
+            layerId: { type: String },
+            url: { type: String },
+            iconName: { type: String },
+            sourceId: { type: String },
+            zoomLevel: { type: Number }
         }
     }
 
@@ -101,18 +76,48 @@ class MapboxWrapper extends PolymerElement {
     connectedCallback() {
         super.connectedCallback();
 
+        this.initializeMap();
+    }
+
+    firstUpdated(_changedProperties) {
+        super.firstUpdated(_changedProperties);
+    }
+
+    initializeMap() {
         // to avoid the map being initialized twice
-        if(this.offsetWidth===0){
+        if (this.offsetWidth === 0) {
             return;
         }
 
-        this.map = new mapboxgl.Map(
-            {
-                container: 'map', // container id" +
-                style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location" +
-                center: JSON.parse(this.initialLocation), // starting position [lng, lat]" +
-                zoom: this.zoomLevel // starting zoom" +
-            });
+        // console.log('this.initialLocation');
+        // console.log(this.initialLocation);
+        // console.log('this.lng');
+        // console.log(this.lng);
+        // console.log('this.lat');
+        // console.log(this.lat);
+        //console.log(JSON.parse(this.initialLocation));
+
+        console.log('accessToken');
+        console.log(this.accessToken);
+        mapboxgl.accessToken = this.accessToken;
+
+        const initialLocationLocal = JSON.stringify({ lng: this.lng, lat: this.lat});
+        const initialLocationObject = JSON.parse(initialLocationLocal);
+        // const initialLocationArray = [this.lng, this.lat];
+
+        try {
+            this.map = new mapboxgl.Map(
+              {
+                  container: 'map', // container id" +
+                  style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location" +
+                  center: initialLocationObject, // starting position [lng, lat]" +
+                  zoom: this.zoomLevel // starting zoom" +
+              });
+        }
+        catch (e) {
+            console.log('Something went wrong, so catching error');
+            console.log(e);
+        }
     }
 
     addFullScreenControl() {
@@ -233,10 +238,6 @@ class MapboxWrapper extends PolymerElement {
         if (this.debug) {
             console.log(this.chartComponent);
         }
-    }
-
-    render() {
-        console.log("**** - At render()");
     }
 
     loadIcon()

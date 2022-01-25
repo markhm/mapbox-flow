@@ -5,42 +5,30 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class Layout extends JSONObject implements Serializable
-{
-    public Layout(Layer.Type type)
-    {
-        if (type.equals(Layer.Type.line))
-        {
+public class Layout extends JSONObject implements Serializable {
+    public Layout(Layer.Type type) {
+        if (type.equals(Layer.Type.line)) {
             initiateLine();
-        }
-        else if (type.equals(Layer.Type.symbol))
-        {
+        } else if (type.equals(Layer.Type.symbol)) {
             initiateSymbol();
-        }
-        else if (type.equals(Layer.Type.fill))
-        {
+        } else if (type.equals(Layer.Type.fill)) {
             initiateFill();
-        }
-        else
-        {
-            throw new RuntimeException("Please Layout for layer type "+type);
+        } else {
+            throw new RuntimeException("Please Layout for layer type " + type);
         }
     }
 
-    private void initiateFill()
-    {
+    private void initiateFill() {
         // nothing prescribed
     }
 
 
-    private void initiateLine()
-    {
+    private void initiateLine() {
         put("line-join", "round");
         put("line-cap", "round");
     }
 
-    private void initiateSymbol()
-    {
+    private void initiateSymbol() {
         JSONArray iconImageArray = new JSONArray();
         iconImageArray.put(0, "concat");
         JSONArray innerIconImageArray = new JSONArray();

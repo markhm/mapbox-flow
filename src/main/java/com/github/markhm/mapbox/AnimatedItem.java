@@ -1,7 +1,6 @@
 package com.github.markhm.mapbox;
 
-public interface AnimatedItem
-{
+public interface AnimatedItem {
     String getId();
 
     String getLayerId();

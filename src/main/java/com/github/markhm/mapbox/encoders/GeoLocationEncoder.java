@@ -6,13 +6,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
 
-public class GeoLocationEncoder implements ModelEncoder<GeoLocation, String>
-{
+public class GeoLocationEncoder implements ModelEncoder<GeoLocation, String> {
     private static Log log = LogFactory.getLog(GeoLocationEncoder.class);
 
     @Override
-    public String encode(GeoLocation value)
-    {
+    public String encode(GeoLocation value) {
         JSONObject result = new JSONObject();
         result.put("lng", value.getLongitude());
         result.put("lat", value.getLatitude());
@@ -20,8 +18,7 @@ public class GeoLocationEncoder implements ModelEncoder<GeoLocation, String>
     }
 
     @Override
-    public GeoLocation decode(String value)
-    {
+    public GeoLocation decode(String value) {
         return GeoLocation.fromLongLat(value);
     }
 }

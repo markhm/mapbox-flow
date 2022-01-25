@@ -7,20 +7,17 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class Feature extends JSONObject implements Serializable
-{
+public class Feature extends JSONObject implements Serializable {
     private static Log log = LogFactory.getLog(Feature.class);
 
     public static final String FEATURE = "Feature";
 
-    private Feature(String type, Properties properties)
-    {
+    private Feature(String type, Properties properties) {
         put("type", type);
         put("properties", properties);
     }
 
-    public Feature(String type, Properties properties, GeoLocation geoLocation)
-    {
+    public Feature(String type, Properties properties, GeoLocation geoLocation) {
         this(type, properties);
 
         JSONObject geometryObject = new JSONObject();
@@ -30,43 +27,35 @@ public class Feature extends JSONObject implements Serializable
         put("geometry", geometryObject);
     }
 
-    public Feature(String type, Properties properties, Geometry geometry)
-    {
+    public Feature(String type, Properties properties, Geometry geometry) {
         this(type, properties);
 
         put("geometry", geometry);
     }
 
-    public String getType()
-    {
+    public String getType() {
         return getString("type");
     }
 
-    public Geometry getGeometry()
-    {
+    public Geometry getGeometry() {
         return (Geometry) get("geometry");
     }
 
-    public Properties getProperty()
-    {
+    public Properties getProperty() {
         return (Properties) get("properties");
     }
 
-    public String getId()
-    {
+    public String getId() {
         return getProperty().getString("id");
     }
 
-    public void setLocation(GeoLocation location)
-    {
+    public void setLocation(GeoLocation location) {
         JSONObject geometryObject = new JSONObject();
         geometryObject.put("type", "Point");
         geometryObject.put("coordinates", location.getCoordArray());
 
         put("geometry", geometryObject);
     }
-
-
 
 
 }

@@ -7,21 +7,17 @@ import {LitElement, html} from "lit";
 
 class MapboxWrapperLit extends LitElement {
 
-    static get template() {
+    render() {
         return html`
-        <slot></slot>
+            <slot></slot>
     `;
     }
 
     static get is() {
-        console.log("**** - At is()");
         return 'mapbox-wrapper-lit';
     }
 
     static get properties() {
-
-        console.log("**** - At properties()");
-
         return {
             accessToken: { type: String },
             initialLocation: { type: Object },
@@ -78,17 +74,17 @@ class MapboxWrapperLit extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
-    }
-
-    firstUpdated(_changedProperties) {
-        super.firstUpdated(_changedProperties);
 
         this.initializeMap();
     }
 
+    firstUpdated(_changedProperties) {
+        super.firstUpdated(_changedProperties);
+    }
+
     initializeMap() {
         // to avoid the map being initialized twice
-        if(this.offsetWidth === 0) {
+        if (this.offsetWidth === 0) {
             return;
         }
 
@@ -241,10 +237,6 @@ class MapboxWrapperLit extends LitElement {
         if (this.debug) {
             console.log(this.chartComponent);
         }
-    }
-
-    render() {
-        console.log("**** - At render()");
     }
 
     loadIcon()

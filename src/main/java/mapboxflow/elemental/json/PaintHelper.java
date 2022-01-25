@@ -5,18 +5,15 @@ import elemental.json.Json;
 import elemental.json.JsonArray;
 import elemental.json.JsonObject;
 
-public class PaintHelper
-{
-    public static JsonObject createPaint(Type type)
-    {
+public class PaintHelper {
+    public static JsonObject createPaint(Type type) {
         JsonObject paint = Json.createObject();
         // paint.put("type", type.toString());
 
         return paint;
     }
 
-    public static JsonObject createPaint(Type type, Color color, int lineWidth)
-    {
+    public static JsonObject createPaint(Type type, Color color, int lineWidth) {
         JsonObject paint = createPaint(type);
 
         setLineColor(paint, color);
@@ -25,38 +22,31 @@ public class PaintHelper
         return paint;
     }
 
-    public static void setLineWidth(JsonObject paint, int lineWidth)
-    {
+    public static void setLineWidth(JsonObject paint, int lineWidth) {
         paint.put("line-width", lineWidth);
     }
 
-    public static void setFillOpacity(JsonObject paint, double fillOpacity)
-    {
+    public static void setFillOpacity(JsonObject paint, double fillOpacity) {
         paint.put("fill-opacity", fillOpacity);
     }
 
-    public static void setFillColor(JsonObject paint, Color color)
-    {
+    public static void setFillColor(JsonObject paint, Color color) {
         paint.put("fill-color", color.getHexValue());
     }
 
-    public static void setFillColor(JsonObject paint, JsonArray array)
-    {
+    public static void setFillColor(JsonObject paint, JsonArray array) {
         paint.put("fill-color", array);
     }
 
-    public static void setLineColor(JsonObject paint, Color color)
-    {
+    public static void setLineColor(JsonObject paint, Color color) {
         paint.put("line-color", color.getHexValue());
     }
 
-    public static void setLineColor(JsonObject paint, String colorHexValue)
-    {
+    public static void setLineColor(JsonObject paint, String colorHexValue) {
         paint.put("line-color", colorHexValue);
     }
 
-    public enum Type
-    {
+    public enum Type {
         symbol, line, fill;
     }
 

@@ -5,25 +5,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaadin.flow.templatemodel.ModelEncoder;
 
-public class JsonEncoder<T> implements ModelEncoder<T, String>
-{
+public class JsonEncoder<T> implements ModelEncoder<T, String> {
     @Override
-    public String encode(T value)
-    {
-        try
-        {
+    public String encode(T value) {
+        try {
             return new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL).writeValueAsString(value);
-        }
-        catch (JsonProcessingException e)
-        {
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     @Override
-    public T decode(String value)
-    {
+    public T decode(String value) {
         return null;
     }
 }

@@ -1,6 +1,7 @@
 package com.github.markhm.mapbox.removal_candidate;
 
 // import com.github.markhm.mapbox.layer.Geometry;
+
 import com.vaadin.flow.component.dependency.JavaScript;
 import com.vaadin.flow.component.dependency.StyleSheet;
 import com.vaadin.flow.component.html.Div;
@@ -9,8 +10,7 @@ import com.vaadin.flow.component.html.Div;
 @StyleSheet(value = "https://api.tiles.mapbox.com/mapbox-gl-js/v1.9.1/mapbox-gl.css")
 @JavaScript(value = "https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js")
 // @JsModule("./com/github/markhm/mapbox-flow/mapbox.js")
-public class DeprecatedMapboxMap extends Div
-{
+public class DeprecatedMapboxMap extends Div {
 //    private static Log log = LogFactory.getLog(DeprecatedMapboxMap.class);
 //
 //    private Page page = null;

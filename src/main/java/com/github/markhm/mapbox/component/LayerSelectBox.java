@@ -10,8 +10,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.Set;
 
-public class LayerSelectBox extends VerticalLayout
-{
+public class LayerSelectBox extends VerticalLayout {
     private static Log log = LogFactory.getLog(LayerSelectBox.class);
 
     // private MapboxMap mapboxMap = null;
@@ -22,8 +21,7 @@ public class LayerSelectBox extends VerticalLayout
 
     private Set<String> selectableLayers = null;
 
-    public LayerSelectBox(MapboxMap mapboxMap, Set<String> selectableLayers)
-    {
+    public LayerSelectBox(MapboxMap mapboxMap, Set<String> selectableLayers) {
         this.mapboxMap = mapboxMap;
         this.selectableLayers = selectableLayers;
         listBox = new MultiSelectListBox<>();
@@ -32,45 +30,36 @@ public class LayerSelectBox extends VerticalLayout
 
         setWidth("200px");
 
-        if (!alreadyRendered)
-        {
+        if (!alreadyRendered) {
             render();
             alreadyRendered = true;
         }
     }
 
-    private void valueChanged(HasValue.ValueChangeEvent valueChangeEvent)
-    {
+    private void valueChanged(HasValue.ValueChangeEvent valueChangeEvent) {
         Set<String> activeLayers = (Set<String>) valueChangeEvent.getValue();
 
-        for (String layer : selectableLayers)
-        {
-            if (activeLayers.contains(layer))
-            {
+        for (String layer : selectableLayers) {
+            if (activeLayers.contains(layer)) {
                 mapboxMap.unhideLayer(layer);
-            }
-            else
-            {
+            } else {
                 mapboxMap.hideLayer(layer);
             }
         }
     }
 
-    public void render()
-    {
+    public void render() {
         add(new H4("Active layers"));
         add(listBox);
     }
 
-    public void registerLayer(String layer)
-    {
+    public void registerLayer(String layer) {
         selectableLayers.add(layer);
 
         resetLayers();
     }
 
-    public void resetLayers()
-    {
+    public void resetLayers() {
         listBox.setItems(selectableLayers);
         listBox.setValue(selectableLayers);
     }

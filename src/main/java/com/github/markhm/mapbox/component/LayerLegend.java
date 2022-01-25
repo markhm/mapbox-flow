@@ -7,17 +7,14 @@ import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
-public class LayerLegend extends VerticalLayout
-{
-    public LayerLegend()
-    {
+public class LayerLegend extends VerticalLayout {
+    public LayerLegend() {
         setWidth("200px");
         add(new H3("# serviceopkald"));
         add("(multiplicer med 1000)");
     }
 
-    private Label getColorBox(String color, double opacity)
-    {
+    private Label getColorBox(String color, double opacity) {
         Label colorBox = new Label("️");
         colorBox.getElement().setProperty("innerHTML", "&block;");
         colorBox.setWidth("5px");
@@ -31,37 +28,34 @@ public class LayerLegend extends VerticalLayout
         return colorBox;
     }
 
-    public void addLegendLine(int from, int to, String color, double opacity)
-    {
+    public void addLegendLine(int from, int to, String color, double opacity) {
         HorizontalLayout legendLine = new HorizontalLayout();
 
         Label colorBox = getColorBox(color, opacity);
 
-        Label fromToLabel = new Label(from/1000 + " - " + to/1000);
+        Label fromToLabel = new Label(from / 1000 + " - " + to / 1000);
         legendLine.add(colorBox, ViewUtil.horizontalWhiteSpace(5), fromToLabel);
 
         add(legendLine);
     }
 
-    public void addLegendLineFrom(int from, String color, double opacity)
-    {
+    public void addLegendLineFrom(int from, String color, double opacity) {
         HorizontalLayout legendLine = new HorizontalLayout();
 
         Label colorBox = getColorBox(color, opacity);
 
-        Label fromToLabel = new Label(from/1000 + " - ");
+        Label fromToLabel = new Label(from / 1000 + " - ");
         legendLine.add(colorBox, ViewUtil.horizontalWhiteSpace(5), fromToLabel);
 
         add(legendLine);
     }
 
-    public void addLegendLineTo(int to, String color , double opacity)
-    {
+    public void addLegendLineTo(int to, String color, double opacity) {
         HorizontalLayout legendLine = new HorizontalLayout();
 
         Label colorBox = getColorBox(color, opacity);
 
-        Label fromToLabel = new Label(" - " + to/1000);
+        Label fromToLabel = new Label(" - " + to / 1000);
         legendLine.add(colorBox, ViewUtil.horizontalWhiteSpace(5), fromToLabel);
 
         add(legendLine);

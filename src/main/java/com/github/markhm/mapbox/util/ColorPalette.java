@@ -1,7 +1,6 @@
 package com.github.markhm.mapbox.util;
 
-public class ColorPalette
-{
+public class ColorPalette {
     public static String green_1 = "hsla(120, 100%, 66%, 0.7)";
     public static String green_2 = "hsla(120, 100%, 50%, 0.7)";
     public static String green_3 = "hsla(120, 100%, 42%, 0.7)";

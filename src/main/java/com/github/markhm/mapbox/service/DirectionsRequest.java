@@ -11,21 +11,18 @@ import java.io.FileWriter;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-public class DirectionsRequest extends AbstractRESTClient
-{
+public class DirectionsRequest extends AbstractRESTClient {
     private static Log log = LogFactory.getLog(DirectionsRequest.class);
 
     private String rootUrl = "https://api.mapbox.com/directions/v5/";
 
-    public DirectionsRequest(String accessToken)
-    {
+    public DirectionsRequest(String accessToken) {
         super(accessToken);
     }
 
     // https://docs.mapbox.com/api-playground/#/directions/?_k=567jzz
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         String accessToken = AccessToken.getToken();
         DirectionsRequest directionsRequest = new DirectionsRequest(accessToken);
 
@@ -35,7 +32,7 @@ public class DirectionsRequest extends AbstractRESTClient
         GeoLocation from = GeoLocation.Rome;
         GeoLocation to = GeoLocation.Copenhagen;
 
-        String origin =  from.getLongitude() + "," + from.getLatitude();
+        String origin = from.getLongitude() + "," + from.getLatitude();
         String destination = to.getLongitude() + "," + to.getLatitude();
 
         String combined = origin + ";" + destination;
@@ -52,8 +49,7 @@ public class DirectionsRequest extends AbstractRESTClient
         System.out.println(result);
     }
 
-    public String getRootUrl()
-    {
+    public String getRootUrl() {
         return rootUrl;
     }
 
