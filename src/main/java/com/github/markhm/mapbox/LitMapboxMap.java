@@ -29,7 +29,7 @@ import java.util.Map;
 // @JavaScript(value = "https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v3.0.11/turf.min.js")
 @Tag("mapbox-wrapper-lit")
 @JsModule("./mapbox/mapbox-wrapper-lit.js")
-public class LitMapboxMap extends Component implements HasSize, HasStyle, HasTheme
+public class LitMapboxMap extends LitTemplate implements HasSize, HasStyle, HasTheme
 {
     private static Log log = LogFactory.getLog(LitMapboxMap.class);
 
