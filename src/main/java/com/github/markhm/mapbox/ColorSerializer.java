@@ -9,21 +9,17 @@ import java.io.IOException;
 
 // https://www.baeldung.com/jackson-custom-serialization
 
-public class ColorSerializer extends StdSerializer<Color>
-{
-    public ColorSerializer()
-    {
+public class ColorSerializer extends StdSerializer<Color> {
+    public ColorSerializer() {
         this(null);
     }
 
-    public ColorSerializer(Class<Color> vc)
-    {
+    public ColorSerializer(Class<Color> vc) {
         super(vc);
     }
 
     @Override
-    public void serialize(Color value, JsonGenerator gen, SerializerProvider provider) throws IOException
-    {
+    public void serialize(Color value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         // gen.writeStartObject();
         gen.writeString(value.toString());
         // gen.writeStringField("line-color", value.toString());

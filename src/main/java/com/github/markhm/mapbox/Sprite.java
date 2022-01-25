@@ -2,17 +2,14 @@ package com.github.markhm.mapbox;
 
 /* A selection of Mapbox Maki Sprites. Full list via: https://labs.mapbox.com/maki-icons/.
  */
-public class Sprite
-{
+public class Sprite {
     private String id = null;
 
-    private Sprite(String id)
-    {
+    private Sprite(String id) {
         this.id = id;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return id;
     }
 

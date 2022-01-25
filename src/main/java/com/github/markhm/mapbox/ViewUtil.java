@@ -8,57 +8,47 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.page.Page;
 
 
-public class ViewUtil
-{
-    public static Label verticalWhitespace(int height)
-    {
+public class ViewUtil {
+    public static Label verticalWhitespace(int height) {
         return verticalWhitespace(height + "pt");
     }
 
-    public static Label verticalWhitespace(String height)
-    {
+    public static Label verticalWhitespace(String height) {
         Label whiteSpace = new Label("");
         whiteSpace.setHeight(height);
         whiteSpace.setVisible(true);
         return whiteSpace;
     }
 
-    public static Label horizontalWhiteSpace(int width)
-    {
+    public static Label horizontalWhiteSpace(int width) {
         return horizontalWhiteSpace(width + "pt");
     }
 
-    public static Label horizontalWhiteSpace(String height)
-    {
+    public static Label horizontalWhiteSpace(String height) {
         Label whiteSpace = new Label("");
         whiteSpace.setWidth(height);
         whiteSpace.setVisible(true);
         return whiteSpace;
     }
 
-    public static void click(UI ui, Component... components)
-    {
+    public static void click(UI ui, Component... components) {
         Page page = ui.getPage();
 
-        for (Component component : components)
-        {
+        for (Component component : components) {
             page.executeJs("$0.click()", component.getElement());
         }
     }
 
-    public static VerticalLayout centeredBoxedText(String... text)
-    {
+    public static VerticalLayout centeredBoxedText(String... text) {
         return centeredBoxedText(600, text);
     }
 
-    public static VerticalLayout centeredBoxedText(int width, String... text)
-    {
+    public static VerticalLayout centeredBoxedText(int width, String... text) {
         VerticalLayout layout = new VerticalLayout();
         layout.setAlignItems(FlexComponent.Alignment.CENTER); //
         layout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-        layout.setWidth(width+"px");
-        for (String textItem : text)
-        {
+        layout.setWidth(width + "px");
+        for (String textItem : text) {
             layout.add(new Label(textItem));
         }
 

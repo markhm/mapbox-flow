@@ -1,26 +1,26 @@
-
+// import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+// import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+// import '@polymer/polymer/lib/utils/html-tag.js';
 import {LitElement, html} from "lit";
 
 // Based on https://github.com/appreciated/apexcharts-flow/blob/master/src/main/resources/META-INF/resources/frontend/com/github/appreciated/apexcharts/apexcharts-wrapper.js
 
-class MapboxWrapper extends LitElement {
+class MapboxWrapperLit extends LitElement {
 
     render() {
         return html`
-          <slot></slot>
+            <slot></slot>
     `;
     }
 
-    // ::slotted(map)
-
     static get is() {
-        return 'mapbox-wrapper';
+        return 'mapbox-wrapper-lit';
     }
 
     static get properties() {
         return {
             accessToken: { type: String },
-            initialLocation: { type: String },
+            initialLocation: { type: Object },
             lng: { type: Number },
             lat: { type: Number },
             zoomCenter: { type: Object },
@@ -36,7 +36,6 @@ class MapboxWrapper extends LitElement {
     }
 
     updateConfig() {
-
         console.log("**** - At updateConfig()");
 
         // change this.debug to true
@@ -89,12 +88,12 @@ class MapboxWrapper extends LitElement {
             return;
         }
 
-        // console.log('this.initialLocation');
-        // console.log(this.initialLocation);
-        // console.log('this.lng');
-        // console.log(this.lng);
-        // console.log('this.lat');
-        // console.log(this.lat);
+        console.log('this.initialLocation');
+        console.log(this.initialLocation);
+        console.log('this.lng');
+        console.log(this.lng);
+        console.log('this.lat');
+        console.log(this.lat);
         //console.log(JSON.parse(this.initialLocation));
 
         console.log('accessToken');
@@ -107,12 +106,12 @@ class MapboxWrapper extends LitElement {
 
         try {
             this.map = new mapboxgl.Map(
-              {
-                  container: 'map', // container id" +
-                  style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location" +
-                  center: initialLocationObject, // starting position [lng, lat]" +
-                  zoom: this.zoomLevel // starting zoom" +
-              });
+                {
+                    container: 'lit-map', // container id" +
+                    style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location" +
+                    center: initialLocationObject, // starting position [lng, lat]" +
+                    zoom: 9 // starting zoom" +
+                });
         }
         catch (e) {
             console.log('Something went wrong, so catching error');
@@ -434,5 +433,5 @@ class MapboxWrapper extends LitElement {
 
 }
 
-customElements.define(MapboxWrapper.is, MapboxWrapper);
-export {MapboxWrapper};
+customElements.define(MapboxWrapperLit.is, MapboxWrapperLit);
+export {MapboxWrapperLit};

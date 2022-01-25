@@ -12,10 +12,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class LayerHelper
-{
-    public static JsonObject createLayer(String id, Type type)
-    {
+public class LayerHelper {
+    public static JsonObject createLayer(String id, Type type) {
         JsonObject layer = Json.createObject();
         layer.put("id", id);
         layer.put("type", type.toString());
@@ -28,40 +26,29 @@ public class LayerHelper
         return layer;
     }
 
-    public static void addLayoutType(JsonObject layout, Type type)
-    {
-        if (type.equals(Type.line))
-        {
+    public static void addLayoutType(JsonObject layout, Type type) {
+        if (type.equals(Type.line)) {
             initiateLine(layout);
-        }
-        else if (type.equals(Type.symbol))
-        {
+        } else if (type.equals(Type.symbol)) {
             initiateSymbol(layout);
-        }
-        else if (type.equals(Type.fill))
-        {
+        } else if (type.equals(Type.fill)) {
             initiateFill(layout);
-        }
-        else
-        {
-            throw new RuntimeException("Please Layout for layer type "+type);
+        } else {
+            throw new RuntimeException("Please Layout for layer type " + type);
         }
     }
 
-    private static void initiateFill(JsonObject layout)
-    {
+    private static void initiateFill(JsonObject layout) {
         // nothing prescribed
     }
 
 
-    private static void initiateLine(JsonObject layout)
-    {
+    private static void initiateLine(JsonObject layout) {
         layout.put("line-join", "round");
         layout.put("line-cap", "round");
     }
 
-    private static void initiateSymbol(JsonObject layout)
-    {
+    private static void initiateSymbol(JsonObject layout) {
         JsonArray iconImageArray = Json.createArray();
         iconImageArray.set(0, "concat");
 
@@ -92,25 +79,21 @@ public class LayerHelper
         layout.put("text-anchor", "top");
     }
 
-    public static void addFeature(JsonObject layer, JsonObject feature)
-    {
+    public static void addFeature(JsonObject layer, JsonObject feature) {
         // source
         JsonObject source = getSource(layer);
         JsonObject data = source.getObject("data");
-        if (data == null)
-        {
+        if (data == null) {
             data = DataHelper.createData(DataHelper.Type.collection);
             source.put("data", data);
         }
         DataHelper.addFeature(data, feature);
     }
 
-    public static JsonObject getSource(JsonObject layer)
-    {
+    public static JsonObject getSource(JsonObject layer) {
         JsonObject source = layer.getObject("source");
 
-        if (source == null)
-        {
+        if (source == null) {
             source = SourceHelper.createSource();
             layer.put("source", source);
         }
@@ -118,8 +101,7 @@ public class LayerHelper
         return source;
     }
 
-    public enum Type
-    {
+    public enum Type {
         symbol, line, fill, circle, heatmap, raster, hillshade, background; //, fill-extrusion
     }
 }

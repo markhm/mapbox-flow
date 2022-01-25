@@ -6,60 +6,49 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-public class Paint extends JSONObject implements Serializable
-{
+public class Paint extends JSONObject implements Serializable {
     private Type type = null;
 
-    public Paint(Type type)
-    {
+    public Paint(Type type) {
         this.type = type;
     }
 
-    public Paint(Type type, Color color, int lineWidth)
-    {
+    public Paint(Type type, Color color, int lineWidth) {
         this(type);
 
         setLineColor(color);
         setLineWidth(lineWidth);
     }
 
-    public void setLineWidth(int lineWidth)
-    {
+    public void setLineWidth(int lineWidth) {
         put("line-width", lineWidth);
     }
 
-    public void setFillOpacity(double fillOpacity)
-    {
+    public void setFillOpacity(double fillOpacity) {
         put("fill-opacity", fillOpacity);
     }
 
-    public void setFillColor(Color color)
-    {
+    public void setFillColor(Color color) {
         put("fill-color", color.getHexValue());
     }
 
-    public void setFillColor(JSONArray array)
-    {
+    public void setFillColor(JSONArray array) {
         put("fill-color", array);
     }
 
-    public void setLineColor(Color color)
-    {
+    public void setLineColor(Color color) {
         put("line-color", color.getHexValue());
     }
 
-    public void setLineColor(String colorHexValue)
-    {
+    public void setLineColor(String colorHexValue) {
         put("line-color", colorHexValue);
     }
 
-    public Type getType()
-    {
+    public Type getType() {
         return type;
     }
 
-    public enum Type
-    {
+    public enum Type {
         line, fill;
     }
 }

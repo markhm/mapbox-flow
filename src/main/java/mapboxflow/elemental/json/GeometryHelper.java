@@ -6,28 +6,22 @@ import elemental.json.JsonObject;
 
 import java.util.List;
 
-public class GeometryHelper
-{
-    public static JsonObject createGeometry(Type type)
-    {
+public class GeometryHelper {
+    public static JsonObject createGeometry(Type type) {
         JsonObject geometry = Json.createObject();
         geometry.put("type", type.toString());
 
         return geometry;
     }
 
-    public static void setCoordinates(JsonObject geometry, List<List<Double>> coordinatesList)
-    {
+    public static void setCoordinates(JsonObject geometry, List<List<Double>> coordinatesList) {
         JsonArray coordinatesListArray = toJsonArray(coordinatesList);
 
         String type = geometry.getString("type");
 
-        if (type.equals(Type.LineString.toString()))
-        {
+        if (type.equals(Type.LineString.toString())) {
             geometry.put("coordinates", coordinatesListArray);
-        }
-        else if (type.equals(Type.Polygon.toString()))
-        {
+        } else if (type.equals(Type.Polygon.toString())) {
             JsonArray polygonArray = Json.createArray();
             polygonArray.set(0, coordinatesListArray);
 
@@ -35,27 +29,20 @@ public class GeometryHelper
         }
     }
 
-    public static JsonArray toJsonArray(List<List<Double>> coordinatesList)
-    {
+    public static JsonArray toJsonArray(List<List<Double>> coordinatesList) {
         JsonArray coordinatesListArray = Json.createArray();
 
-        if (coordinatesList.size() == 1)
-        {
+        if (coordinatesList.size() == 1) {
             List<Double> coordinates = coordinatesList.get(0);
-            for(int j = 0 ; j < coordinates.size(); j++)
-            {
+            for (int j = 0; j < coordinates.size(); j++) {
                 double coordinateElement = coordinates.get(j);
                 coordinatesListArray.set(j, coordinateElement);
             }
-        }
-        else
-        {
-            for (int i = 0; i < coordinatesList.size(); i++)
-            {
+        } else {
+            for (int i = 0; i < coordinatesList.size(); i++) {
                 JsonArray coordinatesArray = Json.createArray();
                 List<Double> coordinates = coordinatesList.get(i);
-                for (int j = 0; j < coordinates.size(); j++)
-                {
+                for (int j = 0; j < coordinates.size(); j++) {
                     double coordinateElement = coordinates.get(j);
                     coordinatesArray.set(j, coordinateElement);
                 }
@@ -67,8 +54,7 @@ public class GeometryHelper
     }
 
 
-    public enum Type
-    {
+    public enum Type {
         Point, LineString, Polygon
     }
 }

@@ -137,7 +137,7 @@ public class DemoView extends VerticalLayout
             String layerId = "route_line";
             Layer routeLineLayer = getLineLayer(layerId, DirectionsResponseLoader.ACTIVE_PATH);
 
-            log.info("lineLayer = "+routeLineLayer.toString(2));
+            // log.info("lineLayer = "+routeLineLayer.toString(2));
 
             mapboxMap.addLayer(routeLineLayer);
             layerSelectBox.registerLayer(layerId);

@@ -12,9 +12,16 @@ tsconfig.json
 
 dependency_tree.txt
 
+mapbox-flow.iml
+
 _sokrates/reports
 src/main/resources/mapbox_default.properties
 /src/test/resources/personal/
 
 /pnpm-lock.yaml
 /pnpmfile.js
+
+
+# Added for port to Vaadin 22
+.npmrc
+/frontend/generated/

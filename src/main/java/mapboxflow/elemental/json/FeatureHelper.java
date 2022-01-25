@@ -7,10 +7,8 @@ import elemental.json.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeatureHelper
-{
-    public static JsonObject createFeature(String type, JsonObject properties)
-    {
+public class FeatureHelper {
+    public static JsonObject createFeature(String type, JsonObject properties) {
         JsonObject feature = Json.createObject();
 
         feature.put("type", type);
@@ -19,8 +17,7 @@ public class FeatureHelper
         return feature;
     }
 
-    public static JsonObject createFeature(String type, JsonObject properties, GeoLocation geoLocation)
-    {
+    public static JsonObject createFeature(String type, JsonObject properties, GeoLocation geoLocation) {
         JsonObject feature = createFeature(type, properties);
 
         List<Double> coordinates = geoLocation.getCoordList();
@@ -36,16 +33,14 @@ public class FeatureHelper
         return feature;
     }
 
-    public static JsonObject createFeature(String type, JsonObject properties, JsonObject geometry)
-    {
+    public static JsonObject createFeature(String type, JsonObject properties, JsonObject geometry) {
         JsonObject feature = createFeature(type, properties);
 
         feature.put("geometry", geometry);
         return feature;
     }
 
-    public static JsonObject getGeometry(JsonObject feature)
-    {
+    public static JsonObject getGeometry(JsonObject feature) {
         return feature.getObject("geometry");
     }
 
