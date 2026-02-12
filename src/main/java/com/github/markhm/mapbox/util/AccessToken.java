@@ -1,5 +1,6 @@
-package com.github.markhm.mapbox;
+package com.github.markhm.mapbox.util;
 
+import com.github.markhm.mapbox.MapboxMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

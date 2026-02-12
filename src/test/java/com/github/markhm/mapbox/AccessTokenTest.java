@@ -1,21 +1,20 @@
 package com.github.markhm.mapbox;
 
+import com.github.markhm.mapbox.util.AccessToken;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
 
-public class AccessTokenTest
-{
+public class AccessTokenTest {
     private Log log = LogFactory.getLog(AccessTokenTest.class);
 
-    public AccessTokenTest()
-    {}
+    public AccessTokenTest() {
+    }
 
     @Test
-    public void testPropertyFileLoad()
-    {
+    public void testPropertyFileLoad() {
         String fileLocation = AccessToken.getJSFileLocation();
-        log.warn("fileLocation = "+fileLocation);
+        log.warn("fileLocation = " + fileLocation);
     }
 
 }

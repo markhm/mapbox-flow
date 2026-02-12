@@ -1,8 +1,7 @@
 package com.github.markhm.mapbox.component;
 
-import com.github.markhm.mapbox.ViewUtil;
+import com.github.markhm.mapbox.util.ViewUtil;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;

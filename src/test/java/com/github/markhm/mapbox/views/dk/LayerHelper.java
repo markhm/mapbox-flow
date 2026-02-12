@@ -1,16 +1,15 @@
-package com.github.markhm.mapbox.ui.dk;
+package com.github.markhm.mapbox.views.dk;
 
 // import com.github.markhm.mapbox.util.Color;
+
 import mapboxflow.jsonobject.layer.Layer;
 import mapboxflow.jsonobject.layer.Paint;
 import org.json.JSONArray;
 
 import java.util.Set;
 
-public class LayerHelper
-{
-    public static Layer createBinLayer(String layerId, JSONArray kommuner, String colorString, double opacity)
-    {
+public class LayerHelper {
+    public static Layer createBinLayer(String layerId, JSONArray kommuner, String colorString, double opacity) {
         Layer layer = new Layer(layerId, Layer.Type.fill);
         layer.put("source", "danske-kommuner");
         layer.put("source-layer", "Danske_Kommuner");
@@ -35,16 +34,14 @@ public class LayerHelper
         return layer;
     }
 
-    public static JSONArray mapToJSONArray(Set<String> values)
-    {
+    public static JSONArray mapToJSONArray(Set<String> values) {
         return mapToJSONArray(values.toArray(new String[values.size()]));
     }
 
-    public static JSONArray mapToJSONArray(String[] values)
-    {
+    public static JSONArray mapToJSONArray(String[] values) {
         JSONArray resultArray = new JSONArray();
 
-        for (int i=0; i < values.length; i++) {
+        for (int i = 0; i < values.length; i++) {
             resultArray.put(i, values[i]);
         }
 

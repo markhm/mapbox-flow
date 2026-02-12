@@ -1,14 +1,13 @@
 package com.github.markhm.mapbox;
 
+import com.github.markhm.mapbox.methods.FlyToMethod;
+import com.github.markhm.mapbox.methods.ZoomToMethod;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dependency.*;
 import com.vaadin.flow.component.littemplate.LitTemplate;
 import com.vaadin.flow.component.page.PendingJavaScriptResult;
 import elemental.json.JsonObject;
-import mapboxflow.jsonobject.layer.Feature;
-import mapboxflow.jsonobject.layer.Layer;
-import mapboxflow.jsonobject.layer.Source;
-import mapboxflow.jsonobject.layer.Data;
+import mapboxflow.jsonobject.layer.*;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -23,44 +22,38 @@ import java.util.Map;
 public class MapboxMap extends LitTemplate implements HasSize, HasStyle, HasTheme {
     private static Log log = LogFactory.getLog(MapboxMap.class);
 
+    protected Map<String, MapItem> items = new HashMap<>();
     protected Map<String, Source> sourcesInUse = new HashMap<>();
+    private MapboxProperties properties;
 
-    private String accessToken = null;
-    private GeoLocation initialLocation = null;
-    private int initialZoom = 0;
+    public MapboxMap(MapboxProperties properties) {
+        this.properties = properties;
+        initialize();
+    }
 
-    private GeoLocation origin = null;
-    private GeoLocation destination = null;
+    private void initialize() {
+        getElement().setProperty("accessToken", properties.getAccessToken());
 
-    public MapboxMap(String accessToken) {
-        this.accessToken = accessToken;
-        getElement().setProperty("accessToken", accessToken);
+        if (properties.getInitialLocation() != null) {
+            GeoLocation initialLocation = properties.getInitialLocation();
+            getElement().setProperty("initialLocation", initialLocation.toJSON());
+            getElement().setProperty("lng", initialLocation.getLongitude());
+            getElement().setProperty("lat", initialLocation.getLatitude());
+        }
+
+        if (properties.getInitialZoom() != 0) {
+            getElement().setProperty("zoomLevel", properties.getInitialZoom());
+        }
 
         setId("map");
         getStyle().set("align-self", "center");
         getStyle().set("border", "1px solid black");
 
         setSizeFull();
-    }
 
-    public MapboxMap(String accessToken, GeoLocation initialLocation) {
-        this(accessToken);
-        this.initialLocation = initialLocation;
-
-        getElement().setProperty("initialLocation", initialLocation.toJSON());
-        getElement().setProperty("lng", initialLocation.getLongitude());
-        getElement().setProperty("lat", initialLocation.getLatitude());
-    }
-
-    public MapboxMap(String accessToken, GeoLocation initialLocation, int initialZoom) {
-        this(accessToken, initialLocation);
-        this.initialZoom = initialZoom;
-
-        getElement().setProperty("zoomLevel", initialZoom);
-    }
-
-    public void addFullScreenControl() {
-        getElement().callJsFunction("addFullScreenControl");
+        if (properties.isAddFullScreenControl()) {
+            getElement().setProperty("isAddFullScreenControl", properties.isAddFullScreenControl());
+        }
     }
 
     public PendingJavaScriptResult executeJs(String command) {
@@ -72,10 +65,6 @@ public class MapboxMap extends LitTemplate implements HasSize, HasStyle, HasThem
     }
 
     public PendingJavaScriptResult addLayer(Layer layer) {
-        // This works, but when called rapidly in series, it does not:
-        // getModel().setLayer(layer);
-        // getElement().callJsFunction("addLayer");
-
         // This does not work:
         // getElement().executeJs("addLayerArgumented($0);", layer.toString());
 
@@ -137,31 +126,6 @@ public class MapboxMap extends LitTemplate implements HasSize, HasStyle, HasThem
         return getElement().executeJs("this.map.getSource('" + sourceId + "').setData(" + data + ");");
     }
 
-    public PendingJavaScriptResult zoomTo(int zoomLevel) {
-//        getModel().setZoomLevel(zoomLevel);
-//        getElement().callJsFunction("zoomTo");
-
-        return getElement().executeJs("this.map.zoomTo(" + zoomLevel + ", { 'duration': 1500 } );");
-    }
-
-    public PendingJavaScriptResult flyTo(GeoLocation geoLocation, int zoomLevel) {
-//        getModel().setZoomLevel(zoomLevel);
-//        getModel().setZoomCenter(geoLocation);
-//        getElement().callJsFunction("flyTo");
-
-        return getElement().executeJs("this.map.flyTo({center: " + geoLocation + ", zoom: " +
-                zoomLevel + ", duration: 1500});");
-    }
-
-    public PendingJavaScriptResult flyTo(GeoLocation geoLocation) {
-//        getModel().setZoomCenter(geoLocation);
-//        getElement().callJsFunction("flyTo");
-
-        // this.map.flyTo({center: JSON.parse(this.zoomCenter), duration: 1500});
-
-        return getElement().executeJs("this.map.flyTo({center: " + geoLocation + ", duration: 1500});");
-    }
-
     public PendingJavaScriptResult deactivateListeners() {
         return getElement().callJsFunction("removeListeners");
     }
@@ -174,13 +138,13 @@ public class MapboxMap extends LitTemplate implements HasSize, HasStyle, HasThem
         getElement().callJsFunction("activatePointerLocation");
     }
 
-    protected void addToExistingLayer(AnimatedItem animatedItem, Source source, Feature itemFeature) {
+    protected void addToExistingLayer(MapItem item, Source source, Feature itemFeature) {
         Data data = source.getData();
         data.addFeature(itemFeature);
-        resetSourceData(animatedItem.getLayerId(), data);
+        resetSourceData(item.getLayerId(), data);
     }
 
-    protected void addToNewLayer(AnimatedItem animatedItem, Feature itemFeature) {
+    protected void addToNewLayer(MapItem animatedItem, Feature itemFeature) {
         Data data = new Data(Data.Type.collection);
         data.addFeature(itemFeature);
         Source source = new Source();
@@ -201,8 +165,6 @@ public class MapboxMap extends LitTemplate implements HasSize, HasStyle, HasThem
         // Expected to work but does not.
         // executeJs("fromOriginToDestination($0, $1);", origin.getLongLat() ,destination.getLongLat());
 
-        this.origin = origin;
-        this.destination = destination;
         getElement().callJsFunction("fromOriginToDestination");
 
         // Should not work, but does
@@ -217,6 +179,74 @@ public class MapboxMap extends LitTemplate implements HasSize, HasStyle, HasThem
         // getModel().setIconName(iconName);
 
         getElement().callJsFunction("loadIcon");
+    }
+
+    public void addMapItem(MapItem mapItem) {
+        assert ! items.containsKey(mapItem.getId());
+
+        boolean sourceAlreadyExists = true;
+        Source source = getSource(mapItem.getLayerId());
+        if (source == null) {
+            sourceAlreadyExists = false;
+        }
+
+        Properties itemProperties = new Properties(mapItem.getId(), mapItem.getDescription(), mapItem.getSprite().toString());
+        Feature itemFeature = new Feature(Feature.FEATURE, itemProperties, mapItem.getLocation());
+
+        if (sourceAlreadyExists) {
+            addToExistingLayer(mapItem, source, itemFeature);
+        } else {
+            addToNewLayer(mapItem, itemFeature);
+        }
+
+        items.put(mapItem.getId(), mapItem);
+    }
+
+    public MapItem getMapItem(String id) {
+        if (items.containsKey(id)) {
+            return items.get(id);
+        }
+        else {
+            return null;
+        }
+    }
+
+    public void moveItemTo(MapItem mapItem, GeoLocation nextPosition) {
+        if (items.get(mapItem.getId()) == null) {
+            // item not on map, returning
+            return;
+
+        }
+        Source source = sourcesInUse.get(mapItem.getLayerId());
+        Data data = source.getData();
+        Feature feature = data.getFeatureWith(mapItem.getId());
+        feature.setLocation(nextPosition);
+
+//        Data newPositionData = new Data(Data.Type.collection);
+//        Properties properties = new Properties(mapItem.getId(), mapItem.getSprite().toString());
+//        Feature feature = new Feature(Feature.FEATURE, properties, nextPosition);
+//        newPositionData.addFeature(feature);
+
+        resetSourceData(mapItem.getLayerId(), data);
+    }
+
+
+    /* ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------ ------*/
+
+    public PendingJavaScriptResult zoomTo(int zoomLevel) {
+        ZoomToMethod zoomToMethod = new ZoomToMethod(zoomLevel, properties.getZoomToDelay());
+        // return getElement().executeJs("this.map.zoomTo(" + zoomLevel + ", { 'duration': " + properties.getZoomToDelay() + " } );");
+        return getElement().executeJs(zoomToMethod.toString());
+    }
+
+    public PendingJavaScriptResult flyTo(GeoLocation geoLocation, int zoomLevel) {
+        FlyToMethod flyToMethod = new FlyToMethod(geoLocation, zoomLevel, properties.getFlyToDelay());
+        return getElement().executeJs(flyToMethod.toString());
+    }
+
+    public PendingJavaScriptResult flyTo(GeoLocation geoLocation) {
+        FlyToMethod flyToMethod = new FlyToMethod(geoLocation,properties.getFlyToDelay());
+        return getElement().executeJs(flyToMethod.toString());
     }
 
 }

@@ -21,7 +21,6 @@ public class Source extends JSONObject implements Serializable {
         return getString("id");
     }
 
-
     public void setData(Data data) {
         put("data", data);
     }

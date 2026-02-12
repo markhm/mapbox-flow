@@ -11,10 +11,10 @@ public class Geometry extends JSONObject implements Serializable {
         put("type", type);
     }
 
-//    public List<List<Double>> getCoordinates()
-//    {
-//        return (List<List<Double>>) get("coordinates");
-//    }
+    public List<List<Double>> getCoordinates()
+    {
+        return (List<List<Double>>) get("coordinates");
+    }
 
     public void setCoordinates(List<List<Double>> value) {
         Object type = get("type");

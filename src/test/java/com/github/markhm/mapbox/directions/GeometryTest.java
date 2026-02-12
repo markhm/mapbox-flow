@@ -10,16 +10,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
 
-public class GeometryTest
-{
+public class GeometryTest {
     private static Log log = LogFactory.getLog(GeometryTest.class);
 
-    public GeometryTest()
-    {}
+    public GeometryTest() {
+    }
 
     @Test
-    public void compareGeometries()
-    {
+    public void compareGeometries() {
 //        DeprecatedDirectionsResponse deprecatedDirectionsResponse = DeprecatedDirectionsResponse.getInstance();
 //        JSONObject jsonObject = deprecatedDirectionsResponse.getGeometry();
 
@@ -31,12 +29,9 @@ public class GeometryTest
 
         String stringValue = null;
 
-        try
-        {
+        try {
             stringValue = writer.writeValueAsString(geometry);
-        }
-        catch (JsonProcessingException jpe)
-        {
+        } catch (JsonProcessingException jpe) {
             log.error(jpe);
         }
 

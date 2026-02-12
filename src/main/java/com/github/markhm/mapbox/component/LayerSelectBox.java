@@ -54,8 +54,9 @@ public class LayerSelectBox extends VerticalLayout {
     }
 
     public void registerLayer(String layer) {
-        selectableLayers.add(layer);
-
+        if (!selectableLayers.contains(layer)) {
+            selectableLayers.add(layer);
+        }
         resetLayers();
     }
 

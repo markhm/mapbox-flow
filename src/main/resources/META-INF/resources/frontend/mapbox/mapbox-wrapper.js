@@ -1,4 +1,3 @@
-
 import {LitElement, html} from "lit";
 
 // Based on https://github.com/appreciated/apexcharts-flow/blob/master/src/main/resources/META-INF/resources/frontend/com/github/appreciated/apexcharts/apexcharts-wrapper.js
@@ -11,8 +10,6 @@ class MapboxWrapper extends LitElement {
     `;
     }
 
-    // ::slotted(map)
-
     static get is() {
         return 'mapbox-wrapper';
     }
@@ -20,6 +17,7 @@ class MapboxWrapper extends LitElement {
     static get properties() {
         return {
             accessToken: { type: String },
+            isAddFullScreenControl: { type: Boolean},
             initialLocation: { type: String },
             lng: { type: Number },
             lat: { type: Number },
@@ -44,24 +42,6 @@ class MapboxWrapper extends LitElement {
             console.log(this.config);
         }
     }
-
-    // ready() {
-    //     super.ready();
-    //
-    //     console.log("at ready()");
-    //
-    //     mapboxgl.accessToken = this.accessToken;
-    //
-    //     console.log("initialLocation = " + this.initialLocation);
-    //
-    //     this.map = new mapboxgl.Map(
-    //         {
-    //             container: 'map', // container id" +
-    //             style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location" +
-    //             center: JSON.parse(this.initialLocation), // starting position [lng, lat]" +
-    //             zoom: this.zoomLevel // starting zoom" +
-    //         });
-    // }
 
     ready() {
         super.ready();
@@ -89,16 +69,6 @@ class MapboxWrapper extends LitElement {
             return;
         }
 
-        // console.log('this.initialLocation');
-        // console.log(this.initialLocation);
-        // console.log('this.lng');
-        // console.log(this.lng);
-        // console.log('this.lat');
-        // console.log(this.lat);
-        //console.log(JSON.parse(this.initialLocation));
-
-        console.log('accessToken');
-        console.log(this.accessToken);
         mapboxgl.accessToken = this.accessToken;
 
         const initialLocationLocal = JSON.stringify({ lng: this.lng, lat: this.lat});
@@ -118,11 +88,13 @@ class MapboxWrapper extends LitElement {
             console.log('Something went wrong, so catching error');
             console.log(e);
         }
+
+        if (this.isAddFullScreenControl) {
+            this.addFullScreenControl();
+        }
     }
 
     addFullScreenControl() {
-        super.connectedCallback();
-
         // to avoid adding the control if the map is not yet available
         if(!this.map){
             console.log("this.map not yet available; cannot add fullScreenControl.");
@@ -131,8 +103,6 @@ class MapboxWrapper extends LitElement {
 
         this.map.addControl(new mapboxgl.FullscreenControl());
     }
-
-
 
     /**
      * This is due to the way the eval function works eval("function (){return \"test\"}") will throw an
@@ -174,74 +144,49 @@ class MapboxWrapper extends LitElement {
         this.map.setFilter(this.layerId, null);
     }
 
-    zoomTo()
-    {
-        this.map.zoomTo(zoomLevel, { "duration": 1500 } );
+    pointerLocation(e) {
+        // console.log("Mouse moved to: " + JSON.stringify(e.point) + " which equals " + JSON.stringify(e.lngLat.wrap()));
+        document.getElementById("infoBox").innerHTML =
+          // e.point is the x, y coordinates of the mouse move event relative to the top-left corner of the map
+          JSON.stringify(e.point) +
+          '<br />' +
+          // e.lngLat is the longitude, latitude geographical position of the event
+          JSON.stringify(e.lngLat.wrap());
     }
 
-    flyTo()
-    {
-        if (this.zoomLevel) {
-            this.map.flyTo({center: JSON.parse(this.zoomCenter), zoom: this.zoomLevel, duration: 1500});
-        }
-        else
-        {
-            this.map.flyTo({center: JSON.parse(this.zoomCenter), duration: 1500});
-        }
+    activatePointerLocation() {
+        this.map.on('mousemove', (e) => this.pointerLocation(e));
     }
 
-    activatePointerLocation()
-    {
-        this.map.on('mousemove', function(e)
-        {
-            console.log("Mouse moved to: " + JSON.stringify(e.point) + " which equals " + JSON.stringify(e.lngLat.wrap()));
-            // document.getElementsByClassName('info').innerHTML = "test";
-            document.getElementById("infoBox").innerHTML =
-                // e.point is the x, y coordinates of the mouse move event relative
-                // to the top-left corner of the map
-                JSON.stringify(e.point) +
-                '<br />' +
-                // e.lngLat is the longitude, latitude geographical position of the event
-                JSON.stringify(e.lngLat.wrap());
-        });
+    removeListeners() {
+        this.map.off('mousemove', (e) => this.pointerLocation(e));
     }
 
-    removeListeners()
-    {
-        this.map.off('mousemove', function(e)
-        {
-            console.log("Mouse moved to: " + JSON.stringify(e.point) + " which equals " + JSON.stringify(e.lngLat.wrap()));
-            // document.getElementsByClassName('info').innerHTML = "test";
-            document.getElementById("infoBox").innerHTML =
-                // e.point is the x, y coordinates of the mouse move event relative
-                // to the top-left corner of the map
-                JSON.stringify(e.point) +
-                '<br />' +
-                // e.lngLat is the longitude, latitude geographical position of the event
-                JSON.stringify(e.lngLat.wrap());
-        });
-    }
+    // removeListeners() {
+    //     this.map.off('mousemove', function(e) {
+    //         // console.log("Mouse moved to: " + JSON.stringify(e.point) + " which equals " + JSON.stringify(e.lngLat.wrap()));
+    //         document.getElementById("infoBox").innerHTML =
+    //           // e.point is the x, y coordinates of the mouse move event relative to the top-left corner of the map
+    //           JSON.stringify(e.point) +
+    //           '<br />' +
+    //           // e.lngLat is the longitude, latitude geographical position of the event
+    //           JSON.stringify(e.lngLat.wrap());
+    //     });
+    // }
 
-    updateData(){
-
+    updateData() {
         console.log("**** - At updateData()");
 
-        if (this.layer)
-        {
+        if (this.layer) {
             console.log("**** - At updateData() in if(this.layer)");
         }
-
-        // if (this.chartComponent) {
-        //     this.chartComponent.updateSeries(JSON.parse(this.series));
-        // }
 
         if (this.debug) {
             console.log(this.chartComponent);
         }
     }
 
-    loadIcon()
-    {
+    loadIcon() {
         console.log("this.url: "+this.url);
         console.log("this.iconName: "+this.iconName);
 
@@ -282,9 +227,7 @@ class MapboxWrapper extends LitElement {
             });
     }
 
-    fromOriginToDestination()
-    {
-
+    fromOriginToDestination() {
         var airplane_route;
         var airplane;
 

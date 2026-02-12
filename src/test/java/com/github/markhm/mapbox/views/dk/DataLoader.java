@@ -1,4 +1,4 @@
-package com.github.markhm.mapbox.ui.dk;
+package com.github.markhm.mapbox.views.dk;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class DataLoader
-{
+public class DataLoader {
     private static Log log = LogFactory.getLog(DataLoader.class);
 
     public static final String DATA_FILE = "personal/kombit/2019_11.csv";
@@ -20,49 +19,40 @@ public class DataLoader
 
     private List<KommuneData> data = null;
 
-    public DataLoader(String dataFile)
-    {
+    public DataLoader(String dataFile) {
         this.dataFile = dataFile;
     }
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception {
         DataLoader dataLoader = new DataLoader(DATA_FILE);
         dataLoader.load();
 
         dataLoader.data.forEach(element -> System.out.println(element));
     }
 
-    public List<KommuneData> getData()
-    {
+    public List<KommuneData> getData() {
         return data;
     }
 
-    public void load()
-    {
-        try
-        {
+    public void load() {
+        try {
             data = new ArrayList<>();
 
             URL url = this.getClass().getClassLoader().getResource(dataFile);
 
             BufferedReader reader = new BufferedReader(new FileReader(url.getFile()));
             String line = reader.readLine();
-            while (line != null && !line.startsWith("#"))
-            {
+            while (line != null && !line.startsWith("#")) {
                 StringTokenizer tokenizer = new StringTokenizer(line, ",");
-                if (tokenizer.hasMoreTokens())
-                {
+                if (tokenizer.hasMoreTokens()) {
                     String kommune = tokenizer.nextToken();
-                    if (!kommune.contains("kommune") || kommune.startsWith("#"))
-                    {
+                    if (!kommune.contains("kommune") || kommune.startsWith("#")) {
                         int calls = Integer.parseInt(tokenizer.nextToken());
 
                         KommuneData kommuneData = new KommuneData(kommune, calls);
                         data.add(kommuneData);
                     }
-                } else
-                {
+                } else {
                     log.info("Could not find more/any tokens on line: " + line);
                 }
 
@@ -70,94 +60,68 @@ public class DataLoader
             }
 
             binData(data);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             log.error(e);
         }
     }
 
-    private void binData(List<KommuneData> data)
-    {
+    private void binData(List<KommuneData> data) {
         data.forEach(e -> {
 
             long numberOfCalls = e.getCalls();
-            if (numberOfCalls > 5000000)
-            {
+            if (numberOfCalls > 5000000) {
                 e.setBin(7);
-            }
-            else if (numberOfCalls > 2000000)
-            {
+            } else if (numberOfCalls > 2000000) {
                 e.setBin(6);
-            }
-            else if (numberOfCalls > 1000000)
-            {
+            } else if (numberOfCalls > 1000000) {
                 e.setBin(5);
-            }
-            else if (numberOfCalls > 500000)
-            {
+            } else if (numberOfCalls > 500000) {
                 e.setBin(4);
-            }
-            else if (numberOfCalls > 200000)
-            {
+            } else if (numberOfCalls > 200000) {
                 e.setBin(3);
-            }
-            else if (numberOfCalls > 20000)
-            {
+            } else if (numberOfCalls > 20000) {
                 e.setBin(2);
-            }
-            else if (numberOfCalls > 2000)
-            {
+            } else if (numberOfCalls > 2000) {
                 e.setBin(1);
-            }
-            else
-            {
+            } else {
                 e.setBin(0);
             }
         });
     }
 
-    public class KommuneData
-    {
+    public class KommuneData {
         String kommune;
         int calls;
         int bin;
 
-        public KommuneData(String kommune, int calls)
-        {
+        public KommuneData(String kommune, int calls) {
             this.kommune = kommune;
             this.calls = calls;
         }
 
-        public KommuneData(String kommune, int calls, int bin)
-        {
+        public KommuneData(String kommune, int calls, int bin) {
             this(kommune, calls);
             this.bin = bin;
         }
 
-        public long getCalls()
-        {
+        public long getCalls() {
             return calls;
         }
 
-        public void setBin(int bin)
-        {
+        public void setBin(int bin) {
             this.bin = bin;
         }
 
-        public int getBin()
-        {
+        public int getBin() {
             return bin;
         }
 
-        public String getKommune()
-        {
+        public String getKommune() {
             return kommune;
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return "KommuneData{" +
                     "kommune='" + kommune + '\'' +
                     ", calls=" + calls +

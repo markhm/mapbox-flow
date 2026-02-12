@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.github.markhm.mapbox.util.Color;
-import com.github.markhm.mapbox.ColorDeserializer;
-import com.github.markhm.mapbox.ColorSerializer;
+import com.github.markhm.mapbox.util.ColorDeserializer;
+import com.github.markhm.mapbox.util.ColorSerializer;
 
 import java.io.IOException;
 

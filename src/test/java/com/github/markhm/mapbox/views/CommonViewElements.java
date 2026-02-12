@@ -1,4 +1,4 @@
-package com.github.markhm.mapbox;
+package com.github.markhm.mapbox.views;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -15,28 +15,22 @@ import com.vaadin.flow.component.page.Page;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.Serializable;
-import java.util.function.Consumer;
-
-public class CommonViewElements
-{
+public class CommonViewElements {
     private static int NOTIFICATION_DURATION = 7000;
 
     private static Log log = LogFactory.getLog(CommonViewElements.class);
 
-    public CommonViewElements()
-    {}
+    public CommonViewElements() {
+    }
 
-    public static void setGridLookAndfeel(Grid grid)
-    {
+    public static void setGridLookAndfeel(Grid grid) {
         // grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS, GridVariant.LUMO_COMPACT, GridVariant.LUMO_ROW_STRIPES);
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER, GridVariant.LUMO_NO_ROW_BORDERS, GridVariant.LUMO_ROW_STRIPES);
     }
 
-    public static Component createHeader(String viewName)
-    {
+    public static Component createHeader(String viewName) {
         HorizontalLayout header = new HorizontalLayout();
-        header.add(new H3("KDI "+viewName));
+        header.add(new H3("KDI " + viewName));
 
         // header.setAlignItems(FlexComponent.Alignment.CENTER);
 
@@ -48,31 +42,27 @@ public class CommonViewElements
         return header;
     }
 
-    public static void showOutput(String text, Component content, HasComponents outputContainer)
-    {
+    public static void showOutput(String text, Component content, HasComponents outputContainer) {
         HtmlComponent p = new HtmlComponent(Tag.P);
         p.getElement().setText(text);
         outputContainer.add(p);
         outputContainer.add(content);
     }
 
-    public static void openDialogWindow(VerticalLayout verticalLayout, int height, int width)
-    {
+    public static void openDialogWindow(VerticalLayout verticalLayout, int height, int width) {
         Dialog dialogWindow = new Dialog();
         dialogWindow.add(verticalLayout);
 
-        dialogWindow.setWidth(width+"px");
-        dialogWindow.setHeight(height+"px");
+        dialogWindow.setWidth(width + "px");
+        dialogWindow.setHeight(height + "px");
         dialogWindow.open();
     }
 
-    public static void showErrorNotification(String text)
-    {
+    public static void showErrorNotification(String text) {
         showErrorNotification(text, Notification.Position.BOTTOM_END);
     }
 
-    public static void showErrorNotification(String text, Notification.Position position)
-    {
+    public static void showErrorNotification(String text, Notification.Position position) {
         Notification notification = new ClickableNotification();
         notification.setText(text);
         notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
@@ -81,13 +71,11 @@ public class CommonViewElements
         notification.open();
     }
 
-    public static void showNotification(String text)
-    {
+    public static void showNotification(String text) {
         showNotification(text, Notification.Position.BOTTOM_START);
     }
 
-    public static void showNotification(String text, Notification.Position position)
-    {
+    public static void showNotification(String text, Notification.Position position) {
         Notification notification = new ClickableNotification();
         notification.setText(text);
         notification.addThemeVariants(NotificationVariant.LUMO_PRIMARY);
@@ -96,8 +84,7 @@ public class CommonViewElements
         notification.open();
     }
 
-    public static void showSuccessNotification(String text)
-    {
+    public static void showSuccessNotification(String text) {
         ClickableNotification notification = new ClickableNotification();
 
         // notification.addClickListener(notification);
@@ -108,17 +95,14 @@ public class CommonViewElements
         notification.open();
     }
 
-    public static class ClickableNotification extends Notification implements ClickNotifier<Notification>
-    {
-        public void onItemClicked(Object o)
-        {
+    public static class ClickableNotification extends Notification implements ClickNotifier<Notification> {
+        public void onItemClicked(Object o) {
             log.info("Registered click");
             this.close();
         }
     }
 
-    public static void clickLink(Anchor anchor)
-    {
+    public static void clickLink(Anchor anchor) {
         // https://vaadin.com/forum/thread/17360172/vaadin-10-autmoatically-download-a-file-without-clicking-a-button
 
         UI ui = UI.getCurrent();

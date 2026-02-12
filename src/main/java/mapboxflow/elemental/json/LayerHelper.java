@@ -1,16 +1,8 @@
 package mapboxflow.elemental.json;
 
-import com.github.markhm.mapbox.GeoLocation;
-import com.github.markhm.mapbox.Sprite;
 import elemental.json.Json;
 import elemental.json.JsonArray;
-import elemental.json.JsonFactory;
 import elemental.json.JsonObject;
-import elemental.json.impl.JreJsonFactory;
-import elemental.json.impl.JreJsonObject;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class LayerHelper {
     public static JsonObject createLayer(String id, Type type) {

@@ -1,8 +1,9 @@
-package com.github.markhm.mapbox.ui;
+package com.github.markhm.mapbox.views;
 
 import com.github.markhm.mapbox.*;
 import com.github.markhm.mapbox.style.DirectionsResponseLoader;
 import com.github.markhm.mapbox.style.Geometry;
+import com.github.markhm.mapbox.util.AccessToken;
 import com.github.markhm.mapbox.util.Color;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
@@ -21,8 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Route("dev")
-public class DevelopmentView extends VerticalLayout
-{
+public class DevelopmentView extends VerticalLayout {
     private static Log log = LogFactory.getLog(DevelopmentView.class);
 
     private MapboxMap mapboxMap = null;
@@ -34,30 +34,27 @@ public class DevelopmentView extends VerticalLayout
 //    private PaperSlider slider = null;
 //    private Label sliderValue = null;
 
-    public DevelopmentView()
-    {
+    public DevelopmentView() {
         setAlignItems(Alignment.CENTER);
 
         content.setAlignItems(Alignment.START);
         content.setWidth("1200px");
 
-        if (!alreadyRendered)
-        {
+        if (!alreadyRendered) {
             render(content);
             alreadyRendered = true;
         }
     }
 
-    private void render(VerticalLayout content)
-    {
+    private void render(VerticalLayout content) {
         add(content);
 
         renderHeader(content);
         renderMap(content);
         // renderSlider(content); //deactivated to remove dependency on paper-slider-1.0.1
 
-        Button fullScreenControl = new Button("Add fullscreen control", e -> mapboxMap.addFullScreenControl());
-        content.add(fullScreenControl);
+//        Button fullScreenControl = new Button("Add fullscreen control", e -> mapboxMap.addFullScreenControl());
+//        content.add(fullScreenControl);
 
         renderNewLayer(content);
 
@@ -66,18 +63,20 @@ public class DevelopmentView extends VerticalLayout
         renderImage(content);
     }
 
-    private void renderHeader(VerticalLayout content)
-    {
+    private void renderHeader(VerticalLayout content) {
         HorizontalLayout titleBox = new HorizontalLayout();
         titleBox.setAlignItems(Alignment.BASELINE);
         H3 title = new H3("Mapbox-Flow Development");
         content.add(title);
     }
 
-    private void renderMap(VerticalLayout content)
-    {
+    private void renderMap(VerticalLayout content) {
         String accessToken = AccessToken.getToken();
-        mapboxMap = new ItemMapboxMap(accessToken, GeoLocation.InitialView_Turku_NY, 2);
+        MapboxProperties properties = new MapboxProperties(accessToken);
+        properties.setInitialLocation(GeoLocation.InitialView_Turku_NY);
+        properties.setInitialZoom(2);
+        mapboxMap = new MapboxMap(properties);
+
         mapboxMap.setWidth("1200px");
         mapboxMap.setHeight("500px");
 
@@ -97,8 +96,7 @@ public class DevelopmentView extends VerticalLayout
 //        content.add(sliderLine);
 //    }
 
-    public void renderNewLayer(VerticalLayout content)
-    {
+    public void renderNewLayer(VerticalLayout content) {
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setAlignItems(Alignment.CENTER);
 
@@ -106,7 +104,7 @@ public class DevelopmentView extends VerticalLayout
         Button addSymbols = new Button("Add symbols", e -> addSymbolLayer());
         buttonLayout.add(addSymbols);
 
-        Button addLine = new Button("Add line", e -> addLineLayer(DirectionsResponseLoader.ACTIVE_PATH));
+        Button addLine = new Button("Add route", e -> addLineLayer(DirectionsResponseLoader.ACTIVE_PATH));
         buttonLayout.add(addLine);
 
         Button addPolygon = new Button("Add polygon", e -> addPolygonLayer());
@@ -115,8 +113,7 @@ public class DevelopmentView extends VerticalLayout
         content.add(buttonLayout);
     }
 
-    public void addPolygonLayer()
-    {
+    public void addPolygonLayer() {
         JsonObject polygonLayer = LayerHelper.createLayer("polygon", LayerHelper.Type.fill);
         JsonObject paint = PaintHelper.createPaint(PaintHelper.Type.fill);
         paint.put("fill-color", Color.RED_LINE.toString());
@@ -141,13 +138,12 @@ public class DevelopmentView extends VerticalLayout
 
         polygonLayer.put("source", source);
 
-        log.info("polygonLayer: "+polygonLayer.toJson());
+        log.info("polygonLayer: " + polygonLayer.toJson());
 
         mapboxMap.addLayer(polygonLayer);
     }
 
-    public void addLineLayer(String filename)
-    {
+    public void addLineLayer(String filename) {
         JsonObject lineLayer = LayerHelper.createLayer("route_line", LayerHelper.Type.line);
 
         JsonObject paint = PaintHelper.createPaint(PaintHelper.Type.line, Color.RED_LINE, 3);
@@ -172,23 +168,22 @@ public class DevelopmentView extends VerticalLayout
         mapboxMap.addLayer(lineLayer);
     }
 
-    public void addSymbolLayer()
-    {
+    public void addSymbolLayer() {
         JsonObject layer = LayerHelper.createLayer("test", LayerHelper.Type.symbol);
 
-        JsonObject mapboxDCProperties = PropertiesHelper.createProperties("bank", "National Bank", Sprite.Bank.toString());
+        JsonObject mapboxDCProperties = PropertiesHelper.createProperties("bank", "National Bank", MapboxSprite.Bank.toString());
         mapboxDCProperties.put("color", Color.NAVY_BLUE.toString());
         GeoLocation mapboxDCLocation = new GeoLocation(38.913188059745586, -77.03238901390978);
         JsonObject mapboxDCFeature = FeatureHelper.createFeature("Feature", mapboxDCProperties, mapboxDCLocation);
         LayerHelper.addFeature(layer, mapboxDCFeature);
 
-        JsonObject mapboxDangerProperties = PropertiesHelper.createProperties("danger", "Danger", Sprite.Fire_Station.toString());
+        JsonObject mapboxDangerProperties = PropertiesHelper.createProperties("danger", "Danger", MapboxSprite.Fire_Station.toString());
         mapboxDangerProperties.put("color", Color.RED.toString());
         GeoLocation mapboxDangerLocation = new GeoLocation(-20, 30);
         JsonObject mapboxDangerFeature = FeatureHelper.createFeature("Feature", mapboxDangerProperties, mapboxDangerLocation);
         LayerHelper.addFeature(layer, mapboxDangerFeature);
 
-        JsonObject mapboxSFProperties = PropertiesHelper.createProperties("helicopter", "Helicopter Haven", Sprite.Helicopter.toString());
+        JsonObject mapboxSFProperties = PropertiesHelper.createProperties("helicopter", "Helicopter Haven", MapboxSprite.Helicopter.toString());
         mapboxSFProperties.put("color", Color.RED.toString());
         GeoLocation mapboxSFLocation = new GeoLocation(37.776, -122.414);
         JsonObject mapboxSFFeature = FeatureHelper.createFeature("Feature", mapboxSFProperties, mapboxSFLocation);
@@ -207,13 +202,12 @@ public class DevelopmentView extends VerticalLayout
 //        // paint.put("icon-color", Color.RED_LINE.toString());
 //        layer.put("paint", paint);
 
-        log.info("layer = "+layer);
+        log.info("layer = " + layer);
 
         mapboxMap.addLayer(layer);
     }
 
-    private void renderDynamicLayerButton(VerticalLayout content)
-    {
+    private void renderDynamicLayerButton(VerticalLayout content) {
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setAlignItems(Alignment.CENTER);
 
@@ -226,13 +220,11 @@ public class DevelopmentView extends VerticalLayout
         content.add(buttonLayout);
     }
 
-    private void updateData()
-    {
+    private void updateData() {
         mapboxMap.executeJs("this.map.getSource('polygon').setData('/data')");
     }
 
-    private void renderDynamicLayer()
-    {
+    private void renderDynamicLayer() {
         JsonObject polygonLayer = LayerHelper.createLayer("polygon", LayerHelper.Type.fill);
         JsonObject paint = PaintHelper.createPaint(PaintHelper.Type.fill);
         paint.put("fill-color", Color.RED_LINE.toString());
@@ -247,8 +239,7 @@ public class DevelopmentView extends VerticalLayout
         mapboxMap.addLayer(polygonLayer);
     }
 
-    private void renderImage(VerticalLayout content)
-    {
+    private void renderImage(VerticalLayout content) {
         HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setAlignItems(Alignment.CENTER);
 
@@ -261,16 +252,14 @@ public class DevelopmentView extends VerticalLayout
         content.add(buttonLayout);
     }
 
-    private void placeImage()
-    {
+    private void placeImage() {
 
     }
 
-    private void addImage()
-    {
+    private void addImage() {
         String imageString = "/img/atom.png";
         String resolvedImage = VaadinServletService.getCurrent().resolveResource(imageString);
-        log.info("resolvedImage = "+resolvedImage);
+        log.info("resolvedImage = " + resolvedImage);
         Image image = new Image(resolvedImage, "Atom");
         content.add(image);
 

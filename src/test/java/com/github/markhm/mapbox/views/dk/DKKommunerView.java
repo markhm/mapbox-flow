@@ -1,11 +1,10 @@
-package com.github.markhm.mapbox.ui.dk;
+package com.github.markhm.mapbox.views.dk;
 
-import com.github.markhm.mapbox.AccessToken;
-import com.github.markhm.mapbox.GeoLocation;
-import com.github.markhm.mapbox.MapboxMap;
-import com.github.markhm.mapbox.ViewUtil;
+import com.github.markhm.mapbox.*;
 import com.github.markhm.mapbox.component.LayerLegend;
+import com.github.markhm.mapbox.util.AccessToken;
 import com.github.markhm.mapbox.util.ColorPalette;
+import com.github.markhm.mapbox.util.ViewUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
@@ -22,8 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Route("dk_map")
-public class DKKommunerView extends VerticalLayout
-{
+public class DKKommunerView extends VerticalLayout {
     private static Log log = LogFactory.getLog(DKKommunerView.class);
 
     private String[] CURRENT_PALETTE = ColorPalette.RED_PALETTE_7;
@@ -38,30 +36,34 @@ public class DKKommunerView extends VerticalLayout
 
     private boolean sourceAlreadyAdded = false;
 
-    public DKKommunerView()
-    {
+    private boolean layersActive = false;
+
+    public DKKommunerView() {
         setAlignItems(Alignment.CENTER);
 
         content.setAlignItems(Alignment.START);
         content.setWidth("1200px");
 
-        if (!alreadyRendered)
-        {
+        if (!alreadyRendered) {
             render();
 
             alreadyRendered = true;
         }
     }
 
-    private void render()
-    {
+    private void render() {
         H3 title = new H3("Danmarks Kommuner");
         content.add(title);
 
         content.add(addTopButtons());
 
         HorizontalLayout mapLine = new HorizontalLayout();
-        mapboxMap = new MapboxMap(AccessToken.getToken(), GeoLocation.InitialView_Denmark, 6);
+
+        MapboxProperties properties = new MapboxProperties(AccessToken.getToken());
+        properties.setInitialLocation(GeoLocation.InitialView_Denmark);
+        properties.setInitialZoom(6);
+        mapboxMap = new MapboxMap(properties);
+
         mapboxMap.setWidth("1000px");
         mapboxMap.setHeight("500px");
         legend = createLayerLegend();
@@ -73,8 +75,7 @@ public class DKKommunerView extends VerticalLayout
         add(content);
     }
 
-    private HorizontalLayout addTopButtons()
-    {
+    private HorizontalLayout addTopButtons() {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setAlignItems(Alignment.CENTER);
 
@@ -92,35 +93,32 @@ public class DKKommunerView extends VerticalLayout
         return horizontalLayout;
     }
 
-    private HorizontalLayout addBottomButtons()
-    {
+    private HorizontalLayout addBottomButtons() {
         HorizontalLayout defaultButtons = new HorizontalLayout();
         defaultButtons.setAlignItems(Alignment.CENTER);
 
-        Button addWireframe = new Button("Trådramme", e -> addWireframeLayer("wireframe"));
-        Button removeWireframe = new Button("Fjern trådramme", e -> removeSelectionLayer("wireframe"));
+        Button addWireframe = new Button("Wireframe", e -> addWireframeLayer("wireframe"));
+        Button removeWireframe = new Button("Remove wireframe", e -> removeSelectionLayer("wireframe"));
 
-        Button addSelection = new Button("Coloring", e -> addServiceUsageLayers());
-        Button removeSelection = new Button("Fjern markering", e -> removeServiceUsageLayers());
+        Button addSelection = new Button("Add layers", e -> addServiceUsageLayers());
+        Button removeSelection = new Button("Remove layers", e -> removeServiceUsageLayers());
 
-        defaultButtons.add(new Label("Tilføj:"), addWireframe, removeWireframe,
+        defaultButtons.add(new Label("Add:"), addWireframe, removeWireframe,
                 ViewUtil.horizontalWhiteSpace(15), addSelection, removeSelection);
 
         return defaultButtons;
     }
 
-    private void removeServiceUsageLayers()
-    {
-        for (int i = 1; i < 8 ; i++)
-        {
-            removeSelectionLayer("layer_"+i);
+    private void removeServiceUsageLayers() {
+        if (layersActive) {
+            for (int i = 1; i < 8; i++) {
+                removeSelectionLayer("layer_" + i);
+            }
+            legend.setVisible(false);
         }
-
-        legend.setVisible(false);
     }
 
-    private LayerLegend createLayerLegend()
-    {
+    private LayerLegend createLayerLegend() {
         LayerLegend layerLegend = new LayerLegend();
         layerLegend.setVisible(false);
 
@@ -135,8 +133,7 @@ public class DKKommunerView extends VerticalLayout
         return layerLegend;
     }
 
-    private void addServiceUsageLayers()
-    {
+    private void addServiceUsageLayers() {
         addSourceIfNeeded();
 
         DataLoader dataLoader = new DataLoader(DataLoader.DATA_FILE);
@@ -144,25 +141,23 @@ public class DKKommunerView extends VerticalLayout
 
         List<DataLoader.KommuneData> list = dataLoader.getData();
 
-        for (int i = 1 ; i < 8 ; i++)
-        {
-            Layer layer = LayerHelper.createBinLayer("layer_"+i, LayerHelper.mapToJSONArray(getKommunerForBin(list, i)), CURRENT_PALETTE[i - 1], opacity);
-            mapboxMap.addLayer(layer);
+        if (list != null && list.size() > 0) {
+            for (int i = 1; i < 8; i++) {
+                Layer layer = LayerHelper.createBinLayer("layer_" + i, LayerHelper.mapToJSONArray(getKommunerForBin(list, i)), CURRENT_PALETTE[i - 1], opacity);
+                mapboxMap.addLayer(layer);
+            }
+            legend.setVisible(true);
+            layersActive = true;
         }
-
-        legend.setVisible(true);
     }
 
-    public Set<String> getKommunerForBin(List<DataLoader.KommuneData> data, int bin)
-    {
+    public Set<String> getKommunerForBin(List<DataLoader.KommuneData> data, int bin) {
         Set<String> layerData = data.stream().filter(item -> item.getBin() == bin).map(DataLoader.KommuneData::getKommune).collect(Collectors.toSet());
         return layerData;
     }
 
-    private void addWireframeLayer(String layerId)
-    {
-        if (!sourceAlreadyAdded)
-        {
+    private void addWireframeLayer(String layerId) {
+        if (!sourceAlreadyAdded) {
             addSource();
             // mapboxMap.addSource("Danske_Kommuner", source);
             sourceAlreadyAdded = true;
@@ -181,25 +176,21 @@ public class DKKommunerView extends VerticalLayout
         mapboxMap.addLayer(layer);
     }
 
-    private void addSourceIfNeeded()
-    {
-        if (!sourceAlreadyAdded)
-        {
+    private void addSourceIfNeeded() {
+        if (!sourceAlreadyAdded) {
             addSource();
             sourceAlreadyAdded = true;
         }
     }
 
     @Deprecated // To be moved to mapboxMap
-    private void removeSelectionLayer(String layerId)
-    {
+    private void removeSelectionLayer(String layerId) {
         // mapboxMap.hideLayer("");
         String command = "this.map.removeLayer('" + layerId + "')";
         mapboxMap.executeJs(command);
     }
 
-    private void addSource()
-    {
+    private void addSource() {
         Source source = new Source();
         source.setType("vector");
         source.put("url", "mapbox://markhm.ck4aedo8f03l32nmyksha2171-5k3o4");
@@ -208,7 +199,7 @@ public class DKKommunerView extends VerticalLayout
     }
 
     private static final String[] DK_KOMMUNER = {"Herning", "København", "Århus", "Næstved", "Aalborg", "Faaborg-Midtfyn", "Esbjerg", "Frederiksberg", "Skanderborg",
-            "Haderslev","Holstebro", "Albertslund", "Guldborgsund", "Fredensborg", "Randers", "Skive", "Ballerup", "Rudersdal", "Kolding", "Norddjurs",
+            "Haderslev", "Holstebro", "Albertslund", "Guldborgsund", "Fredensborg", "Randers", "Skive", "Ballerup", "Rudersdal", "Kolding", "Norddjurs",
             "Mariagerfjord", "Lyngby-Taarbæk", "Viborg", "Odense", "Silkeborg", "Kerteminde", "Roskilde", "Slagelse", "Aabenraa", "Holbæk", "Hvidovre", "Svendborg", "Horsens",
             "Helsingør", "Sønderborg", "Syddjurs", "Middelfart", "Vejle", "Kalundborg", "Høje-Taastrup", "Varde", "Lolland", "Vejen", "Nyborg", "Odder", "Gladsaxe", "Fredericia",
             "Favrskov", "Gentofte", "Thisted", "Frederikshavn", "Brøndby", "Ærø", "Ringkøbing-Skjern", "Hillerød", "Gribskov", "Hjørring", "Egedal", "Odsherred", "Billund", "Rødovre",

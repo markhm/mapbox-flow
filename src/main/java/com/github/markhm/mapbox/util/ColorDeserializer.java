@@ -1,4 +1,4 @@
-package com.github.markhm.mapbox;
+package com.github.markhm.mapbox.util;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

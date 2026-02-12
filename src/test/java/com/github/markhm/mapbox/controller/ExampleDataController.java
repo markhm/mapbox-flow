@@ -15,37 +15,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/data")
-public class ExampleDataController extends HttpServlet
-{
+public class ExampleDataController extends HttpServlet {
     private int example = 0;
 
-    public ExampleDataController()
-    {
+    public ExampleDataController() {
 
     }
 
     protected void doGet(HttpServletRequest reqest, HttpServletResponse response)
-            throws ServletException, IOException
-    {
+            throws ServletException, IOException {
         // response.getWriter().println("Hello World!");
         response.getWriter().println(getDataExample());
     }
 
 
-    private String getDataExample()
-    {
+    private String getDataExample() {
         JsonObject geometry = GeometryHelper.createGeometry(GeometryHelper.Type.Polygon);
 
         List<List<Double>> coordinates = new ArrayList<>();
 
-        if (example == 0)
-        {
+        if (example == 0) {
             coordinates.add(GeoLocation.Bermuda_1_Florida.getCoordList());
             coordinates.add(GeoLocation.Bermuda_2_Bermuda.getCoordList());
             coordinates.add(GeoLocation.Bermuda_3_PuertoRico.getCoordList());
             example = 1;
-        }
-        else // example == 1
+        } else // example == 1
         {
             coordinates.add(GeoLocation.Amsterdam.getCoordList());
             coordinates.add(GeoLocation.Copenhagen.getCoordList());

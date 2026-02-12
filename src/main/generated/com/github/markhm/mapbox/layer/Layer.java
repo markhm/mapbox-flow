@@ -7,10 +7,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Layer
 {
     private String id;
-    private String type;
+    private LayerType type;
     private Source source;
     private Layout layout;
     private Paint paint;
+
+    public Layer(String id, LayerType type) {
+        this.id = id;
+        this.type = type;
+    }
 
     @JsonProperty("id")
     public String getId()
@@ -18,22 +23,10 @@ public class Layer
         return id;
     }
 
-    @JsonProperty("id")
-    public void setId(String value)
-    {
-        this.id = value;
-    }
-
     @JsonProperty("type")
     public String getType()
     {
-        return type;
-    }
-
-    @JsonProperty("type")
-    public void setType(String value)
-    {
-        this.type = value;
+        return type.toString();
     }
 
     @JsonProperty("source")
@@ -72,8 +65,4 @@ public class Layer
         this.paint = value;
     }
 
-//    public enum Type
-//    {
-//        fill, line, symbol, circle, heatmap, raster, hillshade, background; //, fill-extrusion
-//    }
 }

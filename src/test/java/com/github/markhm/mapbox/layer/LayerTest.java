@@ -10,20 +10,16 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LayerTest
-{
+public class LayerTest {
     private static Log log = LogFactory.getLog(LayerTest.class);
 
-    public LayerTest()
-    {}
+    public LayerTest() {
+    }
 
     @Test
-    public void createLayer() throws Exception
-    {
+    public void createLayer() throws Exception {
         // creating layer
-        Layer layer = new Layer();
-        layer.setId("routeLine");
-        layer.setType("line");
+        Layer layer = new Layer("routeLine", LayerType.LINE);
 
         Source source = new Source();
         source.setType("geojson");
@@ -68,31 +64,32 @@ public class LayerTest
 
         String jsonString = Converter.toJsonString(layer);
 
-        log.info("created was: \n"+jsonString);
+        log.info("created was: \n" + jsonString);
 
         JSONAssert.assertEquals(EXPECTED_LAYER, jsonString, JSONCompareMode.LENIENT);
     }
 
-    private static final String EXPECTED_LAYER = "{" +
-            "        'id': 'routeLine'," +
-            "        'type': 'line'," +
-            "        'source': {" +
-            "            'type': 'geojson'," +
-            "            'data': {" +
-            "                'type': 'Feature'," +
-            "                'properties': {}," +
-            "                'geometry': { 'coordinates': [[55.6761, 12.5683], [55.755825, 37.617298]], " +
-            "                   'type':'LineString'}" +
-            "            }" +
-            "        }," +
-            "        'layout': {" +
-            "            'line-join': 'round'," +
-            "            'line-cap': 'round'" +
-            "        }," +
-            "        'paint': {" +
-            "            'line-color': '#d54648'," +
-            "            'line-width': 3" +
-            "        }\n" +
-            "    };";
-
+    private static final String EXPECTED_LAYER = """
+                    {
+                    'id': 'routeLine',
+                    'type': 'line',
+                    'source': {
+                        'type': 'geojson',
+                        'data': {
+                            'type': 'Feature',
+                            'properties': {},
+                            'geometry': { 'coordinates': [[55.6761, 12.5683], [55.755825, 37.617298]],\s
+                               'type':'LineString'}
+                        }
+                    },
+                    'layout': {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    'paint': {
+                        'line-color': '#d54648',
+                        'line-width': 3
+                    }
+                }
+            """;
 }

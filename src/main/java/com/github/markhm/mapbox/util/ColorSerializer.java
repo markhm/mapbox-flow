@@ -1,4 +1,4 @@
-package com.github.markhm.mapbox;
+package com.github.markhm.mapbox.util;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;

@@ -1,6 +1,6 @@
 package com.github.markhm.mapbox.service;
 
-import com.github.markhm.mapbox.AccessToken;
+import com.github.markhm.mapbox.util.AccessToken;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;

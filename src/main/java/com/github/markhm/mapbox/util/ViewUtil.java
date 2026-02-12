@@ -1,4 +1,4 @@
-package com.github.markhm.mapbox;
+package com.github.markhm.mapbox.util;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.UI;

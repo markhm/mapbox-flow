@@ -8,16 +8,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Test;
 
-public class CreateJsonTest
-{
+public class CreateJsonTest {
     private static Log log = LogFactory.getLog(CreateJsonTest.class);
 
-    public CreateJsonTest()
-    {}
+    public CreateJsonTest() {
+    }
 
     @Test
-    public void testCreateElementsal()
-    {
+    public void testCreateElement() {
         JsonObject jsonObject = Json.createObject();
 
         jsonObject.put(MapboxOptions.OptionType.container.toString(), "map");

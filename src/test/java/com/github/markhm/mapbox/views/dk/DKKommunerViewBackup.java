@@ -1,10 +1,9 @@
-package com.github.markhm.mapbox.ui.dk;
+package com.github.markhm.mapbox.views.dk;
 
-import com.github.markhm.mapbox.AccessToken;
-import com.github.markhm.mapbox.GeoLocation;
-import com.github.markhm.mapbox.MapboxMap;
-import com.github.markhm.mapbox.ViewUtil;
+import com.github.markhm.mapbox.*;
 import com.github.markhm.mapbox.component.LayerLegend;
+import com.github.markhm.mapbox.util.AccessToken;
+import com.github.markhm.mapbox.util.ViewUtil;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.Label;
@@ -26,8 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Route("dk_map_backup")
-public class DKKommunerViewBackup extends VerticalLayout
-{
+public class DKKommunerViewBackup extends VerticalLayout {
     private static Log log = LogFactory.getLog(DKKommunerViewBackup.class);
 
     private MapboxMap mapboxMap = null;
@@ -38,29 +36,30 @@ public class DKKommunerViewBackup extends VerticalLayout
 
     private boolean sourceAlreadyAdded = false;
 
-    public DKKommunerViewBackup()
-    {
+    public DKKommunerViewBackup() {
         setAlignItems(Alignment.CENTER);
 
         content.setAlignItems(Alignment.START);
         content.setWidth("1200px");
 
-        if (!alreadyRendered)
-        {
+        if (!alreadyRendered) {
             render();
 
             alreadyRendered = true;
         }
     }
 
-    private void render()
-    {
+    private void render() {
         H3 title = new H3("Danmarks Kommuner");
         content.add(title);
 
         content.add(addTopButtons());
 
-        mapboxMap = new MapboxMap(AccessToken.getToken(), GeoLocation.InitialView_Denmark, 6);
+        MapboxProperties properties = new MapboxProperties(AccessToken.getToken());
+        properties.setInitialLocation(GeoLocation.InitialView_Denmark);
+        properties.setInitialZoom(6);
+        mapboxMap = new MapboxMap(properties);
+
         mapboxMap.setWidth("1000px");
         mapboxMap.setHeight("500px");
         content.add(mapboxMap);
@@ -71,8 +70,7 @@ public class DKKommunerViewBackup extends VerticalLayout
         add(content);
     }
 
-    private HorizontalLayout addTopButtons()
-    {
+    private HorizontalLayout addTopButtons() {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setAlignItems(Alignment.CENTER);
 
@@ -90,8 +88,7 @@ public class DKKommunerViewBackup extends VerticalLayout
         return horizontalLayout;
     }
 
-    private HorizontalLayout addBottomButtons()
-    {
+    private HorizontalLayout addBottomButtons() {
         HorizontalLayout defaultButtons = new HorizontalLayout();
         defaultButtons.setAlignItems(Alignment.CENTER);
 
@@ -111,8 +108,7 @@ public class DKKommunerViewBackup extends VerticalLayout
         return defaultButtons;
     }
 
-    private HorizontalLayout addSelectionButtons()
-    {
+    private HorizontalLayout addSelectionButtons() {
         HorizontalLayout selectionButtons = new HorizontalLayout();
         selectionButtons.setAlignItems(Alignment.CENTER);
 
@@ -144,16 +140,13 @@ public class DKKommunerViewBackup extends VerticalLayout
 
     Set<String> alreadyChosen = new HashSet<>();
 
-    public Set<String> pickRandomKommuner(int amount)
-    {
+    public Set<String> pickRandomKommuner(int amount) {
         Set<String> result = new HashSet<>();
         int currentAmount = 0;
 
-        while (currentAmount < amount)
-        {
+        while (currentAmount < amount) {
             String nextPick = pickRandomKommune();
-            if (!result.contains(nextPick) && ! alreadyChosen.contains(nextPick))
-            {
+            if (!result.contains(nextPick) && !alreadyChosen.contains(nextPick)) {
                 result.add(nextPick);
                 currentAmount++;
             }
@@ -163,15 +156,13 @@ public class DKKommunerViewBackup extends VerticalLayout
         return result;
     }
 
-    public String pickRandomKommune()
-    {
+    public String pickRandomKommune() {
         Random random = new Random();
         int luckyNumber = random.nextInt(96);
         return DK_KOMMUNER[luckyNumber];
     }
 
-    private void addServiceUsageData()
-    {
+    private void addServiceUsageData() {
         addSourceIfNeeded();
 
         DataLoader dataLoader = new DataLoader(DataLoader.DATA_FILE);
@@ -180,32 +171,28 @@ public class DKKommunerViewBackup extends VerticalLayout
         List<DataLoader.KommuneData> list = dataLoader.getData();
 
         list.forEach(item -> {
-            if (item.getKommune().equals("Århus")) log.info("Yes, we found: "+item.toString());
+            if (item.getKommune().equals("Århus")) log.info("Yes, we found: " + item.toString());
         });
 
         LayerLegend layerLegend = new LayerLegend();
-        for (int i = 1 ; i < 8 ; i++)
-        {
-            Layer layer = LayerHelper.createBinLayer("layer"+i, LayerHelper.mapToJSONArray(getKommunerForBin(list, i)), SHADES_OF_GREEN[i-1], 0.7);
+        for (int i = 1; i < 8; i++) {
+            Layer layer = LayerHelper.createBinLayer("layer" + i, LayerHelper.mapToJSONArray(getKommunerForBin(list, i)), SHADES_OF_GREEN[i - 1], 0.7);
             mapboxMap.addLayer(layer);
         }
     }
 
-    public Set<String> getKommunerForBin(List<DataLoader.KommuneData> data, int bin)
-    {
+    public Set<String> getKommunerForBin(List<DataLoader.KommuneData> data, int bin) {
         Set<String> layerData = data.stream().filter(item -> item.getBin() == bin).map(DataLoader.KommuneData::getKommune).collect(Collectors.toSet());
         return layerData;
     }
 
 
-    private void addWireframeViaJson(String layerId)
-    {
+    private void addWireframeViaJson(String layerId) {
         JsonObject layer = Json.createObject();
         layer.put("id", layerId);
         layer.put("type", "line");
 
-        if (!sourceAlreadyAdded)
-        {
+        if (!sourceAlreadyAdded) {
             addSource();
             // mapboxMap.addSource("Danske_Kommuner", source);
             sourceAlreadyAdded = true;
@@ -222,10 +209,8 @@ public class DKKommunerViewBackup extends VerticalLayout
         mapboxMap.addLayer(layer);
     }
 
-    private void addWireframeLayer(String layerId)
-    {
-        if (!sourceAlreadyAdded)
-        {
+    private void addWireframeLayer(String layerId) {
+        if (!sourceAlreadyAdded) {
             addSource();
             // mapboxMap.addSource("Danske_Kommuner", source);
             sourceAlreadyAdded = true;
@@ -261,17 +246,14 @@ public class DKKommunerViewBackup extends VerticalLayout
     private String[] kommuner_4 = {"Brønderslev", "Esbjerg"};
     private String[] kommuner_5 = {"Aarhus", "Rødovre"};
 
-    private void addSourceIfNeeded()
-    {
-        if (!sourceAlreadyAdded)
-        {
+    private void addSourceIfNeeded() {
+        if (!sourceAlreadyAdded) {
             addSource();
             sourceAlreadyAdded = true;
         }
     }
 
-    private void addSelectionLayer(String layerId, String[] kommuner, String color)
-    {
+    private void addSelectionLayer(String layerId, String[] kommuner, String color) {
         addSourceIfNeeded();
 
         // String colorRgB = "rgb(157, 118, 193)";
@@ -279,32 +261,29 @@ public class DKKommunerViewBackup extends VerticalLayout
         // String niceBlue = "hsla(195, 100%, 50%, 0.5)";
         // String[] kommuner = {"Skive", "Haderslev", "Esbjerg", "Lejre", "Køge", "Nyborg", "Brønderslev", "Rødovre", "Aarhus", "Odder"};
 
-        Layer layer = LayerHelper.createBinLayer("layer_"+layerId, LayerHelper.mapToJSONArray(kommuner), color, 0.7);
+        Layer layer = LayerHelper.createBinLayer("layer_" + layerId, LayerHelper.mapToJSONArray(kommuner), color, 0.7);
         mapboxMap.addLayer(layer);
     }
 
     int layerCounter = 6;
 
-    private void addSelectionLayerRandom()
-    {
+    private void addSelectionLayerRandom() {
         addSourceIfNeeded();
 
-        Layer newLayer = LayerHelper.createBinLayer("layer_"+layerCounter, LayerHelper.mapToJSONArray(pickRandomKommuner(5)), green_5, 0.7);
+        Layer newLayer = LayerHelper.createBinLayer("layer_" + layerCounter, LayerHelper.mapToJSONArray(pickRandomKommuner(5)), green_5, 0.7);
         mapboxMap.addLayer(newLayer);
 
         layerCounter++;
     }
 
     @Deprecated // To be moved to mapboxMap
-    private void removeSelectionLayer(String layerId)
-    {
+    private void removeSelectionLayer(String layerId) {
         // mapboxMap.hideLayer("");
         String command = "this.map.removeLayer('" + layerId + "')";
         mapboxMap.executeJs(command);
     }
 
-    private void addSource()
-    {
+    private void addSource() {
         Source source = new Source();
         source.setType("vector");
         source.put("url", "mapbox://markhm.ck4aedo8f03l32nmyksha2171-5k3o4");
@@ -313,7 +292,7 @@ public class DKKommunerViewBackup extends VerticalLayout
     }
 
     private static final String[] DK_KOMMUNER = {"Herning", "København", "Århus", "Næstved", "Aalborg", "Faaborg-Midtfyn", "Esbjerg", "Frederiksberg", "Skanderborg",
-            "Haderslev","Holstebro", "Albertslund", "Guldborgsund", "Fredensborg", "Randers", "Skive", "Ballerup", "Rudersdal", "Kolding", "Norddjurs",
+            "Haderslev", "Holstebro", "Albertslund", "Guldborgsund", "Fredensborg", "Randers", "Skive", "Ballerup", "Rudersdal", "Kolding", "Norddjurs",
             "Mariagerfjord", "Lyngby-Taarbæk", "Viborg", "Odense", "Silkeborg", "Kerteminde", "Roskilde", "Slagelse", "Aabenraa", "Holbæk", "Hvidovre", "Svendborg", "Horsens",
             "Helsingør", "Sønderborg", "Syddjurs", "Middelfart", "Vejle", "Kalundborg", "Høje-Taastrup", "Varde", "Lolland", "Vejen", "Nyborg", "Odder", "Gladsaxe", "Fredericia",
             "Favrskov", "Gentofte", "Thisted", "Frederikshavn", "Brøndby", "Ærø", "Ringkøbing-Skjern", "Hillerød", "Gribskov", "Hjørring", "Egedal", "Odsherred", "Billund", "Rødovre",
